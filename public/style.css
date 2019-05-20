@@ -1,0 +1,25 @@
+body {
+  background: #ecf0f1;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  border: 2px solid black;
+  max-width: 1000px;
+  margin: 100px auto 0 auto; 
+}
+
+header {
+  border-bottom: 1px solid black;
+}
+
+main {
+  max-width: 40em;
+}
+
+h1 {
+  text-align: center;
+  color: #e74c3c;
+}
