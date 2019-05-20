@@ -26,5 +26,6 @@
   $entries = require __DIR__ . '/../src/routes/entries.php';
   $entries($app);
 
+  
   // Run app
   $app->run();
