@@ -10,25 +10,29 @@
 <body>
 
   <template id="loginFormTemplate">
-    <h2>Logga in användare</h2>
-    <form id="loginForm">
-      <input type="text" name="username" id="username" placeholder="Username">
-      <input type="password" name="password" id="password" placeholder="Password">
-      <input type="submit" value="Logga in">
-    </form>
+    <div id ="hideLoginForm">
+      <h2>Logga in användare</h2>
+      <form id="loginForm">
+        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="password" name="password" id="password" placeholder="Password">
+        <input type="submit" value="Logga in">
+      </form>
+    </div>
   </template>
 
   <template id="registerFormTemplate">
-    <h2>Registrera användare</h2>
-    <form id="registerForm">
-      <input type="text" name="username" id="username" placeholder="Username">
-      <input type="password" name="password" id="password" placeholder="Password">
-      <input type="submit" value="Register">
-    </form>
+    <div id ="hideRegisterForm">
+      <h2>Registrera användare</h2>
+      <form id="registerForm">
+        <input type="text" name="username" id="username" placeholder="Username">
+        <input type="password" name="password" id="password" placeholder="Password">
+        <input type="submit" value="Register">
+      </form>
+    </div>
   </template>
 
-  <template id="entries">
-    
+  <template id="createEntryFormTemplate">
+
      <form id="entriesForm">
        <input type="text" name="title" id="title">
        <textarea name="content" id="content" cols="30" rows="10"></textarea>

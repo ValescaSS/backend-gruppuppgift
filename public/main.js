@@ -1,11 +1,18 @@
 
 const views = {
   login: ['#loginFormTemplate', '#registerFormTemplate'],
-  entry: ['#entries']
+  loginFail: ['#loginFailTemplate', '#loginFormTemplate', '#registerFormTemplate'],
+  registerSuccess: ['#registerSuccessTemplate', '#loginFormTemplate', '#registerFormTemplate'],
+  loggedIn: ['#createEntryFormTemplate'],
+  entrySuccess: ['#createEntrySuccessTemplate', '#createEntryFormTemplate'],
+  entryFail: ['#createEntryFailTemplate', '#createEntryFormTemplate']
 
 }
 
-function renderView(view){
+const createEntryFormTemplate = document.getElementById('createEntryFormTemplate');
+
+
+function renderView(view) {
   // Definiera ett target
   const target = document.querySelector('main');
 
@@ -25,41 +32,15 @@ function renderView(view){
     // Lägg in den diven i
     target.append(div);
   })
-  
+
   // Skriva ut innehållet i target
 
   // console.log(view);
 }
-
-
 renderView(views.login);
 
-function renderView(view){
-  const target = document.querySelector('main');
-
-  // Loopa igenom våran "view"
-  view.forEach(template => {
-
-    // Hämta innehållet i template
-    const templateMarkup = document.querySelector(template).innerHTML;
-    // console.log(templateMarkup);
-
-    // skapa en div
-    const div = document.createElement('div');
-
-    // Fill den diven i target (main-element)
-    div.innerHTML = templateMarkup;
-
-    // Lägg in den diven i
-    target.append(div);
-  })
-  
-}
-
-renderView(views.entry);
-
-
-
+const hideLogin = document.querySelector('#hideLoginForm');
+const hideRegister = document.querySelector('#hideRegisterForm');
 
 const loginForm = document.querySelector('#loginForm');
 loginForm.addEventListener('submit', event => {
@@ -71,15 +52,18 @@ loginForm.addEventListener('submit', event => {
     method: 'POST',
     body: formData
   }).then(response => {
-    if(!response.ok){
+    if (!response.ok) {
       return Error(response.statusText);
     } else {
+      renderView(views.loggedIn);
+      hideLogin.classList.add('hidden');
+      hideRegister.classList.add('hidden');
       return response.json();
     }
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 })
 
 const registerForm = document.querySelector('#registerForm');
@@ -92,46 +76,39 @@ registerForm.addEventListener('submit', event => {
     method: 'POST',
     body: formData
   }).then(response => {
-    if(!response.ok){
+    if (!response.ok) {
       return Error(response.statusText);
     } else {
       return response.json();
     }
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 })
 
-const entriesForm = document.querySelector('#entriesForm');
-entriesForm.addEventListener('submit', event => {
-  event.preventDefault();
-  console.log('Hej');
+// const entriesForm = document.querySelector('#entriesForm');
+// entriesForm.addEventListener('submit', event => {
+//   event.preventDefault();
+//   console.log('Hej');
 
-  const formData = new FormData(entriesForm);
-  fetch('/api/newentry/user', {
-    method: 'POST',
-    body: formData
-  }).then(response => {
-    if(!response.ok){
-      return Error(response.statusText);
-    } else {
-      return response.json();
-    }
-  })
-  .catch(error => {
-    console.error(error);
-  })
-})
-
-
-
-// fetch('/api/users')
-//   .then (response => response.json())
-//   .then (data => {
-
-//    console.log(data)
+//   const formData = new FormData(entriesForm);
+//   fetch('/api/newentry/user', {
+//     method: 'POST',
+//     body: formData
+//   }).then(response => {
+//     if (!response.ok) {
+//       return Error(response.statusText);
+//     } else {
+//       return response.json();
+//     }
 //   })
+//     .catch(error => {
+//       console.error(error);
+//     })
+// })
+
+
 
 
 
