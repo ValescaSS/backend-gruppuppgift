@@ -1,5 +1,5 @@
 <?php
-/* session_start(); */
+session_start();
 
 return function ($app) {
   
@@ -18,7 +18,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries->getLastXEntries($num));
-  });
+  })->add($auth);
 
   // 5get Skapa en GET route som hämtar de X första inläggen
   $app->get('/entries/first/{num}', function($request, $response, $args){
@@ -26,7 +26,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getFirstXEntries($num));
-  });
+  })->add($auth);
 
   // 6get Skapa en GET route som hämtar alla inlägg som är skrivna av en specifik användare
   $app->get('/entries/userid/{id}', function($request, $response, $args){
@@ -34,7 +34,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getEntriesUserId($userID));
-  });
+  })->add($auth);
 
   // 7get Skapa en GET route som hämtar de X senaste inläggen som är skrivna av en specifik användare
   $app->get('/entries/useridlastx/{id}', function($request, $response, $args){
@@ -43,7 +43,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getEntriesUserIdLastX($userID, $queryString));
-  });
+  })->add($auth);
 
   // 8get Skapa en GET route som hämtar de X första inläggen som är skrivna av en specifik användare
   $app->get('/entries/useridfirstx/{id}', function($request, $response, $args){
@@ -52,7 +52,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getEntriesUserIdFirstX($userID, $queryString));
-  });
+  })->add($auth);
 
   //2post Skapa en POST route som sparar ett nytt inlägg för en viss användare.
   $app->post('/api/newentry/user', function($request, $response, $args){
@@ -69,6 +69,6 @@ return function ($app) {
     $entry = new Entry($this->db);
 
     return $response->withJson($entry-> deleteEntryById($entryID));
-  });
+  })->add($auth);
 
 };

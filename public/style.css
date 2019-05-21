@@ -23,3 +23,7 @@ h1 {
   text-align: center;
   color: #e74c3c;
 }
+
+.hidden {
+  display: none;
+}
