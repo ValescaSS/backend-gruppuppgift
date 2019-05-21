@@ -20,8 +20,28 @@
 
   <template id="registerFormTemplate">
     <h2>Registrera användare</h2>
-    <p>Det här är en template som visar en registreringsformulär</p>
+    <form id="registerForm">
+      <input type="text" name="username" id="username" placeholder="Username">
+      <input type="password" name="password" id="password" placeholder="Password">
+      <input type="submit" value="Register">
+    </form>
   </template>
+
+  <template id="entriesFormTemplate">
+    <!-- <h2>Lägg till entry</h2>    
+    <form id="entriesForm">
+      <input type="text" name="title" id="title" placeholder="Title"><br><br>
+      <textarea name="content" id="content" cols="30" rows="10" placeholder="Content"></textarea>
+      <input type="submit" value="Add">
+    </form> -->
+ </template>
+
+ <template id="lastTwentiethEntriesTemplate">
+   <h2>Senaste 20 inläggen</h2>
+   <div id="senasteEntries">
+     <!-- innehåll -->
+   </div>
+ </template>
 
   <div class="container">
 
@@ -30,7 +50,7 @@
     </header>
 
     <main>
-
+        <!-- innehåll -->
     </main>
 
   </div>

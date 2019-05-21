@@ -1,68 +1,123 @@
-// (function(){
-//   console.log('Hello World!');
-// })();
-
 const views = {
-  login: ['#loginFormTemplate', '#registerFormTemplate']
-}
+  login: ["#loginFormTemplate", "#registerFormTemplate"],
+  entry: ["#entriesFormTemplate", "#lastTwentiethEntriesTemplate"]
+};
 
-function renderView(view){
-  // Definiera ett target
-  const target = document.querySelector('main');
+function renderView(view) {
+  const target = document.querySelector("main");
 
-  // Loopa igenom våran "view"
+  // Rensa innehållet eftersom innehållet bara växer om vi kör flera renderView()
+  // target.innerHTML = '';
+
   view.forEach(template => {
-
-    // Hämta innehållet i template
     const templateMarkup = document.querySelector(template).innerHTML;
-    // console.log(templateMarkup);
 
-    // skapa en div
-    const div = document.createElement('div');
+    const div = document.createElement("div");
 
-    // Fill den diven i target (main-element)
     div.innerHTML = templateMarkup;
 
-    // Lägg in den diven i
     target.append(div);
-  })
-  
-  // Skriva ut innehållet i target
-
-  // console.log(view);
+  });
 }
 
 renderView(views.login);
+renderView(views.entry);
 
-const loginForm = document.querySelector('#loginForm');
-loginForm.addEventListener('submit', event => {
+const loginForm = document.querySelector("#loginForm");
+loginForm.addEventListener("submit", event => {
   event.preventDefault();
-  console.log('Hej');
 
   const formData = new FormData(loginForm);
-  fetch('/api/login', {
-    method: 'POST',
+  fetch("/api/login", {
+    method: "POST",
     body: formData
-  }).then(response => {
-    if(!response.ok){
-      return Error(response.statusText);
-    } else {
-      return response.json();
-    }
   })
-  .catch(error => {
-    console.error(error);
+    .then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        return response.json();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
+
+const registerForm = document.querySelector("#registerForm");
+registerForm.addEventListener("submit", event => {
+  event.preventDefault();
+  console.log("Hej");
+
+  const formData = new FormData(registerForm);
+  fetch("/api/register", {
+    method: "POST",
+    body: formData
   })
-})
+    .then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        return response.json();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+});
 
+// const entriesForm = document.querySelector('#entriesForm');
+// entriesForm.addEventListener('submit', event => {
+//   event.preventDefault();
+//   console.log('Hej');
 
-
-// fetch('/api/users')
-//   .then (response => response.json())
-//   .then (data => {
-
-//    console.log(data)
+//   const formData = new FormData(entriesForm);
+//   fetch('/api/newentry/user', {
+//     method: 'POST',
+//     body: formData
+//   }).then(response => {
+//     if(!response.ok){
+//       return Error(response.statusText);
+//     } else {
+//       return response.json();
+//     }
 //   })
+//   .catch(error => {
+//     console.error(error);
+//   })
+// })
 
+const api = {
+  entriesLast() {
+    return fetch("/entries/last/5")
+      .then(response => {
+        return !response.ok ? new Error(response.statusText) : response.json();
+      })
+      .catch(error => console.error(error));
+  }
+};
+let data = api.entriesLast();
 
+let p = Promise.resolve(data);
+
+p.then(function(v) {
+  let div = document.getElementById("senasteEntries");
+  for (let i = 0; i < v.length; i++) {
+    let entryID = v[i]["entryID"];
+    let str = v[i]["content"];
+    div.innerHTML +=
+      '<p>' +
+      entryID +
+      ' ' +
+      str.substr(0, 150) +
+      '</p><button class="showalltxt-btn">Läss hela inlägg</button>';
+  }
+
+  let arr = document.querySelectorAll('.showalltxt-btn');
+  for (let i = 0; i < v.length; i++) {
+    arr[i].addEventListener('click', function(){
+      div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
+    });
+  }
+});
 
