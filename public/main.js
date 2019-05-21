@@ -64,7 +64,7 @@ renderView(views.entry);
 const loginForm = document.querySelector('#loginForm');
 loginForm.addEventListener('submit', event => {
   event.preventDefault();
-  console.log('Hej');
+  /* console.log('Hej'); */
 
   const formData = new FormData(loginForm);
   fetch('/api/login', {
@@ -85,7 +85,7 @@ loginForm.addEventListener('submit', event => {
 const registerForm = document.querySelector('#registerForm');
 registerForm.addEventListener('submit', event => {
   event.preventDefault();
-  console.log('Hej');
+  /* console.log('Hej'); */
 
   const formData = new FormData(registerForm);
   fetch('/api/register', {
@@ -106,7 +106,7 @@ registerForm.addEventListener('submit', event => {
 const entriesForm = document.querySelector('#entriesForm');
 entriesForm.addEventListener('submit', event => {
   event.preventDefault();
-  console.log('Hej');
+  /* console.log('Hej'); */
 
   const formData = new FormData(entriesForm);
   fetch('/api/newentry/user', {
