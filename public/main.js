@@ -103,6 +103,7 @@ const api = {
 api.ping();
 
 function entry(v) {
+
   // Visar en sammanfattning av de 20 senaste inlägg
   let div = document.getElementById("senasteEntries");
   for (let i = 0; i < v.length; i++) {
@@ -116,6 +117,7 @@ function entry(v) {
       '...' +
       '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
   }
+  
   // Visar hela inlägg och kommentarer till den inlägg 
   let arr = document.querySelectorAll('.showalltxt-btn');
   for (let i = 0; i < v.length; i++) {
