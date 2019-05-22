@@ -48,6 +48,7 @@ function renderJournalView() {
           <th scope="col">Title</th>
           <th scope="col">Content</th>
           <th scope="col">Delete</th>
+          <th scope="col">Edit</th>
       </tr>
   </thead>
    
@@ -57,6 +58,16 @@ function renderJournalView() {
 
   target.append(tableDiv);
 }
+
+const bindEvents = () => {
+const loginForm = document.querySelector('#loginForm');
+const hideLogin = document.querySelector('#hideLoginForm');
+const hideRegister = document.querySelector('#hideRegisterForm');
+const showEntriesForm = document.querySelector('#showEntriesForm');
+const logoutBtn = document.querySelector('#logout');
+const createEntryFormTemplate = document.getElementById('createEntryFormTemplate');
+const registerForm = document.querySelector('#registerForm');
+const entriesForm = document.querySelector('#entriesForm');
 
 
 function showEntry(entries) {
@@ -69,11 +80,14 @@ function showEntry(entries) {
            <td>${element.title}</td>
            <td>${element.content}</td>
              <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
+             <td><a data-value=${element.entryID} role="button" class ="editBtn">Edit</a></td>
+
              </tr>
          `;
   });
   target.append(entryTable);
 
+  // Delete knappen
   const deleteBtnArray = document.querySelectorAll('.deleteBtn');
   for(let i = 0; i < deleteBtnArray.length; i++){
     
@@ -84,19 +98,25 @@ function showEntry(entries) {
       deleteEntry(entryID);
     })
   }
+  
+  //Edit knappen
+  const editBtnArray = document.querySelectorAll('.editBtn');
+  for(let i = 0; i < editBtnArray.length; i++){
+    
+    editBtnArray[i].addEventListener('click', event => {
+      event.preventDefault();
+      let entryID = editBtnArray[i].getAttribute('data-value');
+      
+      editEntry(entryID);
+    })
+  }
+
 }
 /*------------------end of show journal -----------------*/
 
 
-const hideLogin = document.querySelector('#hideLoginForm');
-const hideRegister = document.querySelector('#hideRegisterForm');
-const showEntriesForm = document.querySelector('#showEntriesForm');
-const logoutBtn = document.querySelector('#logout');
-const createEntryFormTemplate = document.getElementById('createEntryFormTemplate');
-
 
 /*----------------  Login  ------------*/
-const loginForm = document.querySelector('#loginForm');
 loginForm.addEventListener('submit', event => {
   event.preventDefault();
 
@@ -152,6 +172,7 @@ logoutBtn.addEventListener('click', event => {
       hideLogin.classList.remove('hidden');
       hideRegister.classList.remove('hidden');
       showEntriesForm.classList.add('hidden');
+      
       return response.json();
     }
   })
@@ -168,7 +189,6 @@ logoutBtn.addEventListener('click', event => {
 
 
 /*--------------- register --------------------*/
-const registerForm = document.querySelector('#registerForm');
 registerForm.addEventListener('submit', event => {
   event.preventDefault();
   console.log('Hej');
@@ -192,7 +212,6 @@ registerForm.addEventListener('submit', event => {
 
 
 /* ------------------- Entries form ------------------*/
-const entriesForm = document.querySelector('#entriesForm');
 entriesForm.addEventListener('submit', event => {
   event.preventDefault();
 
@@ -219,9 +238,6 @@ entriesForm.addEventListener('submit', event => {
 
 
 /* ------------------- Delete entry ----------------------- */
-// const deleteBtnArray = document.querySelectorAll('.deleteBtn');
-// deleteBtnArray[i].addEventListener('click', event =>{
-//   event.preventDefault();
 
 function deleteEntry(entryID){
 
@@ -242,9 +258,30 @@ function deleteEntry(entryID){
     console.error(error);
   })
 }
-// })
 
+/* ------------------- Edit entry ----------------------- */
 
+// function editEntry(entryID){
 
+//   const formData = new FormData(deleteEntry);
+//   fetch('/api/entry/' + entryID, {
+//     method: 'DELETE',
+//     body: formData
+//   }).then(response => {
+//     if (!response.ok) {
+//       return Error(response.statusText);
+//     } else {
+//       return response.json();
+//     }
+//   }).then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   })
+// }
+
+}
+bindEvents();
 
 
