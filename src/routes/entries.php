@@ -59,16 +59,33 @@ return function ($app) {
     $args['id'] = $_SESSION['userID'];
     $data = $request->getParsedBody();
     $newEntry = new Entry($this->db);
-
+    
     return $response->withJson($newEntry-> postNewEntryUserId($args['id'], $data['title'], $data['content']));     
   })->add($auth);
-
+  
   // 3post Skapa en DELETE route som raderar ett inlägg.
   $app->delete('/api/entry/{id}', function($request, $response, $args){
     $entryID = $args['id'];
     $entry = new Entry($this->db);
-
+    
     return $response->withJson($entry-> deleteEntryById($entryID));
+  })->add($auth);
+  
+  // Put Ändra entrys innehållet
+  $app->put('/api/entry/{id}', function($request, $response, $args){
+    $entryID = $args['id'];
+    $data = $request->getParsedBody();
+    $entry = new Entry($this->db);
+    
+    return $response->withJson($entry->editEntry($entryID,$data['title'], $data['content']));
+  })->add($auth);
+  
+  // Get Hämta specifik title och content för en viss användare
+  $app->get('/api/entry/{id}', function($request, $response, $args){
+    $entryID = $args['id'];
+    $entries = new Entry($this->db);
+
+    return $response->withJson($entries-> getOneEntry($entryID));
   })->add($auth);
 
 };

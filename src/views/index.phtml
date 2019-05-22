@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><?=$title?></title>
+  <title><?= $title ?></title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
 
   <template id="loginFormTemplate">
-    <div id ="hideLoginForm">
+    <div id="hideLoginForm">
       <h2>Logga in användare</h2>
       <form id="loginForm">
         <input type="text" name="username" id="username" placeholder="Username">
@@ -21,7 +23,7 @@
   </template>
 
   <template id="registerFormTemplate">
-    <div id ="hideRegisterForm">
+    <div id="hideRegisterForm">
       <h2>Registrera användare</h2>
       <form id="registerForm">
         <input type="text" name="username" id="username" placeholder="Username">
@@ -30,26 +32,41 @@
       </form>
     </div>
   </template>
-  
+
   <template id="createEntryFormTemplate">
-    
-    <div id ="showEntriesForm" class="hidden">
-     <form id="entriesForm">
-       <input type="text" name="title" id="title">
-       <textarea name="content" id="content" cols="30" rows="10"></textarea>
-       <input type="submit" value="Add">
-     </form>
+
+    <div id="showEntriesForm" class="hidden">
+      <form id="entriesForm">
+        <input type="text" name="title" id="title">
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <input type="submit" value="Add">
+      </form>
     </div>
   </template>
-
-  <template id = "createEntrySuccessTemplate">
+  
+  <template id="createEntrySuccessTemplate">
     
+    </template>
+    
+    <template id="editEntry">
+      <form id="editEntryForm">
+    <div>
+      <label for="title">Title</label>
+      <input type="text" name="title" id="edit-title" class="form-control" value="">
+    </div>
+      <label for="content">Content</label>
+      <textarea type="text" name="content" rows="10" id="edit-content"></textarea>
+
+      <input type="submit" value="Edit" rolr="button" >
+    </div>
+      </form>
   </template>
 
+
   <div class="container">
-   <button id ="logout" class="hidden">Logga ut</button>
+    <button id="logout" class="hidden">Logga ut</button>
     <header>
-      <h1><?=$title?></h1>
+      <h1><?= $title ?></h1>
     </header>
 
     <main>
@@ -61,4 +78,5 @@
   <script type="text/javascript" src="main.js"></script>
 
 </body>
+
 </html>
