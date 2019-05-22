@@ -3,8 +3,8 @@ const views = {
   login: ['#loginFormTemplate', '#registerFormTemplate'],
   loginFail: ['#loginFailTemplate', '#loginFormTemplate', '#registerFormTemplate'],
   registerSuccess: ['#registerSuccessTemplate', '#loginFormTemplate', '#registerFormTemplate'],
-  loggedIn: ['#createEntryFormTemplate', '#createCommentFormTemplate'],
-  entryComment: ['#createCommentFormTemplate'],
+  loggedIn: ['#createEntryFormTemplate'],
+  entryComment: ['#moreentryCommentsTemplates'],
   entrySuccess: ['#createEntrySuccessTemplate', '#createEntryFormTemplate'],
   entryFail: ['#createEntryFailTemplate', '#createEntryFormTemplate']
 
@@ -48,6 +48,7 @@ function renderJournalView() {
           <th scope="col">Title</th>
           <th scope="col">Content</th>
           <th scope="col">Delete</th>
+          <th scope="col">More</th>
       </tr>
   </thead>
    
@@ -69,11 +70,14 @@ function showEntry(entries){
            <td>${element.title}</td>
            <td>${element.content}</td>
              <td><a href="?entryID=<?=${element.entryID}?>" role="button" id="deleteBtn">Delete</a></td>
+             <td><button class="more">More</button></td>
              </tr>
          `;
   });
     target.append(entryTable);
 }
+
+
 
 /*------------------end of show journal -----------------*/
 
@@ -120,6 +124,54 @@ loginForm.addEventListener('submit', event => {
     })
     .then(data =>{
         showEntry(data);
+
+
+      /* ------------------- Comments ----------------------- */
+
+
+
+      let more = document.querySelectorAll(".more")
+      /* for (let i = 0; i < more.length; i++) {
+        console.log(i);
+
+      } */
+      more.forEach(element => {
+        element.addEventListener("click", function () {
+          console.log(element);
+          const api3 = {
+            ping3() {
+              return fetch("/api/comments")
+                .then(response => {
+                  return !response.ok ? new Error(response.statusText) : response.json();
+                }).then(data => {
+                  entry3(data);
+                })
+                .catch(error => console.error(error));
+            }
+          };
+          api3.ping3();
+
+          function entry3(v) {
+            let div = document.getElementById("moreentryComments");
+            /* for (let i = 0; i < v.length; i++) {
+              let content = v[i]['content'];
+              div.innerHTML += '<p>' + ' ' + content + '</p>'
+            } */
+
+            v.forEach(element => {
+              let content = element['content'];
+              div.innerHTML += '<p>' + ' ' + content + '</p>'
+              console.log(element);
+            });
+          };
+
+          renderView(views.entryComment);
+        })
+
+
+
+
+      })
     })
     .catch(error => {
       console.error(error);
@@ -194,7 +246,7 @@ entriesForm.addEventListener('submit', event => {
 
 
 /* ------------------- Delete entry ----------------------- */
-const deleteEntry = document.querySelector('#deleteBtn');
+/* const deleteEntry = document.querySelector('#deleteBtn');
 deleteEntry.addEventListener('click', event =>{
   event.preventDefault();
 
@@ -214,7 +266,21 @@ deleteEntry.addEventListener('click', event =>{
   .catch(error => {
     console.error(error);
   })
-})
+}) */
+
+
+
+  
+
+
+  
+  
+
+  /* console.log(api3.ping3()); */
+
+
+
+
 
 
 

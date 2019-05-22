@@ -25,14 +25,14 @@ return function ($app) {
 
 
 // Add new comment
-$app->post('/api/comment/{id}/{entryID}', function($request, $response, $args){
-    $userID = $args['id'];
-    $entryID =  $args['entryID'];
+$app->post('/api/comment/{id}', function($request, $response, $args){
+    $userID = $_SESSION['userID'];
+    $entryID =  $args['id'];
     $data = $request->getParsedBody();
     $newComment = new Kommentar($this->db);
 
-    return $response->withJson($newComment-> AddNewComment( $userID , $entryID, $data['content']));     
-  });
+    return $response->withJson($newComment-> AddNewComment( $userID,  $entryID, $data['content']));     
+  })->add($auth);
 
 
 
