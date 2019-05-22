@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start(); */
 
 return function ($app) {
   
@@ -55,13 +55,13 @@ return function ($app) {
   })->add($auth);
 
   //2post Skapa en POST route som sparar ett nytt inlägg för en viss användare.
-  $app->post('/api/newentry/user', function($request, $response, $args){
-    $userID = $_SESSION['userID'];
+  $app->post('/api/newentry/{id}', function($request, $response, $args){
+    $userID = $args['id'];
     $data = $request->getParsedBody();
     $newEntry = new Entry($this->db);
 
     return $response->withJson($newEntry-> postNewEntryUserId($userID, $data['title'], $data['content']));     
-  })->add($auth);
+  });
 
   // 3post Skapa en DELETE route som raderar ett inlägg.
   $app->delete('/entries/deleteentry/{id}', function($request, $response, $args){

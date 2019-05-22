@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start(); */
 
 return function ($app) {
   
@@ -10,14 +10,14 @@ return function ($app) {
 // Get one comment with id
  $app->get('/api/comment/{id}', function ($request, $response, $args) {
     $commentID = $args['id'];
-    $comment = new Comment($this->db);
+    $comment = new Kommentar($this->db);
     return $response->withJson($comment->getCommentByID($commentID));
   })->add($auth);
 
   
 // Get all comments with 
   $app->get('/api/comments', function($request, $response ) {
-    $entries = new Entry($this->db);
+    $entries = new Kommentar($this->db);
 
     return $response->withJson($entries-> getAllComments());
   })->add($auth);
@@ -25,13 +25,14 @@ return function ($app) {
 
 
 // Add new comment
-$app->post('/api/newcomment/user', function($request, $response, $args){
-    $userID = $_SESSION['userID'];
+$app->post('/api/newcomment/{id}/{entryID}', function($request, $response, $args){
+    $userID = $args['id'];
+    $entryID =  $args['entryID'];
     $data = $request->getParsedBody();
-    $newComment = new Entry($this->db);
+    $newComment = new Kommentar($this->db);
 
-    return $response->withJson($newComment-> AddNewComment($userID, $data['entryID'], $data['content']));     
-  })->add($auth);
+    return $response->withJson($newComment-> AddNewComment( $userID , $entryID, $data['content']));     
+  });
 
 
 
@@ -39,7 +40,7 @@ $app->post('/api/newcomment/user', function($request, $response, $args){
 $app->put('/api/updatecomment/{id}', function($request, $response, $args){
     $userID = $_SESSION['userID'];
     $data = $request->getParsedBody();
-    $updateComment = new Entry($this->db);
+    $updateComment = new Kommentar($this->db);
 
     return $response->withJson($updateComment-> updateCommentById($userID, $data['content']));     
   })->add($auth);
@@ -47,9 +48,9 @@ $app->put('/api/updatecomment/{id}', function($request, $response, $args){
 
 
 // Delete comment
-$app->delete('/api/comment/deletecomment/{id}', function($request, $response, $args){
+$app->delete('/api/deletecomment/{id}', function($request, $response, $args){
     $commentID = $args['id'];
-    $comment = new Entry($this->db);
+    $comment = new Kommentar($this->db);
 
     return $response->withJson($comment-> deleteCommentById($commentID));
   })->add($auth);

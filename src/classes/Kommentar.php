@@ -1,6 +1,6 @@
 <?php
 
-class User extends Mapper {
+class Kommentar extends Mapper {
 
 
   // Get one comment from id
@@ -22,16 +22,16 @@ class User extends Mapper {
 
 
   // Add new comment
-  public function AddNewComment($entryID, $content){
-        $statement = $this->db->prepare("INSERT INTO comments (entryID, content, createdAt , createdBy) VALUES (:entryID, :content, :createdAt, :createdBy)");
+  public function AddNewComment($userID,$entryID, $content){
+        $statement = $this->db->prepare("INSERT INTO comments (entryID, content, createdBy,createdAt ) VALUES (:entryID, :content, :createdBy , :createdAt)");
         date_default_timezone_set("Europe/Stockholm");
         $statement->execute([
           ":entryID" => $entryID,
           ":content" => $content,
-          ":createdAt" => date('Y-m-d H:i:s'),
-          ":createdBy" => $userID
+          ":createdBy" => $userID,
+          ":createdAt" => date('Y-m-d H:i:s')
           ]);
-          return "Post send";
+          return "Comment send";
     }
 
 
@@ -42,7 +42,7 @@ class User extends Mapper {
         $statement->execute([
           ":content" => $content,
           ]);
-          return "Post updated";
+          return "Comment send";
     }
 
 

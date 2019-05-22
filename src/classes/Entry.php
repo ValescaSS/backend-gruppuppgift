@@ -45,13 +45,13 @@ class Entry extends Mapper {
     }
 
     public function postNewEntryUserId($userID, $title, $content){
-        $statement = $this->db->prepare("INSERT INTO entries (title, content,createdAt , createdBy) VALUES (:title, :content, :createdAt, :createdBy)");
+        $statement = $this->db->prepare("INSERT INTO entries (title, content , createdBy ,createdAt) VALUES (:title, :content, :createdBy , :createdAt)");
         date_default_timezone_set("Europe/Stockholm");
         $statement->execute([
           ":title" => $title, 
           ":content" => $content,
-          ":createdAt" => date('Y-m-d H:i:s'),
-          ":createdBy" => $userID
+          ":createdBy" => $userID,
+          ":createdAt" => date('Y-m-d H:i:s')
           ]);
           return "Post send";
     }
