@@ -27,7 +27,8 @@ renderView(views.entry);
 const loginForm = document.querySelector("#loginForm");
 loginForm.addEventListener("submit", event => {
   event.preventDefault();
-
+  
+  // POST route som loggar in en användare
   const formData = new FormData(loginForm);
   fetch("/api/login", {
       method: "POST",
@@ -48,8 +49,8 @@ loginForm.addEventListener("submit", event => {
 const registerForm = document.querySelector("#registerForm");
 registerForm.addEventListener("submit", event => {
   event.preventDefault();
-  console.log("Hej");
 
+  // POST route som registrerar en ny användare
   const formData = new FormData(registerForm);
   fetch("/api/register", {
       method: "POST",
@@ -67,30 +68,10 @@ registerForm.addEventListener("submit", event => {
     });
 });
 
-// const entriesForm = document.querySelector('#entriesForm');
-// entriesForm.addEventListener('submit', event => {
-//   event.preventDefault();
-//   console.log('Hej');
-
-//   const formData = new FormData(entriesForm);
-//   fetch('/api/newentry/user', {
-//     method: 'POST',
-//     body: formData
-//   }).then(response => {
-//     if(!response.ok){
-//       return Error(response.statusText);
-//     } else {
-//       return response.json();
-//     }
-//   })
-//   .catch(error => {
-//     console.error(error);
-//   })
-// })
-
+// Definierar funktionen som kallar på vårat API
 const api = {
   ping() {
-    return fetch("/entries/last/5")
+    return fetch("/entries/last/20")
       .then(response => {
         return !response.ok ? new Error(response.statusText) : response.json();
       }).then(data => {
@@ -117,7 +98,7 @@ function entry(v) {
       '...' +
       '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
   }
-  
+
   // Visar hela inlägg och kommentarer till den inlägg 
   let arr = document.querySelectorAll('.showalltxt-btn');
   for (let i = 0; i < v.length; i++) {
@@ -125,7 +106,7 @@ function entry(v) {
       div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
       const api2 = {
         ping2() {
-          return fetch('/api/comments/entry/'+ v[i]["entryID"])
+          return fetch('/api/comments/entry/' + v[i]["entryID"])
             .then(response => {
               return !response.ok ? new Error(response.statusText) : response.json();
             }).then(data => {
@@ -134,22 +115,17 @@ function entry(v) {
             .catch(error => console.error(error));
         }
       };
-      
+
       api2.ping2();
-      
-      function entry2(v){
+
+      function entry2(v) {
         let div = document.getElementById("entryComments");
         for (let i = 0; i < v.length; i++) {
           let content = v[i]['content'];
           div.innerHTML += '<p>' + ' ' + content + '</p>'
         }
       };
-      
       renderView(views.comment);
     });
   }
 };
-
-
-
-
