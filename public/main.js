@@ -29,9 +29,9 @@ loginForm.addEventListener("submit", event => {
 
   const formData = new FormData(loginForm);
   fetch("/api/login", {
-    method: "POST",
-    body: formData
-  })
+      method: "POST",
+      body: formData
+    })
     .then(response => {
       if (!response.ok) {
         return Error(response.statusText);
@@ -51,9 +51,9 @@ registerForm.addEventListener("submit", event => {
 
   const formData = new FormData(registerForm);
   fetch("/api/register", {
-    method: "POST",
-    body: formData
-  })
+      method: "POST",
+      body: formData
+    })
     .then(response => {
       if (!response.ok) {
         return Error(response.statusText);
@@ -88,19 +88,21 @@ registerForm.addEventListener("submit", event => {
 // })
 
 const api = {
-  entriesLast() {
+  ping() {
     return fetch("/entries/last/5")
       .then(response => {
         return !response.ok ? new Error(response.statusText) : response.json();
+      }).then(data => {
+        entry(data);
       })
       .catch(error => console.error(error));
   }
 };
-let data = api.entriesLast();
 
-let p = Promise.resolve(data);
+api.ping();
 
-p.then(function(v) {
+function entry(v) {
+  // Visar en sammanfattning av de 20 senaste inlägg
   let div = document.getElementById("senasteEntries");
   for (let i = 0; i < v.length; i++) {
     let entryID = v[i]["entryID"];
@@ -109,15 +111,15 @@ p.then(function(v) {
       '<p>' +
       entryID +
       ' ' +
-      str.substr(0, 150) +
-      '</p><button class="showalltxt-btn">Läss hela inlägg</button>';
+      str.substr(0, 200) +
+      '...' +
+      '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
   }
-
+  // Visar hela inlägg och kommentarer till den inlägg 
   let arr = document.querySelectorAll('.showalltxt-btn');
   for (let i = 0; i < v.length; i++) {
-    arr[i].addEventListener('click', function(){
+    arr[i].addEventListener('click', function () {
       div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
     });
   }
-});
-
+};
