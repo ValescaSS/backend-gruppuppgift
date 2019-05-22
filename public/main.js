@@ -1,6 +1,7 @@
 const views = {
   login: ["#loginFormTemplate", "#registerFormTemplate"],
-  entry: ["#entriesFormTemplate", "#lastTwentiethEntriesTemplate"]
+  entry: ["#entriesFormTemplate", "#lastTwentiethEntriesTemplate"],
+  comment: ["#entryCommentsTemplates"]
 };
 
 function renderView(view) {
@@ -120,6 +121,33 @@ function entry(v) {
   for (let i = 0; i < v.length; i++) {
     arr[i].addEventListener('click', function () {
       div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
+      const api2 = {
+        ping2() {
+          return fetch('/api/comments/entry/'+ v[i]["entryID"])
+            .then(response => {
+              return !response.ok ? new Error(response.statusText) : response.json();
+            }).then(data => {
+              entry2(data);
+            })
+            .catch(error => console.error(error));
+        }
+      };
+      
+      api2.ping2();
+      
+      function entry2(v){
+        let div = document.getElementById("entryComments");
+        for (let i = 0; i < v.length; i++) {
+          let content = v[i]['content'];
+          div.innerHTML += '<p>' + ' ' + content + '</p>'
+        }
+      };
+      
+      renderView(views.comment);
     });
   }
 };
+
+
+
+

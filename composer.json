@@ -16,6 +16,6 @@
     "sort-packages": true
   },
   "scripts": {
-      "start": "php -S localhost:8005 -t public"
+      "start": "php -S localhost:8000 -t public"
   }
 }

@@ -14,4 +14,9 @@ class Comment extends Mapper {
           return "Comment send";
     }
 
+    public function showCommentsEntryID($entryid){
+        $statement = $this->db->prepare("SELECT content FROM comments WHERE entryID = $entryid");
+        $statement->execute();
+        return $statement->fetchall(PDO::FETCH_ASSOC);
+    }
 }
