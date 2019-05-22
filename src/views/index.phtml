@@ -30,15 +30,20 @@
       </form>
     </div>
   </template>
-
+  
   <template id="createEntryFormTemplate">
-     <div id ="hideEntryForm">
+    
+    <div id ="showEntriesForm" class="hidden">
      <form id="entriesForm">
        <input type="text" name="title" id="title">
        <textarea name="content" id="content" cols="30" rows="10"></textarea>
        <input type="submit" value="Add">
      </form>
+    </div>
+  </template>
 
+  <template id = "createEntrySuccessTemplate">
+    
   </template>
 
   <template id="createCommentFormTemplate">
@@ -52,7 +57,7 @@
   </template>
 
   <div class="container">
-
+   <button id ="logout" class="hidden">Logga ut</button>
     <header>
       <h1><?=$title?></h1>
     </header>

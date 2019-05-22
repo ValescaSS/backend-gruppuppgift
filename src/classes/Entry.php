@@ -25,27 +25,27 @@ class Entry extends Mapper {
     }
 
     public function getEntriesUserId($userID) {
-        $statement = $this->db->prepare("SELECT * FROM entries WHERE userID = {$userID}");
+        $statement = $this->db->prepare("SELECT * FROM entries WHERE createdBy = {$userID}");
         $statement->execute();
         return $statement->fetchall(PDO::FETCH_ASSOC);
     }
 
     public function getEntriesUserIdLastX($userID, $queryString) {
         $orderby ='DESC';
-        $statement = $this->db->prepare("SELECT * FROM entries WHERE userID = {$userID} ORDER BY createdAt {$orderby} LIMIT {$queryString['limit']}");
+        $statement = $this->db->prepare("SELECT * FROM entries WHERE createdBy = {$userID} ORDER BY createdAt {$orderby} LIMIT {$queryString['limit']}");
         $statement->execute();
         return $statement->fetchall(PDO::FETCH_ASSOC);
     }
 
     public function getEntriesUserIdFirstX($userID, $queryString) {
         $orderby ='ASC';
-        $statement = $this->db->prepare("SELECT * FROM entries WHERE userID = {$userID} ORDER BY createdAt {$orderby} LIMIT {$queryString['limit']}");
+        $statement = $this->db->prepare("SELECT * FROM entries WHERE createdBy = {$userID} ORDER BY createdAt {$orderby} LIMIT {$queryString['limit']}");
         $statement->execute();
         return $statement->fetchall(PDO::FETCH_ASSOC);
     }
 
     public function postNewEntryUserId($userID, $title, $content){
-        $statement = $this->db->prepare("INSERT INTO entries (title, content , createdBy ,createdAt) VALUES (:title, :content, :createdBy , :createdAt)");
+        $statement = $this->db->prepare("INSERT INTO entries (title, content, createdBy, createdAt) VALUES (:title, :content , :createdBy , :createdAt )");
         date_default_timezone_set("Europe/Stockholm");
         $statement->execute([
           ":title" => $title, 
