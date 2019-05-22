@@ -1,6 +1,5 @@
 const views = {
-  login: ["#loginFormTemplate", "#registerFormTemplate"],
-  entry: ["#entriesFormTemplate", "#lastTwentiethEntriesTemplate"],
+  entry: ["#lastTwentiethEntriesTemplate"],
   comment: ["#entryCommentsTemplates"]
 };
 
@@ -21,52 +20,7 @@ function renderView(view) {
   });
 }
 
-renderView(views.login);
 renderView(views.entry);
-
-const loginForm = document.querySelector("#loginForm");
-loginForm.addEventListener("submit", event => {
-  event.preventDefault();
-  
-  // POST route som loggar in en användare
-  const formData = new FormData(loginForm);
-  fetch("/api/login", {
-      method: "POST",
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        return response.json();
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-});
-
-const registerForm = document.querySelector("#registerForm");
-registerForm.addEventListener("submit", event => {
-  event.preventDefault();
-
-  // POST route som registrerar en ny användare
-  const formData = new FormData(registerForm);
-  fetch("/api/register", {
-      method: "POST",
-      body: formData
-    })
-    .then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        return response.json();
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-});
 
 // Definierar funktionen som kallar på vårat API
 const api = {
@@ -101,8 +55,10 @@ function entry(v) {
 
   // Visar hela inlägg och kommentarer till den inlägg 
   let arr = document.querySelectorAll('.showalltxt-btn');
+  let entryTitle = document.getElementById('entry-title');
   for (let i = 0; i < v.length; i++) {
     arr[i].addEventListener('click', function () {
+      entryTitle.innerHTML = v[i]["title"];
       div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
       const api2 = {
         ping2() {
@@ -118,6 +74,7 @@ function entry(v) {
 
       api2.ping2();
 
+      // Visar kommentarer till en inlägg
       function entry2(v) {
         let div = document.getElementById("entryComments");
         for (let i = 0; i < v.length; i++) {
