@@ -13,6 +13,16 @@ class Kommentar extends Mapper {
         }
 
 
+  // Get all comment for one entry
+  public function getAllCommentsoneEntry($entryID){
+            $statement = $this->db->prepare("SELECT * FROM comments WHERE entryID = :entryID");
+            $statement->execute([
+                'entryID' => $entryID 
+            ]);
+            return $statement->fetchall(PDO::FETCH_ASSOC);
+        }
+
+
   // Get all the comments
   public function getAllComments(){
         $statement = $this->db->prepare("SELECT * FROM comments");

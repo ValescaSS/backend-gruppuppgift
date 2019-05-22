@@ -97,6 +97,14 @@ function showEntry(entries) {
       let entryID = moreBtnArray[i].getAttribute('data-value');
       
       commentMore(entryID);
+      console.log(entryID);
+
+
+
+
+
+
+
     })
   }
 }
@@ -150,14 +158,14 @@ loginForm.addEventListener('submit', event => {
 
 
 
-      let more = document.querySelectorAll(".more")
+      /* let more = document.querySelectorAll(".more")
       
       more.forEach(element => {
         element.addEventListener("click", function () {
-          /* console.log(element); */
+          console.log(element);
           const api3 = {
             ping3() {
-              return fetch("/api/comments")
+              return fetch("/api/comments" + )
                 .then(response => {
                   return !response.ok ? new Error(response.statusText) : response.json();
                 }).then(data => {
@@ -173,7 +181,7 @@ loginForm.addEventListener('submit', event => {
             v.forEach(element => {
               let content = element['content'];
               div.innerHTML += '<p>' + ' ' + content + '</p>'
-              /* console.log(element); */
+              console.log(element);
             });
           };
 
@@ -183,7 +191,7 @@ loginForm.addEventListener('submit', event => {
 
 
 
-      })
+      }) */
     })
     .catch(error => {
       console.error(error);
@@ -287,6 +295,7 @@ function deleteEntry(entryID){
     if (!response.ok) {
       return Error(response.statusText);
     } else {
+      console.log('GET');
       return response.json();
     }
   }).then(data => {
@@ -296,7 +305,19 @@ function deleteEntry(entryID){
     console.error(error);
   })
 }
+function showMoreComments(v) {
+  console.log(v);
+  let div = document.getElementById("moreentryComments");
+  
+  v.forEach(element => {
+  
+    div.innerHTML += '<p>' + ' ' + element.content + '</p>'
+    console.log(element);
+  });
+  renderView(views.entryComment);
+};
 
+       
 
 
 
@@ -304,17 +325,20 @@ function deleteEntry(entryID){
 function commentMore(entryID){
 
   const formData = new FormData(commentMore);
-  fetch('/api/comment/' + entryID, {
-    method: 'POST',
-    body: formData
-  }).then(response => {
+  fetch('/api/comments/' + entryID
+    /* method: 'GET',
+    body: formData */
+  ).then(response => {
     if (!response.ok) {
       return Error(response.statusText);
     } else {
       return response.json();
     }
   }).then(data => {
-    console.log(data);
+    /* console.log(data); */
+
+    showMoreComments(data)
+    
   })
   .catch(error => {
     console.error(error);
