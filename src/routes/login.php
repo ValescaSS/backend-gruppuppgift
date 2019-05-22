@@ -1,5 +1,4 @@
 <?php
-// session_sart();
 return function ($app) {
   // Register auth middleware
   $auth = require __DIR__ . '/../middlewares/auth.php';
@@ -9,6 +8,8 @@ return function ($app) {
     $data = $request->getParsedBody();
     // In a real example, do database checks here
     if (!empty($data['username'] && $data['password'])) {
+  
+
       $statement = $this->db->prepare("SELECT * FROM users WHERE username = :username");
       $statement->execute([
         ":username" => $data['username']

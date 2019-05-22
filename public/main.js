@@ -41,6 +41,7 @@ function renderJournalView() {
   const target = document.querySelector('main');
   let tableDiv = document.createElement('table');
 
+
   tableDiv.innerHTML = ` 
   <thead>
       <tr class="text-uppercase">
@@ -60,25 +61,45 @@ function renderJournalView() {
 }
 
 
-function showEntry(entries){
+function showEntry(entries) {
   let target = document.querySelector('table');
   let entryTable = document.createElement('tbody');
   entryTable.innerHTML = '';
   entries.forEach(element => {
-     entryTable.innerHTML+=`<tr>
+    entryTable.innerHTML += `<tr>
            <td>${element.createdAt}</td>
            <td>${element.title}</td>
            <td>${element.content}</td>
-             <td><a href="?entryID=<?=${element.entryID}?>" role="button" id="deleteBtn">Delete</a></td>
-             <td><button class="more">More</button></td>
+             <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
+             <td><a data-value=${element.entryID} role="button" class ="more">More</a></td>
              </tr>
          `;
   });
-    target.append(entryTable);
+  target.append(entryTable);
+
+  const deleteBtnArray = document.querySelectorAll('.deleteBtn');
+  for(let i = 0; i < deleteBtnArray.length; i++){
+    
+    deleteBtnArray[i].addEventListener('click', event => {
+      event.preventDefault();
+      let entryID = deleteBtnArray[i].getAttribute('data-value');
+      
+      deleteEntry(entryID);
+    })
+  }
+
+
+  const moreBtnArray = document.querySelectorAll('.more');
+  for(let i = 0; i < moreBtnArray.length; i++){
+    
+    moreBtnArray[i].addEventListener('click', event => {
+      event.preventDefault();
+      let entryID = moreBtnArray[i].getAttribute('data-value');
+      
+      commentMore(entryID);
+    })
+  }
 }
-
-
-
 /*------------------end of show journal -----------------*/
 
 
@@ -111,8 +132,7 @@ loginForm.addEventListener('submit', event => {
     }
   })
     .then(data => {
-      const userID = data;
-      console.log(userID);
+      //Hämta alla inlägg
       return fetch('/entries/userid/{id}')
     })
     .then(response => {
@@ -131,13 +151,10 @@ loginForm.addEventListener('submit', event => {
 
 
       let more = document.querySelectorAll(".more")
-      /* for (let i = 0; i < more.length; i++) {
-        console.log(i);
-
-      } */
+      
       more.forEach(element => {
         element.addEventListener("click", function () {
-          console.log(element);
+          /* console.log(element); */
           const api3 = {
             ping3() {
               return fetch("/api/comments")
@@ -153,15 +170,10 @@ loginForm.addEventListener('submit', event => {
 
           function entry3(v) {
             let div = document.getElementById("moreentryComments");
-            /* for (let i = 0; i < v.length; i++) {
-              let content = v[i]['content'];
-              div.innerHTML += '<p>' + ' ' + content + '</p>'
-            } */
-
             v.forEach(element => {
               let content = element['content'];
               div.innerHTML += '<p>' + ' ' + content + '</p>'
-              console.log(element);
+              /* console.log(element); */
             });
           };
 
@@ -184,7 +196,22 @@ loginForm.addEventListener('submit', event => {
 
 /*----------------- Log out -----------------*/
 logoutBtn.addEventListener('click', event => {
-  fetch()
+  event.preventDefault();
+
+  fetch('/api/logout').then(response => {
+    if (!response.ok) {
+      return Error(response.statusText);
+    } else {
+      console.log('logout');
+      hideLogin.classList.remove('hidden');
+      hideRegister.classList.remove('hidden');
+      showEntriesForm.classList.add('hidden');
+      return response.json();
+    }
+  })
+    .catch(error => {
+      console.error(error);
+    })
 })
 
 
@@ -199,7 +226,7 @@ const registerForm = document.querySelector('#registerForm');
 registerForm.addEventListener('submit', event => {
   event.preventDefault();
   console.log('Hej');
-  
+
   const formData = new FormData(registerForm);
   fetch('/api/register', {
     method: 'POST',
@@ -211,9 +238,9 @@ registerForm.addEventListener('submit', event => {
       return response.json();
     }
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 })
 /*---------------end of register --------------------*/
 
@@ -222,7 +249,7 @@ registerForm.addEventListener('submit', event => {
 const entriesForm = document.querySelector('#entriesForm');
 entriesForm.addEventListener('submit', event => {
   event.preventDefault();
-  
+
   const formData = new FormData(entriesForm);
   fetch('/api/entry/{id}', {
     method: 'POST',
@@ -237,21 +264,23 @@ entriesForm.addEventListener('submit', event => {
   }).then(data => {
     console.log(data);
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 })
 
 /* -------------------end of Entries form ------------------*/
 
 
 /* ------------------- Delete entry ----------------------- */
-/* const deleteEntry = document.querySelector('#deleteBtn');
-deleteEntry.addEventListener('click', event =>{
-  event.preventDefault();
+// const deleteBtnArray = document.querySelectorAll('.deleteBtn');
+// deleteBtnArray[i].addEventListener('click', event =>{
+//   event.preventDefault();
+
+function deleteEntry(entryID){
 
   const formData = new FormData(deleteEntry);
-  fetch('/api/entry/delete/{id}', {
+  fetch('/api/entry/' + entryID, {
     method: 'DELETE',
     body: formData
   }).then(response => {
@@ -266,22 +295,32 @@ deleteEntry.addEventListener('click', event =>{
   .catch(error => {
     console.error(error);
   })
-}) */
-
-
-
-  
-
-
-  
-  
-
-  /* console.log(api3.ping3()); */
+}
 
 
 
 
 
+function commentMore(entryID){
+
+  const formData = new FormData(commentMore);
+  fetch('/api/comment/' + entryID, {
+    method: 'POST',
+    body: formData
+  }).then(response => {
+    if (!response.ok) {
+      return Error(response.statusText);
+    } else {
+      return response.json();
+    }
+  }).then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  })
+}
+// })
 
 
 
