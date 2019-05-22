@@ -25,7 +25,9 @@
 
   $entries = require __DIR__ . '/../src/routes/entries.php';
   $entries($app);
-
   
+  $logout = require __DIR__ . '/../src/routes/logout.php';
+  $logout($app);
+
   // Run app
   $app->run();

@@ -65,10 +65,10 @@ return function ($app) {
 
   // 3post Skapa en DELETE route som raderar ett inlägg.
   $app->delete('/api/entry/{id}', function($request, $response, $args){
-    $args['id'] = $_SESSION['entryID'];
+    $entryID = $args['id'];
     $entry = new Entry($this->db);
 
-    return $response->withJson($entry-> deleteEntryById($args['id']));
+    return $response->withJson($entry-> deleteEntryById($entryID));
   })->add($auth);
 
 };
