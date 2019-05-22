@@ -36,20 +36,20 @@ class Kommentar extends Mapper {
 
 
   // Update comment
-    public function updateCommentById($entryID, $content){
-        $statement = $this->db->prepare("UPDATE comments SET content = :content WHERE userID = :userID");
-        date_default_timezone_set("Europe/Stockholm");
-        $statement->execute([
-          ":content" => $content,
+    public function updateCommentById( $commentID, $content){
+        $statement = $this->db->prepare("UPDATE comments SET content = :content WHERE commentID = :commentID");
+          $statement->execute([
+          ":commentID" => $commentID,
+          ":content" => $content
           ]);
-          return "Comment send";
+          return "Comment updated";
     }
 
 
 
   // Delete comment
-  public function deleteCommentById($entryID){
-        $statement = $this->db->prepare("DELETE FROM comments WHERE entryID = {$entryID}");
+  public function deleteCommentById($commentID){
+        $statement = $this->db->prepare("DELETE FROM comments WHERE commentID = {$commentID}");
         $statement->execute();
         return "Comment deleted";
     }
