@@ -5,6 +5,7 @@ const views = {
   registerSuccess: ['#registerSuccessTemplate', '#loginFormTemplate', '#registerFormTemplate'],
   loggedIn: ['#createEntryFormTemplate'],
   entryComment: ['#moreentryCommentsTemplates', '#createCommentFormTemplate'],
+  editEntryComment: ['#editCommentTemplate'],
   entrySuccess: ['#createEntrySuccessTemplate', '#createEntryFormTemplate'],
   entryFail: ['#createEntryFailTemplate', '#createEntryFormTemplate']
 
@@ -89,18 +90,6 @@ function showEntry(entries) {
   }
 
 
-  /* const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
-  for (let i = 0; i < deleteCommentBtnArray.length; i++) {
-     console.log(object);
-    deleteCommentBtnArray[i].addEventListener('click', event => {
-      event.preventDefault();
-      
-
-      deleteComment(commentID);
-    })
-  } */
-
-
   const moreBtnArray = document.querySelectorAll('.more');
   for (let i = 0; i < moreBtnArray.length; i++) {
 
@@ -108,14 +97,14 @@ function showEntry(entries) {
       event.preventDefault();
       let entryID = moreBtnArray[i].getAttribute('data-value');
 
-      commentMore(entryID);
       /* console.log(entryID); */
       const hideEntriesForm = document.querySelector('#hideEntriesForm');
       hideEntriesForm.classList.add('hidden');
       const hideTable = document.querySelector('table');
       hideTable.classList.add('hidden');
       renderView(views.entryComment);
-      commentForm(entryID);
+      commentMore(entryID); // Visa komment
+      commentForm(entryID); // Visa komment form
 
     })
   }
@@ -282,12 +271,12 @@ function deleteEntry(entryID) {
 
 /* ------------------- Comments ----------------------- */
 
+
+
+//Hämta komment 
 function commentMore(entryID) {
-
-
   fetch('/api/comments/' + entryID, {
     method: 'GET'
-
   }).then(response => {
     if (!response.ok) {
       return Error(response.statusText);
@@ -295,52 +284,79 @@ function commentMore(entryID) {
       return response.json();
     }
   }).then(data => {
-     console.log(data) 
-
+    console.log(data) // skriver ut objekt som innehåller komenterar
     let target = document.getElementById("moreentryComments");
     let entryMoreComment = document.createElement('div');
     entryMoreComment.innerHTML = '';
-    for (let i = 0; i < data.length; i++) {
-      /* console.log(data[i]['content']); */
-      /*  output =+ data[i]['content']; */
-      entryMoreComment.innerHTML += '<p>' + ' ' + data[i]['content'] + '</p>' + `<button data-value=${data[i]['CommentID']} class ="deleteCommentBtn">Delete</button>`;
-      
-   /*    let commentID = data[i]['CommentID']
-      console.log(commentID); */
-
+    data.forEach(comment => {
+      // console.log(comment.commentID);
+      // console.log(comment.content);
+      entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.commentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn">Edit</button>`;
+    })
+    target.append(entryMoreComment); //Visa kommenterar på skärmen
+    const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
+    for (let i = 0; i < deleteCommentBtnArray.length; i++) {
+      deleteCommentBtnArray[i].addEventListener('click', event => {
+        event.preventDefault();
+        let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
+        // console.log(commentID); // Hämta commentID
+        deleteComment(commentID); // SKicka den specifika commentID till deleteComment funktion
+      })
     }
-    console.log(entryMoreComment);
-      
-      const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
-      for (let i = 0; i < data.length; i++) {
-        console.log(data[i]);
-        deleteCommentBtnArray[i].addEventListener('click', event => {
-          event.preventDefault();
-          console.log(deleteCommentBtnArray[i]);
-
-  //         let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
-  //         console.log(commentID);
-  //         deleteComment(commentID);
+    const editCommentBtnArray = document.querySelectorAll('.editCommentBtn');
+    for (let i = 0; i < editCommentBtnArray.length; i++) {
+      editCommentBtnArray[i].addEventListener('click', event => {
+        event.preventDefault();
+        let hideCommentForm = document.getElementById('commentForm'); //Dölja comment form
+        hideCommentForm.classList.add('hidden');
+        renderView(views.editEntryComment); // Visa edit comment form
+        let commentID = editCommentBtnArray[i].getAttribute('data-value');
+        console.log(commentID); // Hämta commentID
+        // Först hämta den specifika komment för att kunna visa på textarea 
+        // Och sedan skicka Edit comment
+        fetch('/api/comment/' + commentID, {
+          method: 'GET'
+        }).then(response => {
+          if (!response.ok) {
+            return Error(response.statusText);
+          } else {
+            return response.json();
+          }
+        }).then(data => {
+          console.log(data.content);
+          document.getElementById("editCommentContent").value = data.content;  // Visa comment som skrev innan på textarea
+          let editCommentBtn = document.getElementById('editCommentForm');
+          editCommentBtn.addEventListener('submit', event => {
+            event.preventDefault();
+            const formData = new FormData(editCommentBtn);
+            const formJson = {};
+            formData.forEach((value, key) => { formJson[key] = value });
+            fetch('/api/comment/' + commentID, {
+              method: 'PUT',
+              body: JSON.stringify(formJson),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }).then(response => {
+              if (!response.ok) {
+                return Error(response.statusText);
+              } else {
+                editCommentBtn.classList.add('hidden');
+                hideEntriesForm.classList.remove('hidden');
+                return commentMore(entryID);
+              }
+            })
+          })
         })
-      }
-      
-     
-    
-
-  
-
-  //   /* console.log(entryMoreComment); */
-  //   target.append(entryMoreComment);
-
-    /*  console.log(element); */
-
+      })
+    }
   })
     .catch(error => {
       console.error(error);
     })
 }
-// })
 
+// Visa komment form
 function commentForm(entryID) {
   const commentForm = document.querySelector('#commentForm');
   commentForm.addEventListener('submit', event => {
@@ -356,7 +372,6 @@ function commentForm(entryID) {
       } else {
         /* console.log('skrivit!'); */
         return response.json();
-        
       }
     }).then(data => {
       console.log(data);
@@ -365,23 +380,21 @@ function commentForm(entryID) {
         console.error(error);
       })
   })
-  
+
 }
 
-
+// Ta bort sina kommentarer
 function deleteComment(commentID) {
 
-  const formData = new FormData(deleteComment);
   fetch('/api/comment/' + commentID, {
-    method: 'DELETE',
-    body: formData
+    method: 'DELETE'
   }).then(response => {
     if (!response.ok) {
       return Error(response.statusText);
     } else {
       /* console.log('GET'); */
       return response.json();
-      
+
     }
   }).then(data => {
     console.log(data);

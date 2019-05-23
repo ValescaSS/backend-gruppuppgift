@@ -7,7 +7,7 @@ class Kommentar extends Mapper {
   public function getCommentByID($commentID){
             $statement = $this->db->prepare("SELECT * FROM comments WHERE commentID = :commentID");
             $statement->execute([
-                'commentID' => $commentID 
+                ':commentID' => $commentID 
             ]);
             return $statement->fetch(PDO::FETCH_ASSOC);
         }
@@ -17,7 +17,7 @@ class Kommentar extends Mapper {
   public function getAllCommentsoneEntry($entryID){
             $statement = $this->db->prepare("SELECT * FROM comments WHERE entryID = :entryID");
             $statement->execute([
-                'entryID' => $entryID 
+                ':entryID' => $entryID 
             ]);
             return $statement->fetchall(PDO::FETCH_ASSOC);
         }
