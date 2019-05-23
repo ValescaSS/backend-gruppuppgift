@@ -149,7 +149,7 @@ const bindEvents = () => {
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
       renderJournalView();
-    }
+    } 
   });
 
   /*----------------  Login  ------------*/
@@ -192,7 +192,6 @@ const bindEvents = () => {
 
   /*----------------- Log out -----------------*/
   logoutBtn.addEventListener("click", () => {
-    event.preventDefault();
 
     fetch("/api/logout")
       .then(response => {
