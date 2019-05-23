@@ -18,7 +18,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries->getLastXEntries($num));
-  })->add($auth);
+  });
 
   // 5get Skapa en GET route som hämtar de X första inläggen
   $app->get('/entries/first/{num}', function($request, $response, $args){
