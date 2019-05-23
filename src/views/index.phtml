@@ -33,7 +33,8 @@
   
   <template id="createEntryFormTemplate">
     
-    <div id ="showEntriesForm" class="hidden">
+    <div id ="showEntriesForm" >
+    <div id ="hideEntriesForm" class="hidden">
      <form id="entriesForm">
        <input type="text" name="title" id="title">
        <textarea name="content" id="content" cols="30" rows="10"></textarea>
@@ -46,21 +47,23 @@
     
   </template>
 
-  <!-- <template id="createCommentFormTemplate">
+  <template id="createCommentFormTemplate">
 
      <form id="commentForm">
      <br>
        <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
        <input type="submit" value="Add comment">
+       
      </form>
 
-  </template> -->
+  </template>
 
   <template id="moreentryCommentsTemplates">
    <h2>Comments</h2>
-   <div id="moreentryComments">
+   <div id="moreentryComments" >
      <!-- innehåll -->
    </div>
+   
  </template>
 
   

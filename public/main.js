@@ -4,7 +4,7 @@ const views = {
   loginFail: ['#loginFailTemplate', '#loginFormTemplate', '#registerFormTemplate'],
   registerSuccess: ['#registerSuccessTemplate', '#loginFormTemplate', '#registerFormTemplate'],
   loggedIn: ['#createEntryFormTemplate'],
-  entryComment: ['#moreentryCommentsTemplates'],
+  entryComment: ['#moreentryCommentsTemplates', '#createCommentFormTemplate'],
   entrySuccess: ['#createEntrySuccessTemplate', '#createEntryFormTemplate'],
   entryFail: ['#createEntryFailTemplate', '#createEntryFormTemplate']
 
@@ -78,32 +78,44 @@ function showEntry(entries) {
   target.append(entryTable);
 
   const deleteBtnArray = document.querySelectorAll('.deleteBtn');
-  for(let i = 0; i < deleteBtnArray.length; i++){
-    
+  for (let i = 0; i < deleteBtnArray.length; i++) {
+
     deleteBtnArray[i].addEventListener('click', event => {
       event.preventDefault();
       let entryID = deleteBtnArray[i].getAttribute('data-value');
-      
+
       deleteEntry(entryID);
     })
   }
 
 
+  /* const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
+  for (let i = 0; i < deleteCommentBtnArray.length; i++) {
+     console.log(object);
+    deleteCommentBtnArray[i].addEventListener('click', event => {
+      event.preventDefault();
+      let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
+
+      deleteEntry(entryID);
+    })
+  } */
+
+
   const moreBtnArray = document.querySelectorAll('.more');
-  for(let i = 0; i < moreBtnArray.length; i++){
-    
+  for (let i = 0; i < moreBtnArray.length; i++) {
+
     moreBtnArray[i].addEventListener('click', event => {
       event.preventDefault();
       let entryID = moreBtnArray[i].getAttribute('data-value');
-      
+
       commentMore(entryID);
-      console.log(entryID);
-
-
-
-
-
-
+      /* console.log(entryID); */
+      const hideEntriesForm = document.querySelector('#hideEntriesForm');
+      hideEntriesForm.classList.add('hidden');
+      const hideTable = document.querySelector('table');
+      hideTable.classList.add('hidden');
+      renderView(views.entryComment);
+      commentForm(entryID);
 
     })
   }
@@ -150,48 +162,9 @@ loginForm.addEventListener('submit', event => {
         return response.json();
       }
     })
-    .then(data =>{
-        showEntry(data);
+    .then(data => {
+      showEntry(data);
 
-
-      /* ------------------- Comments ----------------------- */
-
-
-
-      /* let more = document.querySelectorAll(".more")
-      
-      more.forEach(element => {
-        element.addEventListener("click", function () {
-          console.log(element);
-          const api3 = {
-            ping3() {
-              return fetch("/api/comments" + )
-                .then(response => {
-                  return !response.ok ? new Error(response.statusText) : response.json();
-                }).then(data => {
-                  entry3(data);
-                })
-                .catch(error => console.error(error));
-            }
-          };
-          api3.ping3();
-
-          function entry3(v) {
-            let div = document.getElementById("moreentryComments");
-            v.forEach(element => {
-              let content = element['content'];
-              div.innerHTML += '<p>' + ' ' + content + '</p>'
-              console.log(element);
-            });
-          };
-
-          renderView(views.entryComment);
-        })
-
-
-
-
-      }) */
     })
     .catch(error => {
       console.error(error);
@@ -285,7 +258,7 @@ entriesForm.addEventListener('submit', event => {
 // deleteBtnArray[i].addEventListener('click', event =>{
 //   event.preventDefault();
 
-function deleteEntry(entryID){
+function deleteEntry(entryID) {
 
   const formData = new FormData(deleteEntry);
   fetch('/api/entry/' + entryID, {
@@ -301,52 +274,105 @@ function deleteEntry(entryID){
   }).then(data => {
     console.log(data);
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 }
-function showMoreComments(v) {
-  console.log(v);
-  let div = document.getElementById("moreentryComments");
-  
-  v.forEach(element => {
-  
-    div.innerHTML += '<p>' + ' ' + element.content + '</p>'
-    console.log(element);
-  });
-  renderView(views.entryComment);
-};
-
-       
 
 
+/* ------------------- Comments ----------------------- */
+
+function commentMore(entryID) {
 
 
-function commentMore(entryID){
+  fetch('/api/comments/' + entryID, {
+    method: 'GET'
 
-  const formData = new FormData(commentMore);
-  fetch('/api/comments/' + entryID
-    /* method: 'GET',
-    body: formData */
-  ).then(response => {
+  }).then(response => {
     if (!response.ok) {
       return Error(response.statusText);
     } else {
       return response.json();
     }
   }).then(data => {
-    /* console.log(data); */
+    /* console.log(data) */
 
-    showMoreComments(data)
+    let target = document.getElementById("moreentryComments");
+    let entryMoreComment = document.createElement('div');
+    entryMoreComment.innerHTML = '';
+    for (let i = 0; i < data.length; i++) {
+      /* console.log(data[i]['content']); */
+      /*  output =+ data[i]['content']; */
+      entryMoreComment.innerHTML += '<p>' + ' ' + data[i]['content'] + '</p>' + `<button data-value=${data[i]['CommentID']} class ="deleteCommentBtn">Delete</button>`;
+      
+      let commentID = data[i]['CommentID']
+      console.log(commentID);
+
+      
+      
+      deleteComment(commentID);
+    }
+
     
+
+    console.log(entryMoreComment);
+    target.append(entryMoreComment);
+
+    /*  console.log(element); */
+
   })
-  .catch(error => {
-    console.error(error);
-  })
+    .catch(error => {
+      console.error(error);
+    })
 }
 // })
 
+function commentForm(entryID) {
+  const commentForm = document.querySelector('#commentForm');
+  commentForm.addEventListener('submit', event => {
+    event.preventDefault();
+    /* alert('Hej'); */
+    const formData = new FormData(commentForm);
+    fetch('/api/comment/' + entryID, {
+      method: 'POST',
+      body: formData
+    }).then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        /* console.log('skrivit!'); */
+        return response.json();
+        
+      }
+    }).then(data => {
+      console.log(data);
+    })
+      .catch(error => {
+        console.error(error);
+      })
+  })
+  
+}
 
 
+function deleteComment(commentID) {
 
-
+  const formData = new FormData(deleteComment);
+  fetch('/api/comment/' + commentID, {
+    method: 'DELETE',
+    body: formData
+  }).then(response => {
+    if (!response.ok) {
+      return Error(response.statusText);
+    } else {
+      /* console.log('GET'); */
+      return response.json();
+      
+    }
+  }).then(data => {
+    console.log(data);
+  })
+    .catch(error => {
+      console.error(error);
+    })
+}

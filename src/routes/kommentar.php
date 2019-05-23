@@ -23,7 +23,7 @@ return function ($app) {
   })->add($auth);
 
 
-// Get all comments for one entry 
+// Get all comments form one entry 
   $app->get('/api/comments/{id}', function($request, $response ,$args) {
     $entryID =  $args['id'];
     $entries = new Kommentar($this->db);
