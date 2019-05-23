@@ -75,6 +75,7 @@ const bindEvents = () => {
   function showEntry(entries) {
     let target = document.querySelector('table');
     let entryTable = document.createElement('tbody');
+
     entryTable.innerHTML = '';
     entries.forEach(element => {
       entryTable.innerHTML += `<tr>
@@ -109,8 +110,6 @@ const bindEvents = () => {
         event.preventDefault();
         let entryID = editBtnArray[i].getAttribute('data-value');
         renderView(views.entryEdit);
-
-
         fetch('/api/entry/' + entryID, {
           method: 'GET'
         })
@@ -132,13 +131,23 @@ const bindEvents = () => {
           })
 
 
-        // editEntry(entryID);
       }) // editBtnArray[i].addEventListner
     }
 
   }
   /*------------------end of show journal -----------------*/
 
+  /* --------------- Om användare har loggat in? ----------*/
+  fetch('/api/ping')
+  .then(response => {
+    if(response.ok) {
+      hideLogin.classList.add('hidden');
+      hideRegister.classList.add('hidden');
+      showEntriesForm.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+      renderJournalView();
+    }
+  });
 
 
   /*----------------  Login  ------------*/
@@ -175,14 +184,16 @@ const bindEvents = () => {
         console.error(error);
       })
   })
+
+
   /*----------------  end of log in ------------*/
 
 
 
 
   /*----------------- Log out -----------------*/
-  logoutBtn.addEventListener('click', event => {
-    event.preventDefault();
+  logoutBtn.addEventListener('click',() => {
+    // event.preventDefault();
 
     fetch('/api/logout').then(response => {
       if (!response.ok) {
@@ -191,8 +202,8 @@ const bindEvents = () => {
         console.log('logout');
         hideLogin.classList.remove('hidden');
         hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.add('hidden');
-
+        showEntriesForm.classList.remove('hidden');
+        target.classList.add('hidden');
         return response.json();
       }
     })
@@ -278,15 +289,22 @@ const bindEvents = () => {
   }
 
   /* ------------------- Edit entry ----------------------- */
+   
 
   function editEntry(entryID) {
+
     const editEntryForm = document.querySelector('#editEntryForm');
     editEntryForm.addEventListener('submit', event => {
       event.preventDefault();
-      const formData = new FormData(editEntryForm);
+      let formData = new FormData(editEntryForm);
+      const formJson = {};
+      formData.forEach((value, key) => {formJson[key] = value});
       fetch('/api/entry/' + entryID, {
         method: 'PUT',
-        body: formData
+        body: JSON.stringify(formJson),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }).then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -303,6 +321,7 @@ const bindEvents = () => {
 
   }
 }
+
 bindEvents();
 
 

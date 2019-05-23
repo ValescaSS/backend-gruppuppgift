@@ -1,6 +1,7 @@
 <?php
 
 class User extends Mapper {
+
   
   // Databas anrop
   public function getUserByID($userID) {

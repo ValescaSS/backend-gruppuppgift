@@ -71,15 +71,15 @@ class Entry extends Mapper
         return "Post deleted";
     }
 
-    public function editEntry($entryID, $content,$title)
+    public function editEntry($entryID,$title, $content)
     {
         $statement = $this->db->prepare("UPDATE entries SET title = :title , content = :content WHERE entryID = :entryID");
         $statement->execute([
+            ':entryID' => $entryID,
             ':title' => $title,
-            ':content' => $content,
-            ':entryID' => $entryID
+            ':content' => $content
         ]);
-        return "Entry edited";
+        return ['updated' => true];
     }
 
     public function getOneEntry($entryID)

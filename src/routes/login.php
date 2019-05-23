@@ -7,19 +7,16 @@ return function ($app) {
   $app->post('/api/login', function ($request, $response) {
     $data = $request->getParsedBody();
     // In a real example, do database checks here
-    if (!empty($data['username'] && $data['password'])) {
-  
+    $userObj = new User($this->db);
+    $user = $userObj->getUser($data['username']);
 
-      $statement = $this->db->prepare("SELECT * FROM users WHERE username = :username");
-      $statement->execute([
-        ":username" => $data['username']
-      ]);
-      $user = $statement->fetch(PDO::FETCH_ASSOC);
+    if ($data['username'] && $data['password']) {
+
       if ($data['username'] == $user['username']) {
         if (password_verify($data['password'], $user['password'])) {
           $_SESSION['loggedIn'] = true;
           $_SESSION['userID'] = $user['userID'];
-          return $response->withJson(($_SESSION['userID']));
+          return $response->withJson($data);
         }
       } else {
         return $response->withStatus(401);
@@ -28,11 +25,6 @@ return function ($app) {
       return $response->withStatus(401);
     }
   });
-
-
-
-
-
 
 
   // Add a ping route
