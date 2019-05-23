@@ -29,8 +29,7 @@ const api = {
       .then(response => {
         return !response.ok ? new Error(response.statusText) : response.json();
       }).then(data => {
-        summaryEntry(data);
-
+        entry(data);
       })
       .catch(error => console.error(error));
   }
@@ -38,7 +37,7 @@ const api = {
 
 api.ping();
 
-function summaryEntry(v) {
+function entry(v) {
 
   // Visar en sammanfattning av de 20 senaste inlägg
   let div = document.getElementById("senasteEntries");
@@ -57,7 +56,7 @@ function summaryEntry(v) {
   // Visar hela inlägg och kommentarer till den inlägg 
   let arr = document.querySelectorAll('.showalltxt-btn');
   let entryTitle = document.getElementById('entry-title');
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < v.length; i++) {
     arr[i].addEventListener('click', function () {
       entryTitle.innerHTML = v[i]["title"];
       div.innerHTML = '<p>' + v[i]["entryID"] + ' ' + v[i]["content"] + '</p>';
@@ -67,7 +66,7 @@ function summaryEntry(v) {
             .then(response => {
               return !response.ok ? new Error(response.statusText) : response.json();
             }).then(data => {
-              completeEntry(data);
+              entry2(data);
             })
             .catch(error => console.error(error));
         }
@@ -76,7 +75,7 @@ function summaryEntry(v) {
       api2.ping2();
 
       // Visar kommentarer till en inlägg
-      function completeEntry(v) {
+      function entry2(v) {
         let div = document.getElementById("entryComments");
         for (let i = 0; i < v.length; i++) {
           let content = v[i]['content'];
@@ -84,7 +83,6 @@ function summaryEntry(v) {
         }
       };
       renderView(views.comment);
-
     });
   }
 };
