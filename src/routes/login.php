@@ -22,7 +22,7 @@
         if (password_verify($data['password'], $user['password'])) {
           $_SESSION['loggedIn'] = true;
           $_SESSION['userID'] = $user['userID'];
-          return $response->withJson(($_SESSION['userID']));
+          return $response->withJson($data);
         }
       } else {
         return $response->withStatus(401);
@@ -31,6 +31,7 @@
       return $response->withStatus(401);
     }
   });
+  
   // Add a ping route
   $app->get('/api/ping', function ($request, $response, $args) {
     return $response->withJson(['loggedIn' => true]);

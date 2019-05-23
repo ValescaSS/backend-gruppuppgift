@@ -3,6 +3,8 @@ return function ($app) {
   // Register auth middleware
   $auth = require __DIR__ . '/../middlewares/auth.php';
 
+
+
   // Basic protected GET route 
   $app->get('/api/user/{id}', function ($request, $response, $args) {
     $args['id'] = $_SESSION['userID'];

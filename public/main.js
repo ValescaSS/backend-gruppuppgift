@@ -74,9 +74,10 @@ const bindEvents = () => {
   const entriesForm = document.querySelector("#entriesForm");
 
   function showEntry(entries) {
-    let target = document.querySelector("table");
-    let entryTable = document.createElement("tbody");
-    entryTable.innerHTML = "";
+    let target = document.querySelector('table');
+    let entryTable = document.createElement('tbody');
+
+    entryTable.innerHTML = '';
     entries.forEach(element => {
       entryTable.innerHTML += `<tr>
            <td>${element.createdAt}</td>
@@ -112,9 +113,8 @@ const bindEvents = () => {
         event.preventDefault();
         let entryID = editBtnArray[i].getAttribute("data-value");
         renderView(views.entryEdit);
-
-        fetch("/api/entry/" + entryID, {
-          method: "GET"
+        fetch('/api/entry/' + entryID, {
+          method: 'GET'
         })
           .then(response => {
             if (!response.ok) {
@@ -134,13 +134,22 @@ const bindEvents = () => {
             console.error(error);
           });
 
-        // editEntry(entryID);
-      }); // editBtnArray[i].addEventListner
+      }) // editBtnArray[i].addEventListner
     }
   }
   /*------------------end of show journal -----------------*/
 
-  /*---------------- Is user already logged in? ---------*/
+  /* --------------- Om användare har loggat in? ----------*/
+  fetch('/api/ping')
+  .then(response => {
+    if(response.ok) {
+      hideLogin.classList.add('hidden');
+      hideRegister.classList.add('hidden');
+      showEntriesForm.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+      renderJournalView();
+    }
+  });
 
   fetch("/api/ping").then(response => {
     if (response.ok) {
@@ -186,26 +195,28 @@ const bindEvents = () => {
       })
       .catch(error => {
         console.error(error);
-      });
-  });
+      })
+  })
+
+
   /*----------------  end of log in ------------*/
 
   /*----------------- Log out -----------------*/
-  logoutBtn.addEventListener("click", () => {
+  logoutBtn.addEventListener('click',() => {
+    // event.preventDefault();
 
-    fetch("/api/logout")
-      .then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          console.log("logout");
-          hideLogin.classList.remove("hidden");
-          hideRegister.classList.remove("hidden");
-          showEntriesForm.classList.add("hidden");
-
-          return response.json();
-        }
-      })
+    fetch('/api/logout').then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        console.log('logout');
+        hideLogin.classList.remove('hidden');
+        hideRegister.classList.remove('hidden');
+        showEntriesForm.classList.remove('hidden');
+        target.classList.add('hidden');
+        return response.json();
+      }
+    })
       .catch(error => {
         console.error(error);
       });
@@ -286,15 +297,30 @@ const bindEvents = () => {
   }
 
   /* ------------------- Edit entry ----------------------- */
+   
 
   function editEntry(entryID) {
-    const editEntryForm = document.querySelector("#editEntryForm");
-    editEntryForm.addEventListener("submit", event => {
+
+    const editEntryForm = document.querySelector('#editEntryForm');
+    editEntryForm.addEventListener('submit', event => {
       event.preventDefault();
-      const formData = new FormData(editEntryForm);
-      fetch("/api/entry/" + entryID, {
-        method: "PUT",
-        body: formData
+      let formData = new FormData(editEntryForm);
+      const formJson = {};
+      formData.forEach((value, key) => {formJson[key] = value});
+      fetch('/api/entry/' + entryID, {
+        method: 'PUT',
+        body: JSON.stringify(formJson),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return response.json();
+        }
+      }).then(data => {
+        console.log(data);
       })
         .then(response => {
           if (!response.ok) {
@@ -311,7 +337,7 @@ const bindEvents = () => {
         });
     });
   }
-};
+}
 
 bindEvents();
 
