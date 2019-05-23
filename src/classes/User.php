@@ -4,6 +4,7 @@ class User extends Mapper {
 
   
   // Databas anrop
+  
   public function getUserByID($userID) {
     $statement = $this->db->prepare("SELECT * FROM users WHERE userID = :userID");
     $statement->execute([
@@ -20,7 +21,7 @@ class User extends Mapper {
   }
 
   public function getAllUsers(){
-    $statement = $this->db->prepare("SELECT userID, username FROM users");
+    $statement = $this->db->prepare("SELECT * FROM users");
     $statement->execute();
     return $statement->fetchall(PDO::FETCH_ASSOC);
   }

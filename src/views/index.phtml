@@ -5,11 +5,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><?= $title ?></title>
+  <title><?=$title?></title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
+
+  <template id="lastTwentiethEntriesTemplate">
+    <h2 id="entry-title">Senaste 20 inläggen</h2>
+    <div id="senasteEntries">
+    <!-- innehåll -->
+    </div>
+  </template>
+
+  <template id="entryCommentsTemplates">
+    <h2>Comments</h2>
+    <div id="entryComments">
+    <!-- innehåll -->
+    </div>
+   <a href="">Hem</a>
+  </template>
+
+  <!-- Toshikos code -->
 
   <template id="loginFormTemplate">
     <div id="hideLoginForm">
@@ -34,7 +51,6 @@
   </template>
 
   <template id="createEntryFormTemplate">
-
     <div id="showEntriesForm" class="hidden">
       <form id="entriesForm">
         <input type="text" name="title" id="title">
@@ -43,34 +59,35 @@
       </form>
     </div>
   </template>
-  
-  <template id="createEntrySuccessTemplate">
-    
-    </template>
-    
-    <template id="editEntry">
-      <form id="editEntryForm">
-    <div>
-      <label for="title">Title</label>
-      <input type="text" name="title" id="edit-title" class="form-control" value="">
-    </div>
-      <label for="content">Content</label>
-      <textarea type="text" name="content" rows="10" id="edit-content"></textarea>
 
-      <input type="submit" value="Edit" rolr="button" >
-    </div>
-      </form>
+  <template id="createEntrySuccessTemplate">
+
+  </template>
+
+  <template id="editEntry">
+    <form id="editEntryForm">
+      <div>
+        <label for="title">Title</label>
+        <input type="text" name="title" id="edit-title" class="form-control" value="">
+      
+        <label for="content">Content</label>
+        <textarea type="text" name="content" rows="10" id="edit-content"></textarea>
+
+        <input type="submit" value="Edit" rolr="button" >
+      </div>
+    </form>
   </template>
 
 
   <div class="container">
-    <button id="logout" class="hidden">Logga ut</button>
+    <a href="" id="logout" class="hidden">Logga ut</a>
+    <!-- <button id="logout" class="hidden">Logga ut</button> -->
     <header>
-      <h1><?= $title ?></h1>
+      <h1><?=$title?></h1>
     </header>
 
     <main>
-
+        <!-- innehåll -->
     </main>
 
   </div>
