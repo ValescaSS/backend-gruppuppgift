@@ -23,3 +23,15 @@ h1 {
   text-align: center;
   color: #e74c3c;
 }
+
+.hidden {
+  display: none;
+}
+
+#logout{
+  border: 1px solid black;
+}
+
+table {
+  border: 1px solid black;
+}
