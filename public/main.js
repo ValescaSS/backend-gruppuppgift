@@ -202,7 +202,7 @@ const bindEvents = () => {
         console.log('logout');
         hideLogin.classList.remove('hidden');
         hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.remove('hidden');
+        showEntriesForm.classList.add('hidden');
         target.classList.add('hidden');
         return response.json();
       }
