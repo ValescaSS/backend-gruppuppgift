@@ -94,9 +94,9 @@ function showEntry(entries) {
      console.log(object);
     deleteCommentBtnArray[i].addEventListener('click', event => {
       event.preventDefault();
-      let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
+      
 
-      deleteEntry(entryID);
+      deleteComment(commentID);
     })
   } */
 
@@ -295,7 +295,7 @@ function commentMore(entryID) {
       return response.json();
     }
   }).then(data => {
-    /* console.log(data) */
+     console.log(data) 
 
     let target = document.getElementById("moreentryComments");
     let entryMoreComment = document.createElement('div');
@@ -305,18 +305,32 @@ function commentMore(entryID) {
       /*  output =+ data[i]['content']; */
       entryMoreComment.innerHTML += '<p>' + ' ' + data[i]['content'] + '</p>' + `<button data-value=${data[i]['CommentID']} class ="deleteCommentBtn">Delete</button>`;
       
-      let commentID = data[i]['CommentID']
-      console.log(commentID);
+   /*    let commentID = data[i]['CommentID']
+      console.log(commentID); */
 
-      
-      
-      deleteComment(commentID);
     }
+    console.log(entryMoreComment);
+      
+      const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
+      for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
+        deleteCommentBtnArray[i].addEventListener('click', event => {
+          event.preventDefault();
+          console.log(deleteCommentBtnArray[i]);
 
+  //         let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
+  //         console.log(commentID);
+  //         deleteComment(commentID);
+        })
+      }
+      
+     
     
 
-    console.log(entryMoreComment);
-    target.append(entryMoreComment);
+  
+
+  //   /* console.log(entryMoreComment); */
+  //   target.append(entryMoreComment);
 
     /*  console.log(element); */
 
