@@ -73,38 +73,67 @@ const bindEvents = () => {
   const registerForm = document.querySelector("#registerForm");
   const entriesForm = document.querySelector("#entriesForm");
 
-  function showEntry(entries) {
-    let target = document.querySelector('table');
-    let entryTable = document.createElement('tbody');
+  function showEntry() {
+    
+    fetch("/api/entries",{
+    method:'GET'
+    }) .then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        return response.json();
+      }
+    }).then(entries=>{
 
-    entryTable.innerHTML = '';
-    entries.forEach(element => {
-      entryTable.innerHTML += `<tr>
-           <td>${element.createdAt}</td>
-           <td>${element.title}</td>
-           <td>${element.content}</td>
-             <td><button data-value=${
-               element.entryID
-             } role="button" class ="deleteBtn">DELETE</button></td>
-             <td><button data-value=${
-               element.entryID
-             } role="button" class ="editBtn">Edit</button></td>
-
-             </tr>
-         `;
-    });
-    target.append(entryTable);
-
-    // Delete knappen
+      let target = document.querySelector('table');
+      let entryTable = document.createElement('tbody');
+      
+      entryTable.innerHTML = '';
+      entries.forEach(element => {
+        entryTable.innerHTML += `<tr>
+        <td>${element.createdAt}</td>
+        <td>${element.title}</td>
+        <td>${element.content}</td>
+        <td><button data-value=${
+          element.entryID
+        } role="button" class ="deleteBtn">DELETE</button></td>
+        <td><button data-value=${
+          element.entryID
+        } role="button" class ="editBtn">Edit</button></td>
+        
+        </tr>
+        `;
+      });
+      target.append(entryTable);
+    }) .catch(error => {
+      console.error(error);
+    })
+      
+     /* ------------------- Delete entry ----------------------- */
     const deleteBtnArray = document.querySelectorAll(".deleteBtn");
     for (let i = 0; i < deleteBtnArray.length; i++) {
       deleteBtnArray[i].addEventListener("click", event => {
         event.preventDefault();
         let entryID = deleteBtnArray[i].getAttribute("data-value");
-
-        deleteEntry(entryID);
+        fetch("/api/entry/" + entryID, {
+          method: "DELETE"
+        })
+          .then(response => {
+            if (!response.ok) {
+              return Error(response.statusText);
+            } else {
+              return response.json();
+            }
+          })
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
       });
     }
+    
 
     //Edit knappen
     const editBtnArray = document.querySelectorAll(".editBtn");
@@ -148,17 +177,8 @@ const bindEvents = () => {
       showEntriesForm.classList.remove('hidden');
       logoutBtn.classList.remove('hidden');
       renderJournalView();
+      showEntry();
     }
-  });
-
-  fetch("/api/ping").then(response => {
-    if (response.ok) {
-      hideLogin.classList.add("hidden");
-      hideRegister.classList.add("hidden");
-      showEntriesForm.classList.remove("hidden");
-      logoutBtn.classList.remove("hidden");
-      renderJournalView();
-    } 
   });
 
   /*----------------  Login  ------------*/
@@ -179,19 +199,8 @@ const bindEvents = () => {
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
           renderJournalView();
-          return fetch("/entries/userid/{id}");
+          showEntry();
         }
-      })
-      .then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      })
-      .then(data => {
-        // Skicka alla inlägg innehåll till showEntry funktion
-        showEntry(data);
       })
       .catch(error => {
         console.error(error);
@@ -247,13 +256,11 @@ const bindEvents = () => {
   });
   /*---------------end of register --------------------*/
 
-  /* ------------------- Entries form ------------------*/
+  /* ------------------- Posta Entries form ------------------*/
   entriesForm.addEventListener("submit", event => {
     event.preventDefault();
-    console.log("clicked");
-
     const formData = new FormData(entriesForm);
-    fetch("/api/entry/{id}", {
+    fetch("/api/entry", {
       method: "POST",
       body: formData
     })
@@ -261,12 +268,12 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          console.log("skrivit!");
           return response.json();
         }
       })
       .then(data => {
-        console.log(data);
+        console.log(data); //Skrivit inlägg!
+        showEntry();
       })
       .catch(error => {
         console.error(error);
@@ -277,24 +284,24 @@ const bindEvents = () => {
 
   /* ------------------- Delete entry ----------------------- */
 
-  function deleteEntry(entryID) {
-    fetch("/api/entry/" + entryID, {
-      method: "DELETE"
-    })
-      .then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      })
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
+  // function deleteEntry(entryID) {
+  //   fetch("/api/entry/" + entryID, {
+  //     method: "DELETE"
+  //   })
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         return Error(response.statusText);
+  //       } else {
+  //         return response.json();
+  //       }
+  //     })
+  //     .then(data => {
+  //       console.log(data);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
 
   /* ------------------- Edit entry ----------------------- */
    
