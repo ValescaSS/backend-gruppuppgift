@@ -34,5 +34,9 @@
   $logout = require __DIR__ . '/../src/routes/logout.php';
   $logout($app);
 
+
+  $likes = require __DIR__ . '/../src/routes/likes.php';
+  $likes($app);
+
   // Run app
   $app->run();

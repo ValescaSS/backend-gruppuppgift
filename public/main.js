@@ -51,6 +51,7 @@ function renderJournalView() {
           <th scope="col">Content</th>
           <th scope="col">Delete</th>
           <th scope="col">More</th>
+          <th scope="col">Likes</th>
       </tr>
   </thead>
    
@@ -73,6 +74,7 @@ function showEntry(entries) {
            <td>${element.content}</td>
              <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
              <td><a data-value=${element.entryID} role="button" class ="more">More</a></td>
+             <td><a data-value=${element.entryID} role="button" class ="more">Like</a></td>
              </tr>
          `;
   });
@@ -289,9 +291,9 @@ function commentMore(entryID) {
     let entryMoreComment = document.createElement('div');
     entryMoreComment.innerHTML = '';
     data.forEach(comment => {
-      // console.log(comment.commentID);
-      // console.log(comment.content);
-      entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.commentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn">Edit</button>`;
+      console.log(comment.CommentID);
+      console.log(comment.content);
+      entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.CommentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.CommentID} class ="editCommentBtn">Edit</button>`;
     })
     target.append(entryMoreComment); //Visa kommenterar på skärmen
     const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
@@ -323,6 +325,7 @@ function commentMore(entryID) {
             return response.json();
           }
         }).then(data => {
+          console.log(data);
           console.log(data.content);
           document.getElementById("editCommentContent").value = data.content;  // Visa comment som skrev innan på textarea
           let editCommentBtn = document.getElementById('editCommentForm');
@@ -385,7 +388,7 @@ function commentForm(entryID) {
 
 // Ta bort sina kommentarer
 function deleteComment(commentID) {
-
+  console.log(commentID);
   fetch('/api/comment/' + commentID, {
     method: 'DELETE'
   }).then(response => {
