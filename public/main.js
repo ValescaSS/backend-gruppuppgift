@@ -75,6 +75,8 @@ const bindEvents = () => {
 
   function showEntry() {
     
+    let target = document.querySelector('table');
+    let entryTable = document.createElement('tbody');
     fetch("/api/entries",{
     method:'GET'
     }) .then(response => {
@@ -85,8 +87,6 @@ const bindEvents = () => {
       }
     }).then(entries=>{
 
-      let target = document.querySelector('table');
-      let entryTable = document.createElement('tbody');
       
       entryTable.innerHTML = '';
       entries.forEach(element => {
@@ -236,7 +236,6 @@ const bindEvents = () => {
   /*--------------- register --------------------*/
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
-    console.log("Hej");
 
     const formData = new FormData(registerForm);
     fetch("/api/register", {
@@ -249,6 +248,10 @@ const bindEvents = () => {
         } else {
           return response.json();
         }
+      }).then(data=>{
+         const errorMsg = document.getElementById('errorMsg');
+         errorMsg.innerHTML = data;
+         
       })
       .catch(error => {
         console.error(error);
@@ -328,18 +331,7 @@ const bindEvents = () => {
         }
       }).then(data => {
         console.log(data);
-      })
-        .then(response => {
-          if (!response.ok) {
-            return Error(response.statusText);
-          } else {
-            return response.json();
-          }
-        })
-        .then(data => {
-          console.log(data);
-        })
-        .catch(error => {
+      }).catch(error => {
           console.error(error);
         });
     });
