@@ -6,12 +6,12 @@ return function ($app) {
   $auth = require __DIR__ . '/../middlewares/auth.php';
 
 
-  /* $app->get('/api/likes/{id}', function($request, $response ,$args) {
+  $app->get('/api/like/{id}', function($request, $response ,$args) {
     $entryID =  $args['id'];
-    $entries = new Likes($this->db);
+    $likes = new Likes($this->db);
 
-    return $response->withJson($entries-> getAllLikesoneEntry($entryID));
-  })->add($auth); */
+    return $response->withJson($likes-> getAllLikesoneEntry($entryID));
+  })->add($auth);
 
 
   $app->post('/api/like/{id}', function($request, $response, $args){

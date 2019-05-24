@@ -125,16 +125,13 @@ function showEntry(entries) {
   }
 
 
-
-
-
-
-
-
-
-
-
-
+  const likegeter = document.querySelectorAll('.likeBtn');
+  for (let i = 0; i < likegeter.length; i++) {
+      let entryID = likegeter[i].getAttribute('data-value');
+      // console.log(entryID);
+      getLike(entryID);
+   
+  }
 
 
 }
@@ -177,7 +174,7 @@ loginForm.addEventListener('submit', event => {
       if (!response.ok) {
         return Error(response.statusText);
       } else {
-        console.log("test");
+        /* console.log("test"); */
 
         /* addLike(entryID) */
 
@@ -447,15 +444,10 @@ function deleteComment(commentID) {
 // Add like to an entry
 
 function addLike(entryID) {
-  /* const entriesForm = document.querySelector('#entriesForm');
-  entriesForm.addEventListener('submit', event => {
-    event.preventDefault(); */
-  //   /* alert('Hej'); */
-    /* const formData = new FormData(entriesForm); */
+  
     fetch('/api/like/' + entryID, {
       method: 'POST'
-      /* body: formData */
-    }).then(response => {
+      }).then(response => {
       if (!response.ok) {
         return Error(response.statusText);
       } else {
@@ -463,11 +455,35 @@ function addLike(entryID) {
         return response.json();
       }
     }).then(data => {
-      /* console.log(data); */
+     console.log(data);
     })
       .catch(error => {
         console.error(error);
       })
-  // })
+  
+}
+
+
+
+
+function getLike(entryID) {
+
+  fetch('/api/like/' + entryID, {
+  method: "GET"
+  })
+  .then(response => {
+    if (!response.ok) {
+      return Error(response.statusText);
+    } else {
+      console.log("Likes are here :)");
+      return response.json();
+    }
+    
+  }).then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  })
 
 }
