@@ -74,7 +74,7 @@ function showEntry(entries) {
            <td>${element.content}</td>
              <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
              <td><a data-value=${element.entryID} role="button" class ="more">More</a></td>
-             <td><a data-value=${element.entryID} role="button" class ="more">Like</a></td>
+             <td><a data-value=${element.entryID} role="button" class ="likeBtn">Like</a></td>
              </tr>
          `;
   });
@@ -110,6 +110,33 @@ function showEntry(entries) {
 
     })
   }
+
+
+
+  const likeBtnArray = document.querySelectorAll('.likeBtn');
+  for (let i = 0; i < likeBtnArray.length; i++) {
+
+    likeBtnArray[i].addEventListener('click', event => {
+      event.preventDefault();
+      let entryID = likeBtnArray[i].getAttribute('data-value');
+      console.log(entryID);
+      addLike(entryID);
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 /*------------------end of show journal -----------------*/
 
@@ -150,6 +177,13 @@ loginForm.addEventListener('submit', event => {
       if (!response.ok) {
         return Error(response.statusText);
       } else {
+        console.log("test");
+
+        /* addLike(entryID) */
+
+
+
+        
         return response.json();
       }
     })
@@ -405,4 +439,35 @@ function deleteComment(commentID) {
     .catch(error => {
       console.error(error);
     })
+}
+
+
+
+
+// Add like to an entry
+
+function addLike(entryID) {
+  /* const entriesForm = document.querySelector('#entriesForm');
+  entriesForm.addEventListener('submit', event => {
+    event.preventDefault(); */
+  //   /* alert('Hej'); */
+    /* const formData = new FormData(entriesForm); */
+    fetch('/api/like/' + entryID, {
+      method: 'POST'
+      /* body: formData */
+    }).then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        console.log('I like you!');
+        return response.json();
+      }
+    }).then(data => {
+      /* console.log(data); */
+    })
+      .catch(error => {
+        console.error(error);
+      })
+  // })
+
 }
