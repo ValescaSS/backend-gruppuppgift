@@ -8,12 +8,6 @@
     $data = $request->getParsedBody();
     // In a real example, do database checks here
     if (!empty($data['username'] && $data['password'])) {
-  
-      // $statement = $this->db->prepare("SELECT * FROM users WHERE username = :username");
-      // $statement->execute([
-      //   ":username" => $data['username']
-      // ]);
-      // $user = $statement->fetch(PDO::FETCH_ASSOC);
 
       $userObj = new User($this->db);
       $user = $userObj->getUser($data['username']);

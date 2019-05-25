@@ -14,7 +14,8 @@ const views = {
   entrySuccess: ["#createEntrySuccessTemplate", "#createEntryFormTemplate"],
   entryFail: ["#createEntryFailTemplate", "#createEntryFormTemplate"],
   entryEdit: ["#editEntry"],
-  entry: ["#lastTwentiethEntriesTemplate"],
+  entry: ["#lastTwentyEntriesTemplate"],
+  completeEntry: ["#showCompleteEntryTemplate"],
   comment: ["#entryCommentsTemplates"]
 };
 
@@ -35,33 +36,11 @@ function renderView(view) {
   });
 }
 
-// toshikos kod
-
 renderView(views.login);
 renderView(views.loggedIn);
-
-/*----------- Show journal---------------*/
-function renderJournalView() {
-  const target = document.querySelector("main");
-  let tableDiv = document.createElement("table");
-
-  tableDiv.innerHTML = ` 
-  <thead>
-      <tr class="text-uppercase">
-          <th scope="col">Date</th>
-          <th scope="col">Title</th>
-          <th scope="col">Content</th>
-          <th scope="col">Delete</th>
-          <th scope="col">Edit</th>
-      </tr>
-  </thead>
-   
-  <tbody>
-    
-  </tbody>`;
-
-  target.append(tableDiv);
-}
+renderView(views.entry);
+renderView(views.completeEntry);
+// renderView(views.entrySuccess);
 
 const bindEvents = () => {
   const loginForm = document.querySelector("#loginForm");
@@ -69,23 +48,50 @@ const bindEvents = () => {
   const hideRegister = document.querySelector("#hideRegisterForm");
   const showEntriesForm = document.querySelector("#showEntriesForm");
   const logoutBtn = document.querySelector("#logout");
-  const createEntryFormTemplate = document.getElementById("createEntryFormTemplate");
+  // const entrySuccess = document.querySelector("#createEntrySuccessTemplate")
+  const createEntryFormTemplate = document.getElementById(
+    "createEntryFormTemplate"
+  );
   const registerForm = document.querySelector("#registerForm");
   const entriesForm = document.querySelector("#entriesForm");
+  const senasteEntries = document.querySelector("#senasteEntries");
+  const completeEntry = document.querySelector("#completeEntry");
+  // const entryComments = document.querySelector("#entryComments");
 
+  /*----------- Show journal---------------*/
   function showEntry(entries) {
-    let target = document.querySelector('table');
-    let entryTable = document.createElement('tbody');
+    const target1 = document.querySelector("main");
+    let tableDiv = document.createElement("table");
 
-    entryTable.innerHTML = '';
+    tableDiv.innerHTML = ` 
+      <thead>
+          <tr class="text-uppercase">
+              <th scope="col">Date</th>
+              <th scope="col">Title</th>
+              <th scope="col">Content</th>
+              <th scope="col">Delete</th>
+              <th scope="col">Edit</th>
+          </tr>
+      </thead>
+      
+      <tbody>
+        
+      </tbody>`;
+
+    target1.append(tableDiv);
+
+    let target2 = document.querySelector("table");
+    let entryTable = document.createElement("tbody");
+
+    entryTable.innerHTML = "";
     entries.forEach(element => {
       entryTable.innerHTML += `<tr>
            <td>${element.createdAt}</td>
            <td>${element.title}</td>
            <td>${element.content}</td>
-             <td><button data-value=${
+             <td><a href="" data-value=${
                element.entryID
-             } role="button" class ="deleteBtn">DELETE</button></td>
+             } role="button" class ="deleteBtn" type="submit">DELETE</a></td>
              <td><button data-value=${
                element.entryID
              } role="button" class ="editBtn">Edit</button></td>
@@ -93,13 +99,13 @@ const bindEvents = () => {
              </tr>
          `;
     });
-    target.append(entryTable);
+    target2.append(entryTable);
 
     // Delete knappen
     const deleteBtnArray = document.querySelectorAll(".deleteBtn");
     for (let i = 0; i < deleteBtnArray.length; i++) {
       deleteBtnArray[i].addEventListener("click", event => {
-        event.preventDefault();
+        // event.preventDefault();
         let entryID = deleteBtnArray[i].getAttribute("data-value");
 
         deleteEntry(entryID);
@@ -113,9 +119,9 @@ const bindEvents = () => {
         event.preventDefault();
         let entryID = editBtnArray[i].getAttribute("data-value");
         renderView(views.entryEdit);
-        fetch('/api/entry/' + entryID, {
-          method: 'GET'
-        })
+        fetch("/api/entry/" + entryID, {
+            method: "GET"
+          })
           .then(response => {
             if (!response.ok) {
               return Error(response.statusText);
@@ -133,32 +139,122 @@ const bindEvents = () => {
           .catch(error => {
             console.error(error);
           });
-
-      }) // editBtnArray[i].addEventListner
+      }); // editBtnArray[i].addEventListner
     }
   }
   /*------------------end of show journal -----------------*/
 
-  /* --------------- Om användare har loggat in? ----------*/
-  fetch('/api/ping')
-  .then(response => {
-    if(response.ok) {
-      hideLogin.classList.add('hidden');
-      hideRegister.classList.add('hidden');
-      showEntriesForm.classList.remove('hidden');
-      logoutBtn.classList.remove('hidden');
-      renderJournalView();
-    }
-  });
+  /*--------------------Twenty entries---------------------*/
 
+  const api = {
+    ping() {
+      return fetch("/entries/last/20")
+        .then(response => {
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
+        })
+        .then(data => {
+          twentyEntries(data);
+        })
+        .catch(error => console.error(error));
+    }
+  };
+
+  api.ping();
+
+  function twentyEntries(v) {
+    // Visar en sammanfattning av de 20 senaste inlägg
+    for (let i = 0; i < v.length; i++) {
+      let entryID = v[i]["entryID"];
+      let str = v[i]["content"];
+      senasteEntries.innerHTML +=
+        "<p>" +
+        entryID +
+        " " +
+        str.substr(0, 200) +
+        "..." +
+        '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
+    }
+
+    // Visar hela inlägg och kommentarer till den inlägg
+    let showalltxt = document.querySelectorAll(".showalltxt-btn");
+
+    for (let i = 0; i < v.length; i++) {
+      showalltxt[i].addEventListener("click", function () {
+        senasteEntries.classList.add("hidden");
+        hideLogin.classList.add("hidden");
+        hideRegister.classList.add("hidden");
+        completeEntry.innerHTML =
+          "<h2>" +
+          v[i]["title"] +
+          "</h2><p>" +
+          v[i]["entryID"] +
+          " " +
+          v[i]["content"] +
+          "</p>";
+
+        const api2 = {
+          ping2() {
+            return fetch("/api/comments/entry/" + v[i]["entryID"])
+              .then(response => {
+                return !response.ok ?
+                  new Error(response.statusText) :
+                  response.json();
+              })
+              .then(data => {
+                commentsToSelectedEntry(data);
+              })
+              .catch(error => console.error(error));
+          }
+        };
+
+        api2.ping2();
+
+        // Visar kommentarer till en inlägg
+        function commentsToSelectedEntry(v) {
+          let entryComments = document.getElementById("entryComments");
+          for (let i = 0; i < v.length; i++) {
+            let content = v[i]["content"];
+            entryComments.innerHTML += "<p>" + " " + content + "</p>";
+          }
+        }
+        renderView(views.comment);
+      });
+    }
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /* --------------- Om användare har loggat in? ----------*/
   fetch("/api/ping").then(response => {
     if (response.ok) {
       hideLogin.classList.add("hidden");
       hideRegister.classList.add("hidden");
+      // senasteEntries.classList.add("hidden");
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
-      renderJournalView();
-    } 
+      // let entriesdata = JSON.parse(localStorage.getItem("entriesdata"));
+      // console.log(entriesdata[0].createdBy);
+
+      // renderJournalView();
+
+      const api3 = {
+        ping3() {
+          return fetch('/entries/userid/{id}')
+            .then(response => {
+              return !response.ok ?
+                new Error(response.statusText) :
+                response.json();
+            })
+            .then(data => {
+              showEntry(data);
+            })
+            .catch(error => console.error(error));
+        }
+      };
+      api3.ping3();
+    }
   });
 
   /*----------------  Login  ------------*/
@@ -167,18 +263,22 @@ const bindEvents = () => {
 
     const formData = new FormData(loginForm);
     fetch("/api/login", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
           hideLogin.classList.add("hidden");
           hideRegister.classList.add("hidden");
+          // senasteEntries.classList.add("hidden");
+          // completeEntry.classList.add("hidden");
+          // entryComments.classList.add("hidden");
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
-          renderJournalView();
+
+          // renderJournalView();
           return fetch("/entries/userid/{id}");
         }
       })
@@ -192,31 +292,33 @@ const bindEvents = () => {
       .then(data => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
+        // localStorage.setItem("entriesdata", JSON.stringify(data));
       })
       .catch(error => {
         console.error(error);
-      })
-  })
-
+      });
+  });
 
   /*----------------  end of log in ------------*/
 
   /*----------------- Log out -----------------*/
-  logoutBtn.addEventListener('click',() => {
+  logoutBtn.addEventListener("click", () => {
     // event.preventDefault();
+    localStorage.removeItem("entriesdata");
 
-    fetch('/api/logout').then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        console.log('logout');
-        hideLogin.classList.remove('hidden');
-        hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.remove('hidden');
-        target.classList.add('hidden');
-        return response.json();
-      }
-    })
+    fetch("/api/logout")
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          console.log("logout");
+          hideLogin.classList.remove("hidden");
+          hideRegister.classList.remove("hidden");
+          showEntriesForm.classList.remove("hidden");
+          target.classList.add("hidden");
+          return response.json();
+        }
+      })
       .catch(error => {
         console.error(error);
       });
@@ -231,9 +333,9 @@ const bindEvents = () => {
 
     const formData = new FormData(registerForm);
     fetch("/api/register", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -249,14 +351,14 @@ const bindEvents = () => {
 
   /* ------------------- Entries form ------------------*/
   entriesForm.addEventListener("submit", event => {
-    event.preventDefault();
+    // event.preventDefault();
     console.log("clicked");
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry/{id}", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -279,8 +381,8 @@ const bindEvents = () => {
 
   function deleteEntry(entryID) {
     fetch("/api/entry/" + entryID, {
-      method: "DELETE"
-    })
+        method: "DELETE"
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -297,31 +399,33 @@ const bindEvents = () => {
   }
 
   /* ------------------- Edit entry ----------------------- */
-   
 
   function editEntry(entryID) {
-
-    const editEntryForm = document.querySelector('#editEntryForm');
-    editEntryForm.addEventListener('submit', event => {
-      event.preventDefault();
+    const editEntryForm = document.querySelector("#editEntryForm");
+    editEntryForm.addEventListener("submit", event => {
+      // event.preventDefault();
       let formData = new FormData(editEntryForm);
       const formJson = {};
-      formData.forEach((value, key) => {formJson[key] = value});
-      fetch('/api/entry/' + entryID, {
-        method: 'PUT',
-        body: JSON.stringify(formJson),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      }).then(data => {
-        console.log(data);
-      })
+      formData.forEach((value, key) => {
+        formJson[key] = value;
+      });
+      fetch("/api/entry/" + entryID, {
+          method: "PUT",
+          body: JSON.stringify(formJson),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            return Error(response.statusText);
+          } else {
+            return response.json();
+          }
+        })
+        .then(data => {
+          console.log(data);
+        })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);
@@ -337,79 +441,6 @@ const bindEvents = () => {
         });
     });
   }
-}
-
-bindEvents();
-
-// Valescas code
-
-renderView(views.entry);
-
-// Definierar funktionen som kallar på vårat API
-const api = {
-  ping() {
-    return fetch("/entries/last/20")
-      .then(response => {
-        return !response.ok ? new Error(response.statusText) : response.json();
-      })
-      .then(data => {
-        entry(data);
-      })
-      .catch(error => console.error(error));
-  }
 };
 
-api.ping();
-
-function entry(v) {
-  // Visar en sammanfattning av de 20 senaste inlägg
-  let div = document.getElementById("senasteEntries");
-  for (let i = 0; i < v.length; i++) {
-    let entryID = v[i]["entryID"];
-    let str = v[i]["content"];
-    div.innerHTML +=
-      "<p>" +
-      entryID +
-      " " +
-      str.substr(0, 200) +
-      "..." +
-      '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
-  }
-
-  // Visar hela inlägg och kommentarer till den inlägg
-  let arr = document.querySelectorAll(".showalltxt-btn");
-  let entryTitle = document.getElementById("entry-title");
-
-  for (let i = 0; i < v.length; i++) {
-    arr[i].addEventListener("click", function() {
-      entryTitle.innerHTML = v[i]["title"];
-      div.innerHTML = "<p>" + v[i]["entryID"] + " " + v[i]["content"] + "</p>";
-      const api2 = {
-        ping2() {
-          return fetch("/api/comments/entry/" + v[i]["entryID"])
-            .then(response => {
-              return !response.ok
-                ? new Error(response.statusText)
-                : response.json();
-            })
-            .then(data => {
-              entry2(data);
-            })
-            .catch(error => console.error(error));
-        }
-      };
-
-      api2.ping2();
-
-      // Visar kommentarer till en inlägg
-      function entry2(v) {
-        for (let i = 0; i < v.length; i++) {
-          let div2 = document.getElementById("entryComments");
-          let content = v[i]["content"];
-          div2.innerHTML += "<p>" + " " + content + "</p>";
-        }
-      }
-      renderView(views.comment);
-    });
-  }
-}
+bindEvents();

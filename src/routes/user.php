@@ -3,22 +3,20 @@ return function ($app) {
   // Register auth middleware
   $auth = require __DIR__ . '/../middlewares/auth.php';
 
-
-
   // Basic protected GET route 
   $app->get('/api/user/{id}', function ($request, $response, $args) {
     $args['id'] = $_SESSION['userID'];
     $user = new User($this->db);
     
     return $response->withJson($user->getUserByID($args['id']));
-  })->add($auth);
+  });
   
   // 1get Skapa en GET route som hämtar alla användare (tänk på att INTE visa password-fältet)
   $app->get('/users', function($request, $response){
     $users = new User($this->db);
     
     return $response->withJson($users-> getAllUsers());
-  })->add($auth);
+  });
   
   // 2get Skapa en GET route som hämtar en enskild användare (tänk på att INTE visa password-fältet )
   $app->get('/usernotpass/{id}', function ($request, $response, $args) {
@@ -45,5 +43,5 @@ return function ($app) {
     $user = new User($this->db);
 
     return $response->withJson($user->changeUsername($args['id'], $data['new_username']));
-  });
+  })->add($auth);
 };

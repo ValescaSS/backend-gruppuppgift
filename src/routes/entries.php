@@ -10,7 +10,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getAllEntries());
-  })->add($auth);
+  });
 
   // 4get Skapa en GET route som hämtar de X senaste inläggen
   $app->get('/entries/last/{num}', function($request, $response, $args){
@@ -26,7 +26,7 @@ return function ($app) {
     $entries = new Entry($this->db);
 
     return $response->withJson($entries-> getFirstXEntries($num));
-  })->add($auth);
+  });
 
   // 6get Skapa en GET route som hämtar alla inlägg som är skrivna av en specifik användare
   $app->get('/entries/userid/{id}', function($request, $response, $args){

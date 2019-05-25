@@ -11,29 +11,12 @@
 
 <body>
 
-  <template id="lastTwentiethEntriesTemplate">
-    <h2 id="entry-title">Senaste 20 inläggen</h2>
-    <div id="senasteEntries">
-    <!-- innehåll -->
-    </div>
-  </template>
-
-  <template id="entryCommentsTemplates">
-    <h2>Comments</h2>
-    <div id="entryComments">
-    <!-- innehåll -->
-    </div>
-   <a href="">Hem</a>
-  </template>
-
-  <!-- Toshikos code -->
-
   <template id="loginFormTemplate">
     <div id="hideLoginForm">
       <h2>Logga in användare</h2>
       <form id="loginForm">
-        <input type="text" name="username" id="username" placeholder="Username">
-        <input type="password" name="password" id="password" placeholder="Password">
+        <input type="text" name="username" id="usernameLogin" placeholder="Username" value="">
+        <input type="password" name="password" id="passwordLogin" placeholder="Password">
         <input type="submit" value="Logga in">
       </form>
     </div>
@@ -43,8 +26,8 @@
     <div id="hideRegisterForm">
       <h2>Registrera användare</h2>
       <form id="registerForm">
-        <input type="text" name="username" id="username" placeholder="Username">
-        <input type="password" name="password" id="password" placeholder="Password">
+        <input type="text" name="username" id="usernameRegister" placeholder="Username">
+        <input type="password" name="password" id="passwordRegister" placeholder="Password">
         <input type="submit" value="Register">
       </form>
     </div>
@@ -73,11 +56,32 @@
         <label for="content">Content</label>
         <textarea type="text" name="content" rows="10" id="edit-content"></textarea>
 
-        <input type="submit" value="Edit" rolr="button" >
+        <input type="submit" value="Edit" rolr="button" id="send-edit">
       </div>
     </form>
   </template>
 
+  <template id="lastTwentyEntriesTemplate">
+    <div id="senasteEntries" style="border:1px solid black !important;">
+      <h2>Senaste 20 inläggen</h2>
+    <!-- innehåll -->
+    </div>
+  </template>
+
+  <template id="showCompleteEntryTemplate" >
+    <div id="completeEntry">
+    </div>
+  </template>
+
+  <template id="entryCommentsTemplates">
+    <div id="entryComments">
+      <h2>Comments</h2>
+    <!-- innehåll -->
+    </div>
+    <a href="" id="hemLink">Tillbaka</a>
+  </template>
+
+  <div id="user-div"></div>
 
   <div class="container">
     <a href="" id="logout" class="hidden">Logga ut</a>
