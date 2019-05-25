@@ -4,7 +4,21 @@ class Likes extends Mapper {
 
 
         public function getAllLikesoneEntry($entryID){
-            $statement = $this->db->prepare("SELECT * FROM likes WHERE entryID = :entryID");
+            
+            $statement = $this->db->prepare(
+                "SELECT 
+            entries.entryID,
+            entries.title,
+            entries.content,
+            entries.createdAt,
+            COUNT(likes.likesID) as likes 
+            -- GROUP_CONCAT(user.name separator '|') as liked  
+            FROM  entries 
+            LEFT JOIN likes  
+            ON likes.entryID = entries.entryID  
+            -- LEFT JOIN user  
+            -- ON likes.userID = user.id  
+            GROUP BY entries.entryID ");
             $statement->execute([
                 ':entryID' => $entryID 
             ]);

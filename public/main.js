@@ -64,9 +64,11 @@ function renderJournalView() {
 
 
 function showEntry(entries) {
+  console.log(entries);
   let target = document.querySelector('table');
   let entryTable = document.createElement('tbody');
   entryTable.innerHTML = '';
+  /* console.log(entries); */
   entries.forEach(element => {
     entryTable.innerHTML += `<tr>
            <td>${element.createdAt}</td>
@@ -127,12 +129,13 @@ function showEntry(entries) {
 
   const likegeter = document.querySelectorAll('.likeBtn');
   for (let i = 0; i < likegeter.length; i++) {
+    
       let entryID = likegeter[i].getAttribute('data-value');
       // console.log(entryID);
+      
       getLike(entryID);
-   
-  }
-
+    }
+  
 
 }
 /*------------------end of show journal -----------------*/
@@ -479,8 +482,20 @@ function getLike(entryID) {
       return response.json();
     }
     
-  }).then(data => {
-    console.log(data);
+  }).then(datax => {
+    console.log(datax);
+    let output = datax.map(a => a.likes);
+    let likes = output[0]
+    console.log(likes);
+
+    // data.forEach(element => {
+      
+    //   console.log(element);
+    // });
+    
+
+
+
   })
   .catch(error => {
     console.error(error);
