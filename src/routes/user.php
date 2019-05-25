@@ -32,7 +32,7 @@ return function ($app) {
   $app->post('/api/register', function ($request, $response) {
     $data = $request->getParsedBody();
     //validera om användare har redan registrerat eller inte
-    if (empty($data['username'] && $data['password'])) {
+    if (empty($data['username']) && empty($data['password'])) {
       $emptyNameAndPassword = 'Write your password and your name';
       return $response->withJson($emptyNameAndPassword);
     }
@@ -47,14 +47,14 @@ return function ($app) {
 
     if (!empty($data['username'] && $data['password'])) {
       $userInfo = new User($this->db);
-      $user = $userInfo->getUser($data['username']);
-      if (password_verify($data['password'], $user['password']) && $data['username'] == $user['username']){
-        $alreadyRegistered = "You have already registered.";
+      $userCheck = $userInfo->getUser($data['username']);
+      if (password_verify($data['password'], $userCheck['password']) && $data['username'] == $userCheck['username']) {
+        $alreadyRegistered = "You have already registered";
         return $response->withJson($alreadyRegistered);
-     }
-    } else {
-      $user = new User($this->db);
-      return $response->withJson($user->registerNewUser($data['username'], $data['password']));
+      } else {
+        $user = new User($this->db);
+        return $response->withJson($user->registerNewUser($data['username'], $data['password']));
+      }
     }
   });
 

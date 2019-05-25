@@ -7,22 +7,41 @@
   $app->post('/api/login', function ($request, $response) {
     $data = $request->getParsedBody();
     // In a real example, do database checks here
-    if (!empty($data['username'] && $data['password'])) {
+
+    if (empty($data['username']) && empty($data['password'])) {
+      $emptyNameAndPassword = 'Write your password and your name';
+      return $response->withJson($emptyNameAndPassword);
+    }
+    if (empty($data['username'])) {
+      $nameErr = "Write your name";
+      return $response->withJson($nameErr);
+    }
+    if (empty($data['password'])) {
+      $passErr = "Write your password";
+      return $response->withJson($passErr);
+    }
+
+
+    if (!empty($data['username']) && !empty($data['password'])) {
 
       $userObj = new User($this->db);
       $user = $userObj->getUser($data['username']);
 
-      if ($data['username'] == $user['username']) {
+      if ($data['username'] !== $user['username']) {
         if (password_verify($data['password'], $user['password'])) {
           $_SESSION['loggedIn'] = true;
           $_SESSION['userID'] = $user['userID'];
           return $response->withJson($data);
+        }else{
+          $_SESSION['loggedIn'] = false;
+          $wrongPassword = 'Wrong password';
+          return $response->withJson($wrongPassword);
         }
       } else {
-        return $response->withStatus(401);
+        $_SESSION['loggedIn'] = false;
+        $noUserRegistered = 'We can not find your name';
+        return $response->withJson($noUserRegistered);
       }
-    } else {
-      return $response->withStatus(401);
     }
   });
   

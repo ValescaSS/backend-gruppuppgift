@@ -194,13 +194,37 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          hideLogin.classList.add("hidden");
-          hideRegister.classList.add("hidden");
-          showEntriesForm.classList.remove("hidden");
-          logoutBtn.classList.remove("hidden");
-          renderJournalView();
-          showEntry();
+          return response.json();
         }
+      }).then(data=>{
+         const wrongPassAndUserErrorMsg = document.getElementById('wrongPassAndUserErrorMsg');
+         const noRegisteredNameErrorMsg = document.getElementById('noRegisteredNameErrorMsg');
+         const wrongPassErrorMsg = document.getElementById('wrongPassErrorMsg');
+         wrongPassAndUserErrorMsg.innerHTML = '';
+         noRegisteredNameErrorMsg.innerHTML = '';
+         wrongPassErrorMsg.innerHTML = '';
+         
+         if(data === 'Write your password and your name' || data === 'You have already registered'){
+           wrongPassAndUserErrorMsg.innerHTML = data;
+         }
+         else if(data === 'Write your name'){
+           noRegisteredNameErrorMsg.innerHTML = data;
+         }
+         else if(data === 'Write your password'){
+           wrongPassErrorMsg.innerHTML = data;
+         }
+         else if(data === 'User registred'){
+           wrongPassAndUserErrorMsg.innerHTML = 'Thank you for your registration!';
+           
+         }
+         else{
+           hideLogin.classList.add("hidden");
+           hideRegister.classList.add("hidden");
+           showEntriesForm.classList.remove("hidden");
+           logoutBtn.classList.remove("hidden");
+           renderJournalView();
+           showEntry();
+         }
       })
       .catch(error => {
         console.error(error);
@@ -236,8 +260,10 @@ const bindEvents = () => {
   /*--------------- register --------------------*/
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
-
+   
     const formData = new FormData(registerForm);
+   
+   
     fetch("/api/register", {
       method: "POST",
       body: formData
@@ -249,9 +275,26 @@ const bindEvents = () => {
           return response.json();
         }
       }).then(data=>{
-         const errorMsg = document.getElementById('errorMsg');
-         errorMsg.innerHTML = data;
+         const nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
+         const nameErrorMsg = document.getElementById('nameErrorMsg');
+         const passErrorMsg = document.getElementById('passErrorMsg');
+         nameAndPassErrorMsg.innerHTML = '';
+         nameErrorMsg.innerHTML = '';
+         passErrorMsg.innerHTML = '';
          
+         if(data === 'Write your password and your name' || data === 'You have already registered'){
+           nameAndPassErrorMsg.innerHTML = data;
+         }
+         else if(data === 'Write your name'){
+           nameErrorMsg.innerHTML = data;
+         }
+         else if(data === 'Write your password'){
+           passErrorMsg.innerHTML = data;
+         }
+         else if(data === 'User registred'){
+           nameAndPassErrorMsg.innerHTML = 'Thank you for your registration!';
+           
+         }
       })
       .catch(error => {
         console.error(error);
@@ -342,73 +385,73 @@ bindEvents();
 
 // Valescas code
 
-renderView(views.entry);
+// renderView(views.entry);
 
-// Definierar funktionen som kallar på vårat API
-const api = {
-  ping() {
-    return fetch("/entries/last/20")
-      .then(response => {
-        return !response.ok ? new Error(response.statusText) : response.json();
-      })
-      .then(data => {
-        entry(data);
-      })
-      .catch(error => console.error(error));
-  }
-};
+// // Definierar funktionen som kallar på vårat API
+// const api = {
+//   ping() {
+//     return fetch("/entries/last/20")
+//       .then(response => {
+//         return !response.ok ? new Error(response.statusText) : response.json();
+//       })
+//       .then(data => {
+//         entry(data);
+//       })
+//       .catch(error => console.error(error));
+//   }
+// };
 
-api.ping();
+// api.ping();
 
-function entry(v) {
-  // Visar en sammanfattning av de 20 senaste inlägg
-  let div = document.getElementById("senasteEntries");
-  for (let i = 0; i < v.length; i++) {
-    let entryID = v[i]["entryID"];
-    let str = v[i]["content"];
-    div.innerHTML +=
-      "<p>" +
-      entryID +
-      " " +
-      str.substr(0, 200) +
-      "..." +
-      '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
-  }
+// function entry(v) {
+//   // Visar en sammanfattning av de 20 senaste inlägg
+//   let div = document.getElementById("senasteEntries");
+//   for (let i = 0; i < v.length; i++) {
+//     let entryID = v[i]["entryID"];
+//     let str = v[i]["content"];
+//     div.innerHTML +=
+//       "<p>" +
+//       entryID +
+//       " " +
+//       str.substr(0, 200) +
+//       "..." +
+//       '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
+//   }
 
-  // Visar hela inlägg och kommentarer till den inlägg
-  let arr = document.querySelectorAll(".showalltxt-btn");
-  let entryTitle = document.getElementById("entry-title");
+//   // Visar hela inlägg och kommentarer till den inlägg
+//   let arr = document.querySelectorAll(".showalltxt-btn");
+//   let entryTitle = document.getElementById("entry-title");
 
-  for (let i = 0; i < v.length; i++) {
-    arr[i].addEventListener("click", function() {
-      entryTitle.innerHTML = v[i]["title"];
-      div.innerHTML = "<p>" + v[i]["entryID"] + " " + v[i]["content"] + "</p>";
-      const api2 = {
-        ping2() {
-          return fetch("/api/comments/entry/" + v[i]["entryID"])
-            .then(response => {
-              return !response.ok
-                ? new Error(response.statusText)
-                : response.json();
-            })
-            .then(data => {
-              entry2(data);
-            })
-            .catch(error => console.error(error));
-        }
-      };
+//   for (let i = 0; i < v.length; i++) {
+//     arr[i].addEventListener("click", function() {
+//       entryTitle.innerHTML = v[i]["title"];
+//       div.innerHTML = "<p>" + v[i]["entryID"] + " " + v[i]["content"] + "</p>";
+//       const api2 = {
+//         ping2() {
+//           return fetch("/api/comments/entry/" + v[i]["entryID"])
+//             .then(response => {
+//               return !response.ok
+//                 ? new Error(response.statusText)
+//                 : response.json();
+//             })
+//             .then(data => {
+//               entry2(data);
+//             })
+//             .catch(error => console.error(error));
+//         }
+//       };
 
-      api2.ping2();
+//       api2.ping2();
 
-      // Visar kommentarer till en inlägg
-      function entry2(v) {
-        for (let i = 0; i < v.length; i++) {
-          let div2 = document.getElementById("entryComments");
-          let content = v[i]["content"];
-          div2.innerHTML += "<p>" + " " + content + "</p>";
-        }
-      }
-      renderView(views.comment);
-    });
-  }
-}
+//       // Visar kommentarer till en inlägg
+//       function entry2(v) {
+//         for (let i = 0; i < v.length; i++) {
+//           let div2 = document.getElementById("entryComments");
+//           let content = v[i]["content"];
+//           div2.innerHTML += "<p>" + " " + content + "</p>";
+//         }
+//       }
+//       renderView(views.comment);
+//     });
+//   }
+// }
