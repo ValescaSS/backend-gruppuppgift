@@ -29,11 +29,11 @@ return function ($app) {
   });
 
   // 6get Skapa en GET route som hämtar alla inlägg som är skrivna av en specifik användare
-  $app->get('/entries/userid', function($request, $response, $args){
-    $args['id'] = $_SESSION['userID'];
+  $app->get('/api/entries', function($request, $response, $args){
+    $userID = $_SESSION['userID'];
     $entries = new Entry($this->db);
 
-    return $response->withJson($entries-> getEntriesUserId($args['id']));
+    return $response->withJson($entries-> getEntriesUserId($userID));
   })->add($auth);
 
   // 7get Skapa en GET route som hämtar de X senaste inläggen som är skrivna av en specifik användare
@@ -55,12 +55,12 @@ return function ($app) {
   })->add($auth);
 
   //2post Skapa en POST route som sparar ett nytt inlägg för en viss användare.
-  $app->post('/api/entry/{id}', function($request, $response, $args){
-    $args['id'] = $_SESSION['userID'];
+  $app->post('/api/entry', function($request, $response, $args){
+    $userID = $_SESSION['userID'];
     $data = $request->getParsedBody();
     $newEntry = new Entry($this->db);
     
-    return $response->withJson($newEntry-> postNewEntryUserId($args['id'], $data['title'], $data['content']));     
+    return $response->withJson($newEntry-> postNewEntryUserId($userID, $data['title'], $data['content']));     
   })->add($auth);
   
   // 3post Skapa en DELETE route som raderar ett inlägg.
