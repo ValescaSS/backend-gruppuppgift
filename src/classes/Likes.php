@@ -11,6 +11,7 @@ class Likes extends Mapper {
             entries.title,
             entries.content,
             entries.createdAt,
+            
             COUNT(likes.likesID) as likes 
             -- GROUP_CONCAT(user.name separator '|') as liked  
             FROM  entries 

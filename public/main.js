@@ -76,7 +76,7 @@ function showEntry(entries) {
            <td>${element.content}</td>
              <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
              <td><a data-value=${element.entryID} role="button" class ="more">More</a></td>
-             <td><a data-value=${element.entryID} role="button" class ="likeBtn">Like</a></td>
+             <td><a data-value=${element.entryID} role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${element.likes}</td>
              </tr>
          `;
   });
@@ -133,7 +133,7 @@ function showEntry(entries) {
       let entryID = likegeter[i].getAttribute('data-value');
       // console.log(entryID);
       
-      getLike(entryID);
+      /* getLike(entryID); */
     }
   
 
@@ -188,8 +188,8 @@ loginForm.addEventListener('submit', event => {
       }
     })
     .then(data => {
-      showEntry(data);
-
+     /*  showEntry(data); */
+      getLike(data);
     })
     .catch(error => {
       console.error(error);
@@ -482,12 +482,12 @@ function getLike(entryID) {
       return response.json();
     }
     
-  }).then(datax => {
-    console.log(datax);
-    let output = datax.map(a => a.likes);
+  }).then(data => {
+    console.log(data);
+    let output = data.map(a => a.likes);
     let likes = output[0]
     console.log(likes);
-
+    showEntry(data)  // OBS!!!! infinite loop
     // data.forEach(element => {
       
     //   console.log(element);
