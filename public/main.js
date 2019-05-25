@@ -73,10 +73,7 @@ const bindEvents = () => {
               <th scope="col">Edit</th>
           </tr>
       </thead>
-      
-      <tbody>
-        
-      </tbody>`;
+      `;
 
     target1.append(tableDiv);
 
@@ -120,8 +117,8 @@ const bindEvents = () => {
         let entryID = editBtnArray[i].getAttribute("data-value");
         renderView(views.entryEdit);
         fetch("/api/entry/" + entryID, {
-            method: "GET"
-          })
+          method: "GET"
+        })
           .then(response => {
             if (!response.ok) {
               return Error(response.statusText);
@@ -150,9 +147,9 @@ const bindEvents = () => {
     ping() {
       return fetch("/entries/last/20")
         .then(response => {
-          return !response.ok ?
-            new Error(response.statusText) :
-            response.json();
+          return !response.ok
+            ? new Error(response.statusText)
+            : response.json();
         })
         .then(data => {
           twentyEntries(data);
@@ -162,6 +159,21 @@ const bindEvents = () => {
   };
 
   api.ping();
+
+  const api2 = {
+    ping2(x) {
+      return fetch("/api/comments/entry/" + x)
+        .then(response => {
+          return !response.ok
+            ? new Error(response.statusText)
+            : response.json();
+        })
+        .then(data => {
+          commentsToSelectedEntry(data);
+        })
+        .catch(error => console.error(error));
+    }
+  };
 
   function twentyEntries(v) {
     // Visar en sammanfattning av de 20 senaste inlägg
@@ -176,12 +188,15 @@ const bindEvents = () => {
         "..." +
         '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
     }
+    showCompleteEntry(v);
+  }
 
-    // Visar hela inlägg och kommentarer till den inlägg
+  // Visar hela inlägg
+  function showCompleteEntry(v) {
     let showalltxt = document.querySelectorAll(".showalltxt-btn");
 
     for (let i = 0; i < v.length; i++) {
-      showalltxt[i].addEventListener("click", function () {
+      showalltxt[i].addEventListener("click", function() {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
@@ -194,33 +209,18 @@ const bindEvents = () => {
           v[i]["content"] +
           "</p>";
 
-        const api2 = {
-          ping2() {
-            return fetch("/api/comments/entry/" + v[i]["entryID"])
-              .then(response => {
-                return !response.ok ?
-                  new Error(response.statusText) :
-                  response.json();
-              })
-              .then(data => {
-                commentsToSelectedEntry(data);
-              })
-              .catch(error => console.error(error));
-          }
-        };
-
-        api2.ping2();
-
-        // Visar kommentarer till en inlägg
-        function commentsToSelectedEntry(v) {
-          let entryComments = document.getElementById("entryComments");
-          for (let i = 0; i < v.length; i++) {
-            let content = v[i]["content"];
-            entryComments.innerHTML += "<p>" + " " + content + "</p>";
-          }
-        }
-        renderView(views.comment);
+        api2.ping2(v[i]["entryID"]);
       });
+    }
+  }
+
+  // Visar kommentarer till ett inlägg
+  function commentsToSelectedEntry(v) {
+    renderView(views.comment);
+    let entryComments = document.getElementById("entryComments");
+    for (let i = 0; i < v.length; i++) {
+      let content = v[i]["content"];
+      entryComments.innerHTML += "<p>" + " " + content + "</p>";
     }
   }
 
@@ -241,11 +241,11 @@ const bindEvents = () => {
 
       const api3 = {
         ping3() {
-          return fetch('/entries/userid/{id}')
+          return fetch("/entries/userid")
             .then(response => {
-              return !response.ok ?
-                new Error(response.statusText) :
-                response.json();
+              return !response.ok
+                ? new Error(response.statusText)
+                : response.json();
             })
             .then(data => {
               showEntry(data);
@@ -263,9 +263,9 @@ const bindEvents = () => {
 
     const formData = new FormData(loginForm);
     fetch("/api/login", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -304,7 +304,7 @@ const bindEvents = () => {
   /*----------------- Log out -----------------*/
   logoutBtn.addEventListener("click", () => {
     // event.preventDefault();
-    localStorage.removeItem("entriesdata");
+    // localStorage.removeItem("entriesdata");
 
     fetch("/api/logout")
       .then(response => {
@@ -333,9 +333,9 @@ const bindEvents = () => {
 
     const formData = new FormData(registerForm);
     fetch("/api/register", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -356,9 +356,9 @@ const bindEvents = () => {
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry/{id}", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -381,8 +381,8 @@ const bindEvents = () => {
 
   function deleteEntry(entryID) {
     fetch("/api/entry/" + entryID, {
-        method: "DELETE"
-      })
+      method: "DELETE"
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -410,12 +410,12 @@ const bindEvents = () => {
         formJson[key] = value;
       });
       fetch("/api/entry/" + entryID, {
-          method: "PUT",
-          body: JSON.stringify(formJson),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        method: "PUT",
+        body: JSON.stringify(formJson),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);

@@ -29,7 +29,7 @@ return function ($app) {
   });
 
   // 6get Skapa en GET route som hämtar alla inlägg som är skrivna av en specifik användare
-  $app->get('/entries/userid/{id}', function($request, $response, $args){
+  $app->get('/entries/userid', function($request, $response, $args){
     $args['id'] = $_SESSION['userID'];
     $entries = new Entry($this->db);
 
