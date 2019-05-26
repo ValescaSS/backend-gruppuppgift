@@ -127,14 +127,14 @@ function showEntry(entries) {
   }
 
 
-  const likegeter = document.querySelectorAll('.likeBtn');
-  for (let i = 0; i < likegeter.length; i++) {
+  // const likegeter = document.querySelectorAll('.likeBtn');
+  // for (let i = 0; i < likegeter.length; i++) {
     
-      let entryID = likegeter[i].getAttribute('data-value');
-      // console.log(entryID);
+  //     let entryID = likegeter[i].getAttribute('data-value');
+  //     // console.log(entryID);
       
-      /* getLike(entryID); */
-    }
+  //     /* getLike(entryID); */
+  //   }
   
 
 }
