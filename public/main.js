@@ -605,48 +605,50 @@ bindEvents();
 
 /* -------------Search-------------- */
 
+document.querySelector('.searchBtn').addEventListener('click', event=>{
+
+  event.preventDefault()
+  let searchWord = document.getElementById('search').value;
+  /* console.log(searchWord); */
+  
+   search(searchWord);
+
+});
 
 
-const searchBtn = document.querySelector('.deleteBtn');
-for (let i = 0; i < deleteBtnArray.length; i++) {
-
-  deleteBtnArray[i].addEventListener('click', event => {
-    event.preventDefault();
-    let entryID = deleteBtnArray[i].getAttribute('data-value');
-
-    deleteEntry(entryID);
-  })
-
-
-
-
-
-
-
-
-
-
-
-function commentMore(searchWord) {
+function search(searchWord) {
     fetch('/api/search/' + searchWord, {
         method: 'GET'
     }).then(response => {
         if (!response.ok) {
-            return Error(response.statusText);
+            // return Error(response.statusText);
+          let target = document.getElementById("searchFormDiv");
+          let searchEntry = document.createElement('div'); 
+          target.append(searchEntry);
+          return searchEntry.innerHTML = 'Type something in the search bar!!!';
+            
         } else {
             return response.json();
         }
     }).then(data => {
         console.log(data) // skriver ut objekt som innehåller searches
-      let target = document.getElementById("searchFormDiv");
-        let searchEntry = document.createElement('div');
-      searchEntry.innerHTML = '';
-        data.forEach(element => {
-          console.log(element.title);
-            console.log(comment.content);
-          searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>' ;
-        })
-      target.append(searchEntry); //Visa kommenterar på skärmen
+        if (data.length == 0){
+          let target = document.getElementById("searchFormDiv");
+          let searchEntry = document.createElement('div');
+          target.append(searchEntry);
+          return searchEntry.innerHTML = 'Sorry, no results found for ' + searchWord +".";
+        }else{
+
+          
+          let target = document.getElementById("searchFormDiv");
+            let searchEntry = document.createElement('div');
+            searchEntry.innerHTML = '';
+            data.forEach(element => {
+              /* console.log(element); */
+            searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>' ;
+            })
+          target.append(searchEntry); //Visa kommenterar på skärmen
+        }
 
       })
 

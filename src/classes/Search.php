@@ -17,5 +17,4 @@ class Search extends Mapper
 
 
 
-
 }

@@ -8,8 +8,8 @@ return function ($app) {
 
 
 
-$app->get('/api/search', function($request, $response, $args){
-    $search = $args['search'];
+$app->get('/api/search/{word}', function($request, $response, $args){
+    $search = $args['word'];
     $searchs = new Search($this->db);
 
     return $response->withJson($searchs-> getSerach($search));
