@@ -25,12 +25,18 @@
 
   $entries = require __DIR__ . '/../src/routes/entries.php';
   $entries($app);
-  
+
+  $kommentar = require __DIR__ . '/../src/routes/kommentar.php';
+  $kommentar($app);
+
   $logout = require __DIR__ . '/../src/routes/logout.php';
   $logout($app);
 
   $comments = require __DIR__ . '/../src/routes/comments.php';
   $comments($app);
+
+  $likes = require __DIR__ . '/../src/routes/likes.php';
+  $likes($app);
 
   // Run app
   $app->run();

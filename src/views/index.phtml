@@ -8,6 +8,7 @@
   <title><?=$title?></title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <link href="pagination.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 </head>
 
 <body>
@@ -90,6 +91,34 @@
   </template>
 
   <div id="user-div"></div>
+  <template id="createCommentFormTemplate">
+
+     <form id="commentForm">
+     <br>
+       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
+       <input type="submit" value="Add comment">
+       
+     </form>
+
+  </template>
+
+  <template id="moreentryCommentsTemplates">
+   <h2>Comments</h2>
+   <div id="moreentryComments" >
+     <!-- innehåll -->
+   </div>
+   
+ </template>
+
+ <template id="editCommentTemplate">
+ <form id="editCommentForm">
+       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" ></textarea>
+       <input type="submit" value="Add comment">
+     </form>     
+
+ </template>
+
+  
 
   <div class="container">
     <a href="" id="logout" class="hidden">Logga ut</a>
