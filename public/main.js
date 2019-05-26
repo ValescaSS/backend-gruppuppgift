@@ -60,7 +60,7 @@ const bindEvents = () => {
 
 
 
-   
+
 
   /*----------- Show journal---------------*/
   function showEntry(entries) {
@@ -153,9 +153,9 @@ const bindEvents = () => {
     ping() {
       return fetch("/entries/last/20")
         .then(response => {
-          return !response.ok
-            ? new Error(response.statusText)
-            : response.json();
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
         })
         .then(data => {
           twentyEntries(data);
@@ -170,9 +170,9 @@ const bindEvents = () => {
     ping2(x) {
       return fetch("/api/comments/entry/" + x)
         .then(response => {
-          return !response.ok
-            ? new Error(response.statusText)
-            : response.json();
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
         })
         .then(data => {
           commentsToSelectedEntry(data);
@@ -202,7 +202,7 @@ const bindEvents = () => {
     let showalltxt = document.querySelectorAll(".showalltxt-btn");
 
     for (let i = 0; i < v.length; i++) {
-      showalltxt[i].addEventListener("click", function() {
+      showalltxt[i].addEventListener("click", function () {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
@@ -237,21 +237,17 @@ const bindEvents = () => {
     if (response.ok) {
       hideLogin.classList.add("hidden");
       hideRegister.classList.add("hidden");
-      // senasteEntries.classList.add("hidden");
+      senasteEntries.classList.add("hidden");
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
-      // let entriesdata = JSON.parse(localStorage.getItem("entriesdata"));
-      // console.log(entriesdata[0].createdBy);
-
-      // renderJournalView();
 
       const api3 = {
         ping3() {
           return fetch("/api/entries")
             .then(response => {
-              return !response.ok
-                ? new Error(response.statusText)
-                : response.json();
+              return !response.ok ?
+                new Error(response.statusText) :
+                response.json();
             })
             .then(data => {
               showEntry(data);
@@ -269,16 +265,16 @@ const bindEvents = () => {
 
     const formData = new FormData(loginForm);
     fetch("/api/login", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
           hideLogin.classList.add("hidden");
           hideRegister.classList.add("hidden");
-          // senasteEntries.classList.add("hidden");
+          senasteEntries.classList.add("hidden");
           // completeEntry.classList.add("hidden");
           // entryComments.classList.add("hidden");
           showEntriesForm.classList.remove("hidden");
@@ -298,7 +294,6 @@ const bindEvents = () => {
       .then(data => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
-        // localStorage.setItem("entriesdata", JSON.stringify(data));
       })
       .catch(error => {
         console.error(error);
@@ -313,17 +308,17 @@ const bindEvents = () => {
     // localStorage.removeItem("entriesdata");
 
     fetch('/api/logout').then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        console.log('logout');
-        hideLogin.classList.remove('hidden');
-        hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.add('hidden');
-        target.classList.add('hidden');
-        return response.json();
-      }
-    })
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          console.log('logout');
+          hideLogin.classList.remove('hidden');
+          hideRegister.classList.remove('hidden');
+          showEntriesForm.classList.add('hidden');
+          target.classList.add('hidden');
+          return response.json();
+        }
+      })
       .catch(error => {
         console.error(error);
       });
@@ -334,41 +329,38 @@ const bindEvents = () => {
   /*--------------- register --------------------*/
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
-   
+
     const formData = new FormData(registerForm);
-   
-   
+
+
     fetch("/api/register", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
           return response.json();
         }
-      }).then(data=>{
-         const nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
-         const nameErrorMsg = document.getElementById('nameErrorMsg');
-         const passErrorMsg = document.getElementById('passErrorMsg');
-         nameAndPassErrorMsg.innerHTML = '';
-         nameErrorMsg.innerHTML = '';
-         passErrorMsg.innerHTML = '';
-         
-         if(data === 'Write your password and your name' || data === 'You have already registered'){
-           nameAndPassErrorMsg.innerHTML = data;
-         }
-         else if(data === 'Write your name'){
-           nameErrorMsg.innerHTML = data;
-         }
-         else if(data === 'Write your password'){
-           passErrorMsg.innerHTML = data;
-         }
-         else if(data === 'User registred'){
-           nameAndPassErrorMsg.innerHTML = 'Thank you for your registration!';
-           
-         }
+      }).then(data => {
+        const nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
+        const nameErrorMsg = document.getElementById('nameErrorMsg');
+        const passErrorMsg = document.getElementById('passErrorMsg');
+        nameAndPassErrorMsg.innerHTML = '';
+        nameErrorMsg.innerHTML = '';
+        passErrorMsg.innerHTML = '';
+
+        if (data === 'Write your password and your name' || data === 'You have already registered') {
+          nameAndPassErrorMsg.innerHTML = data;
+        } else if (data === 'Write your name') {
+          nameErrorMsg.innerHTML = data;
+        } else if (data === 'Write your password') {
+          passErrorMsg.innerHTML = data;
+        } else if (data === 'User registred') {
+          nameAndPassErrorMsg.innerHTML = 'Thank you for your registration!';
+
+        }
       })
       .catch(error => {
         console.error(error);
@@ -383,9 +375,9 @@ const bindEvents = () => {
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -436,12 +428,12 @@ const bindEvents = () => {
         formJson[key] = value;
       });
       fetch("/api/entry/" + entryID, {
-        method: "PUT",
-        body: JSON.stringify(formJson),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+          method: "PUT",
+          body: JSON.stringify(formJson),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);
@@ -457,6 +449,154 @@ const bindEvents = () => {
         });
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  /* ------------------- Comments ----------------------- */
+
+
+
+  //Hämta komment 
+//   function commentMore(entryID) {
+//     fetch('/api/comments/' + entryID, {
+//         method: 'GET'
+//       }).then(response => {
+//         if (!response.ok) {
+//           return Error(response.statusText);
+//         } else {
+//           return response.json();
+//         }
+//       }).then(data => {
+//         console.log(data) // skriver ut objekt som innehåller komenterar
+//         let target = document.getElementById("moreentryComments");
+//         let entryMoreComment = document.createElement('div');
+//         entryMoreComment.innerHTML = '';
+//         data.forEach(comment => {
+//           // console.log(comment.commentID);
+//           // console.log(comment.content);
+//           entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.commentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn">Edit</button>`;
+//         })
+//         target.append(entryMoreComment); //Visa kommenterar på skärmen
+//         const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
+//         for (let i = 0; i < deleteCommentBtnArray.length; i++) {
+//           deleteCommentBtnArray[i].addEventListener('click', event => {
+//             event.preventDefault();
+//             let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
+//             // console.log(commentID); // Hämta commentID
+//             deleteComment(commentID); // SKicka den specifika commentID till deleteComment funktion
+//           })
+//         }
+//         const editCommentBtnArray = document.querySelectorAll('.editCommentBtn');
+//         for (let i = 0; i < editCommentBtnArray.length; i++) {
+//           editCommentBtnArray[i].addEventListener('click', event => {
+//             event.preventDefault();
+//             let hideCommentForm = document.getElementById('commentForm'); //Dölja comment form
+//             hideCommentForm.classList.add('hidden');
+//             renderView(views.editEntryComment); // Visa edit comment form
+//             let commentID = editCommentBtnArray[i].getAttribute('data-value');
+//             console.log(commentID); // Hämta commentID
+//             // Först hämta den specifika komment för att kunna visa på textarea 
+//             // Och sedan skicka Edit comment
+//             fetch('/api/comment/' + commentID, {
+//               method: 'GET'
+//             }).then(response => {
+//               if (!response.ok) {
+//                 return Error(response.statusText);
+//               } else {
+//                 return response.json();
+//               }
+//             }).then(data => {
+//               console.log(data.content);
+//               document.getElementById("editCommentContent").value = data.content; // Visa comment som skrev innan på textarea
+//               let editCommentBtn = document.getElementById('editCommentForm');
+//               editCommentBtn.addEventListener('submit', event => {
+//                 event.preventDefault();
+//                 const formData = new FormData(editCommentBtn);
+//                 const formJson = {};
+//                 formData.forEach((value, key) => {
+//                   formJson[key] = value
+//                 });
+//                 fetch('/api/comment/' + commentID, {
+//                   method: 'PUT',
+//                   body: JSON.stringify(formJson),
+//                   headers: {
+//                     'Content-Type': 'application/json'
+//                   }
+//                 }).then(response => {
+//                   if (!response.ok) {
+//                     return Error(response.statusText);
+//                   } else {
+//                     editCommentBtn.classList.add('hidden');
+//                     hideEntriesForm.classList.remove('hidden');
+//                     return commentMore(entryID);
+//                   }
+//                 })
+//               })
+//             })
+//           })
+//         }
+//       })
+//       .catch(error => {
+//         console.error(error);
+//       })
+//   }
+
+//   // Visa komment form
+//   function commentForm(entryID) {
+//     const commentForm = document.querySelector('#commentForm');
+//     commentForm.addEventListener('submit', event => {
+//       event.preventDefault();
+//       /* alert('Hej'); */
+//       const formData = new FormData(commentForm);
+//       fetch('/api/comment/' + entryID, {
+//           method: 'POST',
+//           body: formData
+//         }).then(response => {
+//           if (!response.ok) {
+//             return Error(response.statusText);
+//           } else {
+//             /* console.log('skrivit!'); */
+//             return response.json();
+//           }
+//         }).then(data => {
+//           console.log(data);
+//         })
+//         .catch(error => {
+//           console.error(error);
+//         })
+//     })
+
+//   }
+
+//   // Ta bort sina kommentarer
+//   function deleteComment(commentID) {
+
+//     fetch('/api/comment/' + commentID, {
+//         method: 'DELETE'
+//       }).then(response => {
+//         if (!response.ok) {
+//           return Error(response.statusText);
+//         } else {
+//           /* console.log('GET'); */
+//           return response.json();
+
+//         }
+//       }).then(data => {
+//         console.log(data);
+//       })
+//       .catch(error => {
+//         console.error(error);
+//       })
+//   }
 };
 
 bindEvents();
