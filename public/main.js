@@ -1,5 +1,5 @@
 const views = {
-  login: ["#loginFormTemplate", "#registerFormTemplate"],
+    login: ["#loginFormTemplate", "#registerFormTemplate", "#searchFormTemplate"],
   loginFail: [
     "#loginFailTemplate",
     "#loginFormTemplate",
@@ -600,3 +600,55 @@ const bindEvents = () => {
 };
 
 bindEvents();
+
+
+
+/* -------------Search-------------- */
+
+
+
+const searchBtn = document.querySelector('.deleteBtn');
+for (let i = 0; i < deleteBtnArray.length; i++) {
+
+  deleteBtnArray[i].addEventListener('click', event => {
+    event.preventDefault();
+    let entryID = deleteBtnArray[i].getAttribute('data-value');
+
+    deleteEntry(entryID);
+  })
+
+
+
+
+
+
+
+
+
+
+
+function commentMore(searchWord) {
+    fetch('/api/search/' + searchWord, {
+        method: 'GET'
+    }).then(response => {
+        if (!response.ok) {
+            return Error(response.statusText);
+        } else {
+            return response.json();
+        }
+    }).then(data => {
+        console.log(data) // skriver ut objekt som innehåller searches
+      let target = document.getElementById("searchFormDiv");
+        let searchEntry = document.createElement('div');
+      searchEntry.innerHTML = '';
+        data.forEach(element => {
+          console.log(element.title);
+            console.log(comment.content);
+          searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>' ;
+        })
+      target.append(searchEntry); //Visa kommenterar på skärmen
+
+      })
+
+    }
+  
