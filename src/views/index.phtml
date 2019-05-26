@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><?=$title?></title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="pagination.css" rel="stylesheet">
 </head>
 
 <body>
@@ -59,7 +60,7 @@
       <div>
         <label for="title">Title</label>
         <input type="text" name="title" id="edit-title" class="form-control" value="">
-      
+
         <label for="content">Content</label>
         <textarea type="text" name="content" rows="10" id="edit-content"></textarea>
 
@@ -70,12 +71,12 @@
 
   <template id="lastTwentyEntriesTemplate">
     <div id="senasteEntries" style="border:1px solid black !important;">
-      <h2>Senaste 20 inläggen</h2>
-    <!-- innehåll -->
+      <!-- <h2>Senaste 20 inläggen</h2> -->
+      <!-- innehåll -->
     </div>
   </template>
 
-  <template id="showCompleteEntryTemplate" >
+  <template id="showCompleteEntryTemplate">
     <div id="completeEntry">
     </div>
   </template>
@@ -83,7 +84,7 @@
   <template id="entryCommentsTemplates">
     <div id="entryComments">
       <h2>Comments</h2>
-    <!-- innehåll -->
+      <!-- innehåll -->
     </div>
     <a href="" id="hemLink">Tillbaka</a>
   </template>
@@ -98,11 +99,57 @@
     </header>
 
     <main>
-        <!-- innehåll -->
+      <!-- innehåll -->
     </main>
 
   </div>
 
+  <!-- <div class="contents">
+  <div>This Is Number 1</div>
+      <div>This Is Number 2</div>
+      <div>This Is Number 3</div>
+      <div>This Is Number 4</div>
+      <div>This Is Number 5</div>
+      <div>This Is Number 6</div>
+      <div>This Is Number 7</div>
+      <div>This Is Number 8</div>
+      <div>This Is Number 9</div>
+      <div>This Is Number 10</div>
+      <div>This Is Number 11</div>
+      <div>This Is Number 12</div>
+      <div>This Is Number 13</div>
+      <div>This Is Number 14</div>
+      <div>This Is Number 15</div>
+      <div>This Is Number 16</div>
+      <div>This Is Number 17</div>
+      <div>This Is Number 18</div>
+      <div>This Is Number 19</div>
+      <div>This Is Number 20</div>
+      <div>This Is Number 21</div>
+      <div>This Is Number 22</div>
+      <div>This Is Number 23</div>
+      <div>This Is Number 24</div>
+      <div>This Is Number 25</div>
+      <div>This Is Number 26</div>
+      <div>This Is Number 27</div>
+      <div>This Is Number 28</div>
+      <div>This Is Number 29</div>
+      <div>This Is Number 30</div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="pagination.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#tab").pagination({
+        items: 5,
+        contents: 'contents',
+        previous: 'Previous',
+        next: 'Next',
+        position: 'bottom',
+      });
+    });
+  </script> -->
   <script type="text/javascript" src="main.js"></script>
 
 </body>
