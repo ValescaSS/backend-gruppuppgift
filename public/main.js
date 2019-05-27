@@ -153,6 +153,7 @@ const bindEvents = () => {
         renderView(views.entryEdit);
         showEntriesForm.classList.add("hidden");
         entryTable.classList.add('hidden');
+        showAllEntriesBtn.classList.add('hidden');
         fetch("/api/entry/" + entryID, {
           method: "GET"
         })
