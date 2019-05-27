@@ -1,5 +1,5 @@
 const views = {
-  login: ["#loginFormTemplate", "#registerFormTemplate"],
+    login: ["#loginFormTemplate", "#registerFormTemplate", "#searchFormTemplate"],
   loginFail: [
     "#loginFailTemplate",
     "#loginFormTemplate",
@@ -315,9 +315,9 @@ const bindEvents = () => {
 
     const formData = new FormData(loginForm);
     fetch("/api/login", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -377,17 +377,17 @@ const bindEvents = () => {
     // localStorage.removeItem("entriesdata");
 
     fetch('/api/logout').then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        console.log('logout');
-        hideLogin.classList.remove('hidden');
-        hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.add('hidden');
-        target.classList.add('hidden');
-        return response.json();
-      }
-    })
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          console.log('logout');
+          hideLogin.classList.remove('hidden');
+          hideRegister.classList.remove('hidden');
+          showEntriesForm.classList.add('hidden');
+          target.classList.add('hidden');
+          return response.json();
+        }
+      })
       .catch(error => {
         console.error(error);
       });
@@ -404,9 +404,9 @@ const bindEvents = () => {
 
 
     fetch("/api/register", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -453,9 +453,9 @@ const bindEvents = () => {
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -506,12 +506,12 @@ const bindEvents = () => {
         formJson[key] = value;
       });
       fetch("/api/entry/" + entryID, {
-        method: "PUT",
-        body: JSON.stringify(formJson),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+          method: "PUT",
+          body: JSON.stringify(formJson),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);
@@ -830,6 +830,57 @@ const bindEvents = () => {
 
 
 
+
+}
+
+/* -------------Search-------------- */
+
+document.querySelector('.searchBtn').addEventListener('click', event => {
+
+  event.preventDefault()
+  let searchWord = document.getElementById('search').value;
+  /* console.log(searchWord); */
+
+  search(searchWord);
+
+});
+
+
+function search(searchWord) {
+  fetch('/api/search/' + searchWord, {
+    method: 'GET'
+  }).then(response => {
+    if (!response.ok) {
+      // return Error(response.statusText);
+      let target = document.getElementById("searchFormDiv");
+      let searchEntry = document.createElement('div');
+      target.append(searchEntry);
+      return searchEntry.innerHTML = 'Type something in the search bar!!!';
+
+    } else {
+      return response.json();
+    }
+  }).then(data => {
+    console.log(data) // skriver ut objekt som innehåller searches
+    if (data.length == 0) {
+      let target = document.getElementById("searchFormDiv");
+      let searchEntry = document.createElement('div');
+      target.append(searchEntry);
+      return searchEntry.innerHTML = 'Sorry, no results found for ' + searchWord + ".";
+    } else {
+
+
+      let target = document.getElementById("searchFormDiv");
+      let searchEntry = document.createElement('div');
+      searchEntry.innerHTML = '';
+      data.forEach(element => {
+        /* console.log(element); */
+        searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>';
+      })
+      target.append(searchEntry); //Visa kommenterar på skärmen
+    }
+
+  })
 
 }
 bindEvents();
