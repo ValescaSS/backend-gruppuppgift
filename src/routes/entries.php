@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start(); */
 
 return function ($app) {
   
@@ -87,5 +87,12 @@ return function ($app) {
 
     return $response->withJson($entries-> getOneEntry($entryID));
   })->add($auth);
+  
+  $app->get('/api/entriesandusername', function($request, $response, $args){
+    $entries = new Entry($this->db);
+
+    return $response->withJson($entries-> getAllUsersEntriesAndUsername());
+  })->add($auth);
+
 
 };
