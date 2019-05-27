@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><?=$title?></title>
+  <title><?= $title ?></title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -15,15 +15,15 @@
 <body>
 
   <template id="searchFormTemplate">
-    <div id="hideSearchForm" class="hidden">
+    <div id="hideSearchForm" class="hidden justify-content-end">
       <form id="searchForm">
         <div id="No result" class="errMsg"></div>
         <input type="text" name="search" id="search" placeholder="Search...">
         <input type="submit" class="searchBtn" name="submit-search" value="Search">
         <div id="searchFormDiv">
-        <h2>Search Results</h2>
-    <!-- innehåll -->
-        </div> 
+          <h2>Search Results</h2>
+          <!-- innehåll -->
+        </div>
       </form>
     </div>
   </template>
@@ -88,7 +88,7 @@
 
   <template id="editEntry">
     <div class="container">
-    <form id="editEntryForm">
+      <form id="editEntryForm">
         <div class="form-group row">
           <label for="title">Title</label>
           <input type="text" name="title" id="edit-title" class="form-control" value="">
@@ -117,10 +117,10 @@
   </template>
 
   <template id="showIndividualCommentAndEntry">
-     <div id="individualComment">
+    <div id="individualComment">
 
-     </div>
-     <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+    </div>
+    <button class="btn btn-outline-secondary"><a href="">Back</a></button>
   </template>
 
   <template id="showCompleteEntryTemplate">
@@ -139,44 +139,44 @@
   <div id="user-div"></div>
   <template id="createCommentFormTemplate">
 
-     <form id="commentForm">
-     <br>
-       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
-       <input type="submit" value="Add comment">
+    <form id="commentForm">
+      <br>
+      <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
+      <input type="submit" value="Add comment">
 
-     </form>
+    </form>
 
   </template>
 
   <template id="moreentryCommentsTemplates">
-   <h2>Comments</h2>
-   <div id="moreentryComments" >
-     <!-- innehåll -->
-   </div>
+    <h2>Comments</h2>
+    <div id="moreentryComments">
+      <!-- innehåll -->
+    </div>
 
- </template>
+  </template>
 
- <template id="editCommentTemplate">
- <form id="editCommentForm">
-       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" ></textarea>
-       <input type="submit" value="Add comment">
-     </form>
+  <template id="editCommentTemplate">
+    <form id="editCommentForm">
+      <textarea name="content" id="editCommentContent" cols="30" rows="10" value=""></textarea>
+      <input type="submit" value="Add comment">
+    </form>
 
- </template>
+  </template>
 
- <template id="createAllEntryTemplate">
-    <div id ="showAllUsersEntries" >
-   
-      </div>
-      <button class="btn btn-outline-secondary"><a href="">Back</a></button>
-</template>
+  <template id="createAllEntryTemplate">
+    <div id="showAllUsersEntries">
+
+    </div>
+    <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+  </template>
 
 
   <div class="container">
     <a href="" id="logout" class="hidden"><i class="fas fa-sign-out-alt">Sign out</i></a>
     <!-- <button id="logout" class="hidden">Logga ut</button> -->
     <header>
-      <h1><?=$title?></h1>
+      <h1><?= $title ?></h1>
     </header>
 
     <main>
@@ -184,7 +184,12 @@
     </main>
 
     <aside>
+      <!-- innehåll -->
     </aside>
+
+    <section>
+      <!-- innehåll -->
+    </section>
 
   </div>
 
