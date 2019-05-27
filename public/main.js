@@ -103,7 +103,7 @@ const bindEvents = () => {
       </div>
         <div><button data-value=${
           element.entryID
-        } role="button" class ="commentsBtn">Comment<i class="far fa-comments"></i></button></div>
+        } role="button" class ="showCommentsBtn">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
     </div>
@@ -111,6 +111,10 @@ const bindEvents = () => {
   
     });
     target1.append(entryTable);
+
+    //Show comment knappen
+    const showCommentsBtnArray = document.querySelectorAll('.showCommentsBtn');
+    
 
     // Delete knappen
     const deleteBtnArray = document.querySelectorAll(".deleteBtn");
