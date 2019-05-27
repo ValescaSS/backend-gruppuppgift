@@ -183,7 +183,7 @@ const bindEvents = () => {
             response.json();
         })
         .then(data => {
-          console.log(data);
+          //console.log(data);
           showAllUsersEntries(data);
         })
         .catch(error => console.error(error));
@@ -556,12 +556,13 @@ const bindEvents = () => {
 
   /*---------------------- Show all users entries ------------------*/
 
-
+  // OBS!!! In this function we get all the entries and the number of likes for evry entry
+  // Line nummber 179
   function showAllUsersEntries(entries) {
     let target = document.querySelector('#showAllUsersEntries');
     let entryTable = document.createElement('div');
     entryTable.innerHTML = '';
-    /* console.log(entries); */
+    // console.log(entries);
     entries.forEach(element => {
       entryTable.innerHTML += `
       <div class="container mt-5" id='userEntries'>
@@ -612,7 +613,7 @@ const bindEvents = () => {
       likeBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
         let entryID = likeBtnArray[i].getAttribute('data-value');
-        console.log(entryID);
+        // console.log(entryID);
         addLike(entryID);
       })
     }
@@ -782,7 +783,7 @@ const bindEvents = () => {
       if (!response.ok) {
         return Error(response.statusText);
       } else {
-        console.log('I like you!');
+        // console.log('I like you!');
         return response.json();
       }
     }).then(data => {
@@ -793,41 +794,6 @@ const bindEvents = () => {
       })
 
   }
-
-
-
-
-  // function getLike(entryID) {
-
-  //   fetch('/api/like/' + entryID, {
-  //       method: "GET"
-  //     })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         return Error(response.statusText);
-  //       } else {
-  //         console.log("Likes are here :)");
-  //         return response.json();
-  //       }
-
-  //     }).then(data => {
-  //       console.log(data);
-  //       let output = data.map(a => a.likes);
-  //       let likes = output[0]
-  //       console.log(likes);
-  //       showAllEntries(data) // OBS!!!! infinite loop
-  //       // data.forEach(element => {
-
-  //       //   console.log(element);
-  //       // });
-
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     })
-
-  // }
-
 
 
 

@@ -30,7 +30,7 @@ class Likes extends Mapper {
 
         public function AddLike($userID , $entryID){
         $statement = $this->db->prepare("INSERT INTO likes (userID, entryID)
-        SELECT $entryID, $entryID FROM likes
+        SELECT $userID, $entryID FROM entries
         WHERE EXISTS
         (  SELECT entryID FROM entries WHERE entryID = $entryID) AND 
         NOT EXISTS
