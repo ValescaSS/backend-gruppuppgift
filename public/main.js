@@ -114,7 +114,13 @@ const bindEvents = () => {
 
     //Show comment knappen
     const showCommentsBtnArray = document.querySelectorAll('.showCommentsBtn');
-    
+    for(let i = 0; i < showCommentsBtnArray.length; i++){
+      showCommentsBtnArray[i].addEventListener('click', event =>{
+         event.preventDefault();
+         let entryID = showCommentsBtnArray[i].getAttribute('data-value');
+         showUserComment(entryID);
+      })
+    }
 
     // Delete knappen
     const deleteBtnArray = document.querySelectorAll(".deleteBtn");
@@ -497,5 +503,27 @@ const bindEvents = () => {
     });
   }
 
+/* ------------------- Show user comment & Entry ----------------------- */
+    function showUserComment(entryID){
+      
+       fetch('/api/entry/' + entryID,{
+         method: 'GET'
+       }).then(response => {
+         if(!response.ok){
+           return Error(response.statusText);
+         }else{
+           return response.json();
+         }
+       }).then(data => {
+           
+       })
+
+
+    }
+
+
+
+
+/* ------------------- End of show user comment & Entry ----------------------- */
 }
 bindEvents();
