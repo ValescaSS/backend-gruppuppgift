@@ -36,9 +36,25 @@ function renderView(view) {
   });
 }
 
+function lastTwentyEntryrenderView(view) {
+  const target = document.querySelector("aside");
+
+  // Rensa innehållet eftersom innehållet bara växer om vi kör flera renderView()
+  // target.innerHTML = '';
+
+  view.forEach(template => {
+    const templateMarkup = document.querySelector(template).innerHTML;
+
+    const div = document.createElement("div");
+
+    div.innerHTML = templateMarkup;
+
+    target.append(div);
+  });
+}
 renderView(views.login);
 renderView(views.loggedIn);
-renderView(views.entry);
+lastTwentyEntryrenderView(views.entry);
 renderView(views.completeEntry);
 // renderView(views.entrySuccess);
 
@@ -60,49 +76,41 @@ const bindEvents = () => {
 
 
 
-   
+
 
   /*----------- Show journal---------------*/
   function showEntry(entries) {
     const target1 = document.querySelector("main");
-    let tableDiv = document.createElement("table");
-
-    tableDiv.innerHTML = ` 
-      <thead>
-          <tr class="text-uppercase">
-              <th scope="col">Date</th>
-              <th scope="col">Title</th>
-              <th scope="col">Content</th>
-              <th scope="col">Delete</th>
-              <th scope="col">Edit</th>
-          </tr>
-      </thead>
-      
-      <tbody>
-        
-      </tbody>`;
-
-    target1.append(tableDiv);
-
-    let target2 = document.querySelector("table");
-    let entryTable = document.createElement("tbody");
+   
+    let entryTable = document.createElement("div");
 
     entryTable.innerHTML = "";
     entries.forEach(element => {
-      entryTable.innerHTML += `<tr>
-           <td>${element.createdAt}</td>
-           <td>${element.title}</td>
-           <td>${element.content}</td>
-             <td><a href="" data-value=${
-               element.entryID
-             } role="button" class ="deleteBtn" type="submit">DELETE</a></td>
-             <td><button data-value=${
-               element.entryID
-             } role="button" class ="editBtn">Edit</button></td>
-             </tr>
-         `;
+      entryTable.innerHTML += `
+      <div class="container mt-5">
+      <div class="row">
+        <div class=mx-5>${element.createdAt}</div>
+        <h3>${element.title}</h3>
+      </div>
+      <p>${element.content}</p>
+      <div class="row justify-content-end">
+        <div class="mx-5"><a href="" data-value=${
+          element.entryID
+        } role="button" class ="deleteBtn" type="submit"><i class="far fa-trash-alt"></i></a></div>
+        <div><button data-value=${
+          element.entryID
+        } role="button" class ="editBtn">Edit<i class="far fa-edit"></i></button></div>
+      </div>
+        <div><button data-value=${
+          element.entryID
+        } role="button" class ="commentsBtn">Comment<i class="far fa-comments"></i></button></div>
+      </div>
+      </div>
+    </div>
+     `;
+  
     });
-    target2.append(entryTable);
+    target1.append(entryTable);
 
     // Delete knappen
     const deleteBtnArray = document.querySelectorAll(".deleteBtn");
@@ -122,6 +130,8 @@ const bindEvents = () => {
         event.preventDefault();
         let entryID = editBtnArray[i].getAttribute("data-value");
         renderView(views.entryEdit);
+        showEntriesForm.classList.add("hidden");
+        entryTable.classList.add('hidden');
         fetch("/api/entry/" + entryID, {
             method: "GET"
           })
@@ -153,9 +163,9 @@ const bindEvents = () => {
     ping() {
       return fetch("/entries/last/20")
         .then(response => {
-          return !response.ok
-            ? new Error(response.statusText)
-            : response.json();
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
         })
         .then(data => {
           twentyEntries(data);
@@ -170,9 +180,9 @@ const bindEvents = () => {
     ping2(x) {
       return fetch("/api/comments/entry/" + x)
         .then(response => {
-          return !response.ok
-            ? new Error(response.statusText)
-            : response.json();
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
         })
         .then(data => {
           commentsToSelectedEntry(data);
@@ -192,7 +202,7 @@ const bindEvents = () => {
         " " +
         str.substr(0, 200) +
         "..." +
-        '</p><button class="showalltxt-btn">Visa hela inlägg</button>';
+        '</p><button class="showalltxt-btn btn btn-outline-success">Visa hela inlägg</button>';
     }
     showCompleteEntry(v);
   }
@@ -202,7 +212,7 @@ const bindEvents = () => {
     let showalltxt = document.querySelectorAll(".showalltxt-btn");
 
     for (let i = 0; i < v.length; i++) {
-      showalltxt[i].addEventListener("click", function() {
+      showalltxt[i].addEventListener("click", function () {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
@@ -232,26 +242,23 @@ const bindEvents = () => {
 
   /*--------------------------------------------------------------------------*/
 
+
   /* --------------- Om användare har loggat in? ----------*/
   fetch("/api/ping").then(response => {
     if (response.ok) {
       hideLogin.classList.add("hidden");
       hideRegister.classList.add("hidden");
-      // senasteEntries.classList.add("hidden");
+      senasteEntries.classList.add("hidden");
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
-      // let entriesdata = JSON.parse(localStorage.getItem("entriesdata"));
-      // console.log(entriesdata[0].createdBy);
-
-      // renderJournalView();
-
+      
       const api3 = {
         ping3() {
           return fetch("/api/entries")
             .then(response => {
-              return !response.ok
-                ? new Error(response.statusText)
-                : response.json();
+              return !response.ok ?
+                new Error(response.statusText) :
+                response.json();
             })
             .then(data => {
               showEntry(data);
@@ -276,16 +283,34 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
+          return response.json();
+        }
+      }).then(data=>{
+         let wrongPassAndUserErrorMsg = document.getElementById('wrongPassAndUserErrorMsg');
+         let noRegisteredNameErrorMsg = document.getElementById('noRegisteredNameErrorMsg');
+         let wrongPassErrorMsg = document.getElementById('wrongPassErrorMsg');
+         wrongPassAndUserErrorMsg.innerHTML = '';
+         noRegisteredNameErrorMsg.innerHTML = '';
+         wrongPassErrorMsg.innerHTML = '';
+         
+         if(data === 'Write your password and your name'){
+           wrongPassAndUserErrorMsg.innerHTML = data;
+          }
+          else if(data === 'We can not find your name' || data === 'Write your name'){
+            noRegisteredNameErrorMsg.innerHTML = data;
+          }
+          else if(data === 'Wrong password' || data === 'Write your password'){
+           wrongPassErrorMsg.innerHTML = data;
+         }
+         else{
           hideLogin.classList.add("hidden");
           hideRegister.classList.add("hidden");
-          // senasteEntries.classList.add("hidden");
-          // completeEntry.classList.add("hidden");
-          // entryComments.classList.add("hidden");
+          senasteEntries.classList.add("hidden");
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
-
-          // renderJournalView();
-          return fetch("/api/entries");
+          return fetch("/api/entries",{
+            method: 'GET'
+          });
         }
       })
       .then(response => {
@@ -296,14 +321,16 @@ const bindEvents = () => {
         }
       })
       .then(data => {
+        console.log(data);
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
-        // localStorage.setItem("entriesdata", JSON.stringify(data));
       })
+
       .catch(error => {
         console.error(error);
-      });
-  });
+      })
+  })
+  
 
   /*----------------  end of log in ------------*/
 
@@ -313,17 +340,17 @@ const bindEvents = () => {
     // localStorage.removeItem("entriesdata");
 
     fetch('/api/logout').then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        console.log('logout');
-        hideLogin.classList.remove('hidden');
-        hideRegister.classList.remove('hidden');
-        showEntriesForm.classList.add('hidden');
-        target.classList.add('hidden');
-        return response.json();
-      }
-    })
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          console.log('logout');
+          hideLogin.classList.remove('hidden');
+          hideRegister.classList.remove('hidden');
+          showEntriesForm.classList.add('hidden');
+          target.classList.add('hidden');
+          return response.json();
+        }
+      })
       .catch(error => {
         console.error(error);
       });
@@ -332,44 +359,52 @@ const bindEvents = () => {
   /*---------------end of Log out -----------------*/
 
   /*--------------- register --------------------*/
+  
   registerForm.addEventListener("submit", event => {
     event.preventDefault();
-   
+
     const formData = new FormData(registerForm);
-   
-   
+
+    
     fetch("/api/register", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
           return response.json();
         }
-      }).then(data=>{
-         const nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
-         const nameErrorMsg = document.getElementById('nameErrorMsg');
-         const passErrorMsg = document.getElementById('passErrorMsg');
-         nameAndPassErrorMsg.innerHTML = '';
-         nameErrorMsg.innerHTML = '';
-         passErrorMsg.innerHTML = '';
-         
-         if(data === 'Write your password and your name' || data === 'You have already registered'){
-           nameAndPassErrorMsg.innerHTML = data;
-         }
-         else if(data === 'Write your name'){
-           nameErrorMsg.innerHTML = data;
-         }
-         else if(data === 'Write your password'){
-           passErrorMsg.innerHTML = data;
-         }
-         else if(data === 'User registred'){
-           nameAndPassErrorMsg.innerHTML = 'Thank you for your registration!';
-           
-         }
-      })
+      }).then(data => {
+
+          let nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
+          let nameErrorMsg = document.getElementById('nameErrorMsg');
+          let passErrorMsg = document.getElementById('passErrorMsg');
+        
+          
+          if (data === 'Write your password and your name' || data === 'You have already registered') {
+            let div = document.createElement('div');
+            div.innerHTML = data;
+            nameAndPassErrorMsg.append(div);
+            console.log(div);
+          } else if (data === 'Write your name') {
+            let div = document.createElement('div');
+            div.innerHTML = data;
+            nameErrorMsg.append(div);
+            console.log(div);
+          } else if (data === 'Write your password') {
+            let div = document.createElement('div');
+            div.innerHTML = data;
+            console.log(data);
+            nameErrorMsg.append(div);
+          } else if (data === 'User registred') {
+            hideLogin.classList.add("hidden");
+            hideRegister.classList.add("hidden");
+            renderView(views.registerSuccess);
+            // nameAndPassErrorMsg.innerHTML = 'Thank you for your registration!';
+          }
+        })
       .catch(error => {
         console.error(error);
       });
@@ -383,9 +418,9 @@ const bindEvents = () => {
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry", {
-      method: "POST",
-      body: formData
-    })
+        method: "POST",
+        body: formData
+      })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -395,7 +430,7 @@ const bindEvents = () => {
       })
       .then(data => {
         console.log(data); //Skrivit inlägg!
-        showEntry();
+        showEntry(data);
       })
       .catch(error => {
         console.error(error);
@@ -436,12 +471,12 @@ const bindEvents = () => {
         formJson[key] = value;
       });
       fetch("/api/entry/" + entryID, {
-        method: "PUT",
-        body: JSON.stringify(formJson),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+          method: "PUT",
+          body: JSON.stringify(formJson),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);
@@ -457,6 +492,6 @@ const bindEvents = () => {
         });
     });
   }
-};
 
+}
 bindEvents();

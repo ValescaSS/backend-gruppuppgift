@@ -56,6 +56,8 @@ return function ($app) {
     }
   });
 
+  
+
   // 4get Skapa en GET route som loggar ut den inloggade användaren.
 
   // 5put Skapa en PUT route som ändrar på en användares användarnamn.

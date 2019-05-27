@@ -5,11 +5,11 @@ body {
   margin: 0;
 }
 
-.container {
+/* .container {
   border: 2px solid black;
   max-width: 1000px;
   margin: 100px auto 0 auto; 
-}
+} */
 
 header {
   border-bottom: 1px solid black;
@@ -38,4 +38,12 @@ table {
 
 .errMsg{
   color: red;
+}
+
+#successMsg{
+  color: green;
+}
+
+textarea{
+  width: 100%;
 }
