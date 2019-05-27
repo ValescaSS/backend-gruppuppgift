@@ -259,7 +259,7 @@ const bindEvents = () => {
       senasteEntries.classList.add("hidden");
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
-      showAllEntriesBtn.classList.remove("hidden");
+      // showAllEntriesBtn.classList.remove("hidden");
 
       const api3 = {
         ping3() {
@@ -315,7 +315,7 @@ const bindEvents = () => {
           senasteEntries.classList.add("hidden");
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
-          showAllEntriesBtn.classList.remove("hidden");
+          // showAllEntriesBtn.classList.remove("hidden");
           return fetch("/api/entries", {
             method: 'GET'
           });
@@ -329,7 +329,7 @@ const bindEvents = () => {
         }
       })
       .then(data => {
-        console.log(data);
+        // console.log(data);
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
         getLike(data);
@@ -352,7 +352,7 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          console.log('logout');
+          // console.log('logout');
           hideLogin.classList.remove('hidden');
           hideRegister.classList.remove('hidden');
           showEntriesForm.classList.add('hidden');
@@ -396,16 +396,16 @@ const bindEvents = () => {
           let div = document.createElement('div');
           div.innerHTML = data;
           nameAndPassErrorMsg.append(div);
-          console.log(div);
+          // console.log(div);
         } else if (data === 'Write your name') {
           let div = document.createElement('div');
           div.innerHTML = data;
           nameErrorMsg.append(div);
-          console.log(div);
+          // console.log(div);
         } else if (data === 'Write your password') {
           let div = document.createElement('div');
           div.innerHTML = data;
-          console.log(data);
+          // console.log(data);
           nameErrorMsg.append(div);
         } else if (data === 'User registred') {
           hideLogin.classList.add("hidden");
@@ -423,7 +423,7 @@ const bindEvents = () => {
   /* ------------------- Posta Entries form ------------------*/
   entriesForm.addEventListener("submit", event => {
     // event.preventDefault();
-    console.log("clicked");
+    // console.log("clicked");
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry", {
@@ -520,7 +520,7 @@ const bindEvents = () => {
           <th scope="col">Date</th>
           <th scope="col">Title</th>
           <th scope="col">Content</th>
-          <th scope="col">Delete</th>
+          
           <th scope="col">More</th>
           <th scope="col">Likes</th>
       </tr>
@@ -535,7 +535,7 @@ const bindEvents = () => {
 
 
   function showAllEntries(entries) {
-    console.log(entries);
+    // console.log(entries);
     let target = document.querySelector('table');
     let entryTable = document.createElement('tbody');
     entryTable.innerHTML = '';
@@ -545,7 +545,7 @@ const bindEvents = () => {
            <td>${element.createdAt}</td>
            <td>${element.title}</td>
            <td>${element.content}</td>
-             <td><a data-value=${element.entryID} role="button" class ="deleteBtn">DELETE</a></td>
+             
              <td><a data-value=${element.entryID} role="button" class ="more">More</a></td>
              <td><a data-value=${element.entryID} role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${element.likes}</td>
              </tr>
@@ -553,30 +553,21 @@ const bindEvents = () => {
     });
     target.append(entryTable);
 
-    const deleteBtnArray = document.querySelectorAll('.deleteBtn');
-    for (let i = 0; i < deleteBtnArray.length; i++) {
-
-      deleteBtnArray[i].addEventListener('click', event => {
-        event.preventDefault();
-        let entryID = deleteBtnArray[i].getAttribute('data-value');
-
-        deleteEntry(entryID);
-      })
-    }
-
 
     const moreBtnArray = document.querySelectorAll('.more');
     for (let i = 0; i < moreBtnArray.length; i++) {
 
       moreBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
+        console.log('click');
         let entryID = moreBtnArray[i].getAttribute('data-value');
+        
 
-        /* console.log(entryID); */
-        const hideEntriesForm = document.querySelector('#hideEntriesForm');
-        hideEntriesForm.classList.add('hidden');
-        const hideTable = document.querySelector('table');
-        hideTable.classList.add('hidden');
+        console.log(entryID);
+        // const hideEntriesForm = document.querySelector('#hideEntriesForm');
+        // hideEntriesForm.classList.add('hidden');
+        // const hideTable = document.querySelector('table');
+        // hideTable.classList.add('hidden');
         renderView(views.entryComment);
         commentMore(entryID); // Visa komment
         commentForm(entryID); // Visa komment form
@@ -591,6 +582,7 @@ const bindEvents = () => {
 
       likeBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
+        console.log('click');
         let entryID = likeBtnArray[i].getAttribute('data-value');
         console.log(entryID);
         addLike(entryID);
@@ -617,6 +609,7 @@ const bindEvents = () => {
 
   //Hämta komment 
   function commentMore(entryID) {
+
     fetch('/api/comments/' + entryID, {
         method: 'GET'
       }).then(response => {
@@ -631,9 +624,9 @@ const bindEvents = () => {
         let entryMoreComment = document.createElement('div');
         entryMoreComment.innerHTML = '';
         data.forEach(comment => {
-          console.log(comment.CommentID);
+          console.log(comment.commentID);
           console.log(comment.content);
-          entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.CommentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.CommentID} class ="editCommentBtn">Edit</button>`;
+          entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.commentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn">Edit</button>`;
         })
         target.append(entryMoreComment); //Visa kommenterar på skärmen
         const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
@@ -786,15 +779,15 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          console.log("Likes are here :)");
+          // console.log("Likes are here :)");
           return response.json();
         }
 
       }).then(data => {
-        console.log(data);
+        // console.log(data);
         let output = data.map(a => a.likes);
         let likes = output[0]
-        console.log(likes);
+        // console.log(likes);
         showAllEntries(data) // OBS!!!! infinite loop
         // data.forEach(element => {
 
@@ -809,7 +802,7 @@ const bindEvents = () => {
   }
 
   // showAllEntriesBtn.addEventListener('click', function(){
-  //   hideAllEntries.classList.remove('hidden');
+  //   // hideAllEntries.classList.remove('hidden');
   // })
 
 
