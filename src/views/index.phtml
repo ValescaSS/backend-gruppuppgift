@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><?= $title ?></title>
+  <title><?=$title?></title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 </head>
 
 <body>
@@ -62,8 +63,8 @@
           <div class="mx-auto">
             <input type="submit" value="Add" rolr="button" id="send-edit" class="btn btn-success add px-4">
           </div>
+        </form>
       </div>
-      </form>
     </div>
   </template>
 
@@ -115,12 +116,46 @@
   </template>
 
   <div id="user-div"></div>
+  <template id="createCommentFormTemplate">
+
+     <form id="commentForm">
+     <br>
+       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
+       <input type="submit" value="Add comment">
+
+     </form>
+
+  </template>
+
+  <template id="moreentryCommentsTemplates">
+   <h2>Comments</h2>
+   <div id="moreentryComments" >
+     <!-- innehåll -->
+   </div>
+
+ </template>
+
+ <template id="editCommentTemplate">
+ <form id="editCommentForm">
+       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" ></textarea>
+       <input type="submit" value="Add comment">
+     </form>
+
+ </template>
+
+ <template id="createAllEntryTemplate">
+    <div id ="showAllUsersEntries" >
+   
+      </div>
+      <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+</template>
+
 
   <div class="container">
     <a href="" id="logout" class="hidden"><i class="fas fa-sign-out-alt">Sign out</i></a>
     <!-- <button id="logout" class="hidden">Logga ut</button> -->
     <header>
-      <h1><?= $title ?></h1>
+      <h1><?=$title?></h1>
     </header>
 
     <main>
@@ -134,8 +169,10 @@
 
   </div>
 
+  <button><a href="" id="showAllEntriesBtn" class="hidden">Show all entries</a></button>
+
   <script type="text/javascript" src="main.js"></script>
 
 </body>
 
-</html>
+</htmlte>

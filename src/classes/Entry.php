@@ -99,4 +99,11 @@ class Entry extends Mapper
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getAllUsersEntriesAndUsername()
+    {
+        $statement = $this->db->prepare("SELECT users.username, entries.createdAt, entries.title, entries.content FROM entries INNER JOIN users ON entries.createdBy = users.userID");
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
