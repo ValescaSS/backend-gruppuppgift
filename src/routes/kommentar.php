@@ -65,10 +65,10 @@ return function ($app) {
   })->add($auth);
 
   // Get ett inlägg och all kommenterar
-  $app->get('/api/comment/entry/{id}', function ($request, $response, $args) {
+  $app->get('/api/comment/user/{id}', function ($request, $response, $args) {
     $entryID = (int)$args['id'];
     $comment = new Kommentar($this->db);
 
-    return $response->withJson($comment->getUserCommentAndEntry($entryID));
+    return $response->withJson($comment->getUserCommentAndUsername($entryID));
   })->add($auth);
 };

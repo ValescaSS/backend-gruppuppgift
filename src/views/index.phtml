@@ -15,7 +15,7 @@
 <body>
 
   <template id="searchFormTemplate">
-    <div id="hideSearchForm">
+    <div id="hideSearchForm" class="hidden">
       <form id="searchForm">
         <div id="No result" class="errMsg"></div>
         <input type="text" name="search" id="search" placeholder="Search...">
@@ -116,6 +116,13 @@
     </div>
   </template>
 
+  <template id="showIndividualCommentAndEntry">
+     <div id="individualComment">
+
+     </div>
+     <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+  </template>
+
   <template id="showCompleteEntryTemplate">
     <div id="completeEntry">
     </div>
@@ -177,8 +184,6 @@
     </main>
 
     <aside>
-
-
     </aside>
 
   </div>

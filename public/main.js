@@ -16,6 +16,7 @@ const views = {
   entryEdit: ["#editEntry"],
   entry: ["#lastTwentyEntriesTemplate"],
   completeEntry: ["#showCompleteEntryTemplate"],
+  individualComment: ['#showIndividualCommentAndEntry'],
   comment: ["#entryCommentsTemplates"],
   entryComment: ['#moreentryCommentsTemplates', '#createCommentFormTemplate'],
   editEntryComment: ['#editCommentTemplate'],
@@ -77,6 +78,8 @@ const bindEvents = () => {
   const completeEntry = document.querySelector("#completeEntry");
   // const entryComments = document.querySelector("#entryComments");
   const showAllEntriesBtn = document.querySelector('#showAllEntriesBtn');
+  const hideSearchForm = document.querySelector('#hideSearchForm');
+  const showIndividualCommentAndEntry = document.querySelector('#showIndividualCommentAndEntry');
 
 
 
@@ -122,7 +125,11 @@ const bindEvents = () => {
       showCommentsBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
         let entryID = showCommentsBtnArray[i].getAttribute('data-value');
+        showEntriesForm.classList.add("hidden");
+        entryTable.classList.add('hidden');
+        showAllEntriesBtn.classList.add("hidden");
         showUserComment(entryID);
+        renderView(views.individualComment);
       })
     }
 
@@ -345,6 +352,7 @@ const bindEvents = () => {
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
+          hideSearchForm.classList.remove('hidden');
           return fetch("/api/entries", {
             method: 'GET'
           });
@@ -529,22 +537,62 @@ const bindEvents = () => {
   }
 
   /* ------------------- Show user comment & Entry ----------------------- */
+
   function showUserComment(entryID) {
     console.log(entryID);
-    fetch('/api/comment/entry/' + entryID, {
-      method: 'GET'
-    }).then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        return response.json();
-      }
-    }).then(data => {
-      console.log(data);
-    }).catch(error => {
-      console.error(error);
-    });
-
+    fetch('/api/entry/' + entryID, {
+      method: "GET"
+    })
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return response.json();
+        }
+      })
+      .then(data => {
+        let target = document.querySelector('#individualComment');
+        let entry = document.createElement('div');
+        entry.innerHTML = '';
+        entry.innerHTML += `
+        <div class="my-5 text-center">
+        <h3>${data[0].title}</h3>
+        </div>
+        <div class="my-5"><p>${data[0].content}</p></div>
+        `;
+        target.append(entry);
+        return fetch('/api/comment/user/' + entryID, {
+            method: 'GET'
+          })
+      }).then(response => {
+          if (!response.ok) {
+            return Error(response.statusText);
+          } else {
+            return response.json();
+          }
+        }).then(data => {
+          let target = document.querySelector('#individualComment');
+          let entry = document.createElement('div');
+          if(data.length == 0){
+            entry.innerHTML += '<h4>No comment</h4>';
+             target.append(entry);
+          }else{
+            entry.innerHTML = '<h3>Comment</h3>'
+            data.forEach(comment =>{
+             entry.innerHTML += `
+             <div class="container">
+             <div class="row justify-content-between my-4 borderbottom">
+             <div>${comment.content}</div>
+             <div><span class="mx-4">By</span>${comment.username}</div>
+             </div>
+             </div>
+             `;
+             target.append(entry);
+            })
+          }
+        }).catch(error => {
+          console.error(error);
+        });
 
 
   }

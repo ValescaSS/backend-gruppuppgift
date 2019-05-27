@@ -71,6 +71,22 @@ class Kommentar extends Mapper
     return "Comment deleted";
   }
 
- 
+  public function getUserCommentAndUsername($entryID)
+  {
+  $statement = $this->db->prepare("SELECT 
+  comments.content,
+  users.username 
+  FROM  comments 
+  LEFT JOIN users  
+  ON comments.createdBy = users.userID
+  WHERE entryID = :entryID  
+  
+  ");
+  $statement->execute([
+    ':entryID' => $entryID
+  ]);
+    return $statement->fetchall(PDO::FETCH_ASSOC);
+  }
+  // SELECT comments.content, users.username FROM comments WHERE comments.entryID = :entryID JOIN users ON comments.createdBy = users.userID
   
 }
