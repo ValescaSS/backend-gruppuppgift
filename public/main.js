@@ -631,7 +631,7 @@ function search(searchWord) {
             return response.json();
         }
     }).then(data => {
-        console.log(data) // skriver ut objekt som innehåller searches
+        /* console.log(data) */ // skriver ut objekt som innehåller searches
         if (data.length == 0){
           let target = document.getElementById("searchFormDiv");
           let searchEntry = document.createElement('div');
@@ -644,8 +644,53 @@ function search(searchWord) {
             let searchEntry = document.createElement('div');
             searchEntry.innerHTML = '';
             data.forEach(element => {
-              /* console.log(element); */
-            searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>' ;
+              /* console.log(element.entryID); */
+              
+              let entryID = element.entryID
+
+              // console.log(entryID);
+
+              fetch("/api/entry/" + entryID, {
+                method: "GET"
+              })
+                .then(response => {
+                  if (!response.ok) {
+                    return Error(response.statusText);
+                  } else {
+                    return response.json();
+                  }
+                })
+                .then(data => {
+                   console.log(data);
+                  // console.log(data[0].title);
+                  
+                  searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.content + '</p>' ;
+
+
+
+
+
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>' ;
             })
           target.append(searchEntry); //Visa kommenterar på skärmen
         }
