@@ -45,12 +45,4 @@ return function ($app) {
         return $response->withJson(['loggedIn' => true]);
     })->add($auth);
 
-    // $app->get('/api/ping/true', function ($request, $response, $args){
-    //   return $response->withJson(['showAllEntries' => true]);        
-    // });
-
-    // $app->get('/api/ping/false', function ($request, $response, $args){
-    //   return $response->withJson(['showAllEntries' => false]);        
-    // });
-
 };
