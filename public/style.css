@@ -19,9 +19,6 @@ input[id=title], textarea {
   border-radius: 0;
 }
 
-main {
-  max-width: 50em;
-}
 
 h1 {
   font-size: 4em;
@@ -72,4 +69,10 @@ textarea {
 
 #hideSearchForm form{
   text-align: end;
+}
+
+#loginForm input, #registerForm input{
+   width: 400px;
+   border: none;
+   border-bottom: 1px solid black;
 }
