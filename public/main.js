@@ -144,14 +144,14 @@ const bindEvents = () => {
       <div class="row justify-content-end">
         <div class="mx-5"><a data-value=${
         element.entryID
-        } role="button" class ="deleteBtn" type="submit"><i class="far fa-trash-alt"></i></a></div>
+        } role="button" class ="deleteBtn btn btn-danger" type="submit"><i class="far fa-trash-alt"></i></a></div>
         <div><button data-value=${
           element.entryID
-        } role="button" class ="editBtn">Edit<i class="far fa-edit"></i></button></div>
+        } role="button" class ="editBtn btn btn-info">Edit<i class="far fa-edit"></i></button></div>
       </div>
         <div><button data-value=${
           element.entryID
-        } role="button" class ="showCommentsBtn">Comment<i class="far fa-comments"></i></button></div>
+        } role="button" class ="showCommentsBtn btn btn-info">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
     </div>
