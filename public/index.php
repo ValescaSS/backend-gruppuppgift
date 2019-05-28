@@ -34,9 +34,7 @@
   $logout = require __DIR__ . '/../src/routes/logout.php';
   $logout($app);
 
-  // $comments = require __DIR__ . '/../src/routes/comments.php';
-  // $comments($app);
-  
+
   $comments = require __DIR__ . '/../src/routes/search.php';
   $comments($app);
 
