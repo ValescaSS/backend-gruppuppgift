@@ -137,17 +137,17 @@
 
  <template id="editCommentTemplate">
  <form id="editCommentForm">
-       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" ></textarea>
-       <input type="submit" value="Add comment">
+       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
+       <input type="submit" value="Edit comment">
      </form>
 
  </template>
 
  <template id="createAllEntryTemplate">
     <div id ="showAllUsersEntries" >
-   
+
       </div>
-      <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+      <button class="btn btn-outline-secondary"><a href="" id="journalLinkBtn">Back</a></button>
 </template>
 
 
@@ -170,6 +170,15 @@
   </div>
 
   <button><a href="" id="showAllEntriesBtn" class="hidden">Show all entries</a></button>
+
+  <div class="pagination">
+    <a href="#">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#">5</a>
+    <a href="#">6</a>
+  </div>
 
   <script type="text/javascript" src="main.js"></script>
 

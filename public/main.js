@@ -77,8 +77,14 @@ const bindEvents = () => {
   const completeEntry = document.querySelector("#completeEntry");
   // const entryComments = document.querySelector("#entryComments");
   const showAllEntriesBtn = document.querySelector('#showAllEntriesBtn');
+  const journalLinkBtn = document.querySelector('#journalLinkBtn');
+
+  console.log(journalLinkBtn);
+
+  console.log(showAllEntriesBtn);
 
 
+  // journalLinkBtn.classList.add('hidden');
 
 
 
@@ -118,11 +124,11 @@ const bindEvents = () => {
 
     //Show comment knappen
     const showCommentsBtnArray = document.querySelectorAll('.showCommentsBtn');
-    for(let i = 0; i < showCommentsBtnArray.length; i++){
-      showCommentsBtnArray[i].addEventListener('click', event =>{
-         event.preventDefault();
-         let entryID = showCommentsBtnArray[i].getAttribute('data-value');
-         showUserComment(entryID);
+    for (let i = 0; i < showCommentsBtnArray.length; i++) {
+      showCommentsBtnArray[i].addEventListener('click', event => {
+        event.preventDefault();
+        let entryID = showCommentsBtnArray[i].getAttribute('data-value');
+        showUserComment(entryID);
       })
     }
 
@@ -170,29 +176,26 @@ const bindEvents = () => {
     }
 
     //Show all users entries
-    showAllEntriesBtn.addEventListener('click' , event =>{
-          event.preventDefault();
-          showEntriesForm.classList.add('hidden');
-          entryTable.classList.add('hidden');
-          showAllEntriesBtn.classList.add('hidden');
-          renderView(views.allEntries);
-          fetch('/api/like') // Hämta all users inlägg, username och likes
-          .then(response => {
-            return !response.ok ?
-              new Error(response.statusText) :
-              response.json();
-          })
-          .then(data => {
-            console.log(data);
-            showAllUsersEntries(data);
-          })
-          .catch(error => console.error(error));
+    showAllEntriesBtn.addEventListener('click', event => {
+      event.preventDefault();
+      showEntriesForm.classList.add('hidden');
+      entryTable.classList.add('hidden');
+      showAllEntriesBtn.classList.add('hidden');
+      renderView(views.allEntries);
+      fetch('/api/like') // Hämta all users inlägg, username och likes
+        .then(response => {
+          return !response.ok ?
+            new Error(response.statusText) :
+            response.json();
         })
+        .then(data => {
+          console.log(data);
+          showAllUsersEntries(data);
+        })
+        .catch(error => console.error(error));
+    })
   }
   /*------------------end of show journal -----------------*/
-
-
-  
 
 
   /*--------------------Twenty entries---------------------*/
@@ -278,7 +281,7 @@ const bindEvents = () => {
     }
   }
 
-  /*--------------------------------------------------------------------------*/
+  /*-------------------End twenty entries------------------*/
 
 
   /* --------------- Om användare har loggat in? ----------*/
@@ -361,6 +364,7 @@ const bindEvents = () => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
         getLike(data);
+        console.log(data);
       })
 
       .catch(error => {
@@ -374,7 +378,6 @@ const bindEvents = () => {
   /*----------------- Log out -----------------*/
   logoutBtn.addEventListener("click", () => {
     // event.preventDefault();
-    // localStorage.removeItem("entriesdata");
 
     fetch('/api/logout').then(response => {
         if (!response.ok) {
@@ -528,31 +531,31 @@ const bindEvents = () => {
     });
   }
 
-/* ------------------- Show user comment & Entry ----------------------- */
-    function showUserComment(entryID){
-      
-       fetch('/api/entry/' + entryID,{
-         method: 'GET'
-       }).then(response => {
-         if(!response.ok){
-           return Error(response.statusText);
-         }else{
-           return response.json();
-         }
-       }).then(data => {
-           
-       })
+  /* ------------------- Show user comment & Entry ----------------------- */
+  function showUserComment(entryID) {
 
-
-
+    fetch('/api/entry/' + entryID, {
+      method: 'GET'
+    }).then(response => {
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        return response.json();
       }
+    }).then(data => {
+
+    })
 
 
 
-/* ------------------- End of show user comment & Entry ----------------------- */
+  }
 
 
- /*---------------------- Show all users entries ------------------*/
+
+  /* ------------------- End of show user comment & Entry ----------------------- */
+
+
+  /*---------------------- Show all users entries ------------------*/
 
 
   function showAllUsersEntries(entries) {
@@ -587,7 +590,7 @@ const bindEvents = () => {
     target.append(entryTable);
 
 
-
+    // show comment form
     const moreBtnArray = document.querySelectorAll('.more');
     for (let i = 0; i < moreBtnArray.length; i++) {
 
@@ -595,14 +598,13 @@ const bindEvents = () => {
         event.preventDefault();
         let entryID = moreBtnArray[i].getAttribute('data-value');
         console.log(entryID);
+        showEntriesForm.classList.add('hidden');
+        entryTable.classList.add('hidden');
         renderView(views.entryComment);
         commentMore(entryID); // Visa komment
         commentForm(entryID); // Visa komment form
-
       })
     }
-    
-
 
     const likeBtnArray = document.querySelectorAll('.likeBtn');
     for (let i = 0; i < likeBtnArray.length; i++) {
@@ -647,11 +649,12 @@ const bindEvents = () => {
         console.log(data) // skriver ut objekt som innehåller komenterar
         let target = document.getElementById("moreentryComments");
         let entryMoreComment = document.createElement('div');
+        target.innerHTML = '';
         entryMoreComment.innerHTML = '';
         data.forEach(comment => {
-          console.log(comment.CommentID);
+          console.log(comment.commentID);
           console.log(comment.content);
-          entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.CommentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.CommentID} class ="editCommentBtn">Edit</button>`;
+          entryMoreComment.innerHTML += '<p>' + ' ' + comment.content + '</p>' + `<button data-value=${comment.commentID} class ="deleteCommentBtn">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn">Edit</button>`;
         })
         target.append(entryMoreComment); //Visa kommenterar på skärmen
         const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
@@ -661,6 +664,9 @@ const bindEvents = () => {
             let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
             // console.log(commentID); // Hämta commentID
             deleteComment(commentID); // SKicka den specifika commentID till deleteComment funktion
+            commentMore(entryID);
+            console.log(commentID);
+            console.log(entryID);
           })
         }
         const editCommentBtnArray = document.querySelectorAll('.editCommentBtn');
@@ -674,6 +680,10 @@ const bindEvents = () => {
             console.log(commentID); // Hämta commentID
             // Först hämta den specifika komment för att kunna visa på textarea 
             // Och sedan skicka Edit comment
+
+            // let commentForm = document.querySelector('commentForm');
+            // commentForm.classList.remove('hidden');
+
             fetch('/api/comment/' + commentID, {
               method: 'GET'
             }).then(response => {
@@ -688,6 +698,7 @@ const bindEvents = () => {
               document.getElementById("editCommentContent").value = data.content; // Visa comment som skrev innan på textarea
               let editCommentBtn = document.getElementById('editCommentForm');
               editCommentBtn.addEventListener('submit', event => {
+
                 event.preventDefault();
                 const formData = new FormData(editCommentBtn);
                 const formJson = {};
@@ -705,7 +716,7 @@ const bindEvents = () => {
                     return Error(response.statusText);
                   } else {
                     editCommentBtn.classList.add('hidden');
-                    hideEntriesForm.classList.remove('hidden');
+                    // hideEntriesForm.classList.remove('hidden');
                     return commentMore(entryID);
                   }
                 })
@@ -718,6 +729,8 @@ const bindEvents = () => {
         console.error(error);
       })
   }
+
+  window.commentMore = commentMore;
 
   // Visa komment form
   function commentForm(entryID) {
@@ -742,6 +755,8 @@ const bindEvents = () => {
         .catch(error => {
           console.error(error);
         })
+
+      commentMore(entryID);
     })
 
   }
@@ -792,39 +807,36 @@ const bindEvents = () => {
 
   }
 
+  function getLike(entryID) {
 
+    fetch('/api/like/' + entryID, {
+        method: "GET"
+      })
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          console.log("Likes are here :)");
+          return response.json();
+        }
 
+      }).then(data => {
+        console.log(data);
+        let output = data.map(a => a.likes);
+        let likes = output[0]
+        console.log(likes);
+        showAllEntries(data) // OBS!!!! infinite loop
+        // data.forEach(element => {
 
-  // function getLike(entryID) {
+        //   console.log(element);
+        // });
 
-  //   fetch('/api/like/' + entryID, {
-  //       method: "GET"
-  //     })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         return Error(response.statusText);
-  //       } else {
-  //         console.log("Likes are here :)");
-  //         return response.json();
-  //       }
+      })
+      .catch(error => {
+        console.error(error);
+      })
 
-  //     }).then(data => {
-  //       console.log(data);
-  //       let output = data.map(a => a.likes);
-  //       let likes = output[0]
-  //       console.log(likes);
-  //       showAllEntries(data) // OBS!!!! infinite loop
-  //       // data.forEach(element => {
-
-  //       //   console.log(element);
-  //       // });
-
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     })
-
-  // }
+  }
 
 
 
