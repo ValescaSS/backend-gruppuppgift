@@ -142,7 +142,7 @@
     <form id="commentForm">
       <br>
       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
-      <input type="submit" value="Add comment">
+      <button class="btn btn-success"><input type="submit" value="Add comment"></button>
 
     </form>
 
@@ -156,11 +156,11 @@
 
   </template>
 
- <template id="editCommentTemplate">
- <form id="editCommentForm">
-       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
-       <input type="submit" value="Edit comment">
-     </form>
+  <template id="editCommentTemplate">
+    <form id="editCommentForm">
+      <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
+      <button class="btn btn-primary"><input type="submit" value="Edit comment"></button>
+    </form>
 
   </template>
 
@@ -182,6 +182,10 @@
     <main>
       <!-- innehåll -->
     </main>
+    
+    <article>
+        <!-- innehåll -->
+    </article>
 
     <aside>
       <!-- innehåll -->
