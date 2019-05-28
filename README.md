@@ -1,3 +1,7 @@
+# backend-gruppuppgift/CMS-verktyg, backend och interaktion med databaser 2019
+Uppgift
+Ni som grupp ska skapa ett API med hjälp av PHP-ramverket Slim och databasen MySQL. Till detta API ska ni bygga ett enklare grafiskt gränssnitt med Javascript. Detta blir som ert eget CMS.
+
 # Gruppmedlemmar
 ## Therese johansson
 https://github.com/LezCodeHer
@@ -8,11 +12,6 @@ https://github.com/ValescaSS
 ## Mohammed Darrah
 https://github.com/mmdarrah
 
-
-
-# backend-gruppuppgift
-Uppgift
-Ni som grupp ska skapa ett API med hjälp av PHP-ramverket Slim och databasen MySQL. Till detta API ska ni bygga ett enklare grafiskt gränssnitt med Javascript. Detta blir som ert eget CMS.
 
 
 # Krav
