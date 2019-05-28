@@ -300,19 +300,25 @@ const bindEvents = () => {
 
     for (let i = 0; i < v.length; i++) {
       showalltxt[i].addEventListener("click", function() {
+        console.log('hej');
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
+        
+        showAllEntriesBtn.classList.add("hidden");
+        allUserList.classList.add("hidden");
+        showAllEntriesBtn.classList.add("hidden");
         completeEntry.innerHTML =
-          "<h2>" +
-          v[i]["title"] +
-          "</h2><p>" +
-          v[i]["entryID"] +
-          " " +
-          v[i]["content"] +
-          "</p>";
-
+        "<h2>" +
+        v[i]["title"] +
+        "</h2><p>" +
+        v[i]["entryID"] +
+        " " +
+        v[i]["content"] +
+        "</p>";
+        
         api2.ping2(v[i]["entryID"]);
+        
       });
     }
   }
