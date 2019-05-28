@@ -1,16 +1,6 @@
 const views = {
   login: ["#loginFormTemplate", "#registerFormTemplate"],
-  loginFail: [
-    "#loginFailTemplate",
-    "#loginFormTemplate",
-    "#registerFormTemplate"
-  ],
-  registerSuccess: [
-    "#registerSuccessTemplate",
-    "#loginFormTemplate",
-    "#registerFormTemplate"
-  ],
-  serch:["#searchFormTemplate"],
+  serch: ["#searchFormTemplate"],
   loggedIn: ["#createEntryFormTemplate"],
   entrySuccess: ["#createEntrySuccessTemplate", "#createEntryFormTemplate"],
   entryFail: ["#createEntryFailTemplate", "#createEntryFormTemplate"],
@@ -105,8 +95,8 @@ const bindEvents = () => {
   const allUserList = document.querySelector("#allUserList");
 
   /*-----------------Show all users-------------------*/
-  
-  showAllUsersBtn.addEventListener("click", function(e) {
+
+  showAllUsersBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
     const api = {
@@ -152,11 +142,11 @@ const bindEvents = () => {
         element.entryID
         } role="button" class ="deleteBtn btn btn-danger" type="submit"><i class="far fa-trash-alt"></i></a></div>
         <div><button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="editBtn btn btn-info">Edit<i class="far fa-edit"></i></button></div>
       </div>
         <div><button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="showCommentsBtn btn btn-info">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
@@ -299,7 +289,7 @@ const bindEvents = () => {
     let showalltxt = document.querySelectorAll(".showalltxt-btn");
 
     for (let i = 0; i < v.length; i++) {
-      showalltxt[i].addEventListener("click", function() {
+      showalltxt[i].addEventListener("click", function () {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
@@ -474,30 +464,44 @@ const bindEvents = () => {
         }
       })
       .then(data => {
-        let nameAndPassErrorMsg = document.getElementById(
-          "nameAndPassErrorMsg"
+        let nameAndPassErrorMsg = document.querySelector(
+          "#nameAndPassErrorMsg"
         );
-        let nameErrorMsg = document.getElementById("nameErrorMsg");
+        let alreadyRegisteredErrorMsg = document.querySelector(
+          "#alreadyRegisteredErrorMsg"
+        );
+        let nameErrorMsg = document.querySelector("#nameErrorMsg");
+        let passErrorMsg = document.querySelector("#passErrorMsg");
+        let successRegister = document.querySelector("#successMsg");
 
-        if (
-          data === "Write your password and your name" ||
-          data === "You have already registered"
-        ) {
-          let div = document.createElement("div");
-          div.innerHTML = data;
-          nameAndPassErrorMsg.append(div);
-        } else if (data === "Write your name") {
-          let div = document.createElement("div");
-          div.innerHTML = data;
-          nameErrorMsg.append(div);
+        if (data === "Write your password and your name") {
+          alreadyRegisteredErrorMsg.classList.add('hidden');
+          nameErrorMsg.classList.add('hidden');
+          passErrorMsg.classList.add('hidden');
+          nameAndPassErrorMsg.classList.remove('hidden');
+        }
+        else if (data === "You have already registered") {
+          nameAndPassErrorMsg.classList.add('hidden');
+          nameErrorMsg.classList.add('hidden');
+          passErrorMsg.classList.add('hidden');
+          alreadyRegisteredErrorMsg.classList.remove('hidden');
+        }
+        else if (data === "Write your name") {
+          nameAndPassErrorMsg.classList.add('hidden');
+          alreadyRegisteredErrorMsg.classList.add('hidden');
+          passErrorMsg.classList.add('hidden');
+          nameErrorMsg.classList.remove('hidden');
         } else if (data === "Write your password") {
-          let div = document.createElement("div");
-          div.innerHTML = data;
-          nameErrorMsg.append(div);
-        } else if (data === "User registred") {
-          hideLogin.classList.add("hidden");
-          hideRegister.classList.add("hidden");
-          renderView(views.registerSuccess);
+          nameAndPassErrorMsg.classList.add('hidden');
+          alreadyRegisteredErrorMsg.classList.add('hidden');
+          nameErrorMsg.classList.add('hidden');
+          passErrorMsg.classList.remove('hidden');
+        } else if (data === "Thank you for your registration") {
+          nameAndPassErrorMsg.classList.add('hidden');
+          alreadyRegisteredErrorMsg.classList.add('hidden');
+          nameErrorMsg.classList.add('hidden');
+          passErrorMsg.classList.add('hidden');
+          successRegister.classList.remove('hidden');
         }
       })
       .catch(error => {
@@ -506,42 +510,42 @@ const bindEvents = () => {
   });
   /*---------------end of register --------------------*/
 
-    /* ------------------- Posta Entries form ------------------*/
-    entriesForm.addEventListener("submit", event => {
-      event.preventDefault();
-  
-      const formData = new FormData(entriesForm);
-      fetch("/api/entry", {
-        method: "POST",
-        body: formData
+  /* ------------------- Posta Entries form ------------------*/
+  entriesForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const formData = new FormData(entriesForm);
+    fetch("/api/entry", {
+      method: "POST",
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return fetch("/api/entries", {
+            method: "GET"
+          });
+        }
       })
-        .then(response => {
-          if (!response.ok) {
-            return Error(response.statusText);
-          } else {
-            return fetch("/api/entries", {
-              method: "GET"
-            });
-          }
-        })
-        .then(response => {
-          if (!response.ok) {
-            return Error(response.statusText);
-          } else {
-            return response.json();
-          }
-        })
-        .then(data => {
-          // Skicka alla inlägg innehåll till showEntry funktion
-          showEntry(data);
-          document.getElementById('title').value = '';
-          document.getElementById('content').value = '';
-        })
-  
-        .catch(error => {
-          console.error(error);
-        });
-    });
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return response.json();
+        }
+      })
+      .then(data => {
+        // Skicka alla inlägg innehåll till showEntry funktion
+        showEntry(data);
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+      })
+
+      .catch(error => {
+        console.error(error);
+      });
+  });
 
   /* -------------------end of Entries form ------------------*/
 
@@ -695,14 +699,14 @@ const bindEvents = () => {
       <div class="row justify-content-end">
        
         <button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="more btn btn-outline-secondary">Comment<i class="far fa-comments"></i></button></div>
       
         <div><a data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${
         element.likes
-      }</div>
+        }</div>
       </div>
       </div>
     </div>
@@ -783,12 +787,12 @@ const bindEvents = () => {
       })
       target.append(entryMoreComment); //Visa kommenterar på skärmen
 
-      
+
       const deleteCommentBtnArray = document.querySelectorAll('.deleteCommentBtn');
       for (let i = 0; i < deleteCommentBtnArray.length; i++) {
         deleteCommentBtnArray[i].addEventListener('click', event => {
           event.preventDefault();
-          
+
           let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
           deleteComment(commentID); // SKicka den specifika commentID till deleteComment funktion
           commentMore(entryID);
@@ -820,7 +824,7 @@ const bindEvents = () => {
             let editCommentBtn = document.getElementById('editCommentForm');
             editCommentBtn.addEventListener('submit', event => {
               event.preventDefault();
-              
+
               const formData = new FormData(editCommentBtn);
               const formJson = {};
               formData.forEach((value, key) => {
@@ -873,7 +877,7 @@ const bindEvents = () => {
       }).catch(error => {
         console.error(error);
       });
-      document.getElementById('content').value='';
+      document.getElementById('content').value = '';
       commentMore(entryID);
     });
   }

@@ -35,20 +35,20 @@
     <div id="hideRegisterForm">
       <h2>Registrera användare</h2>
       <form id="registerForm">
-        <div id="nameAndPassErrorMsg" class="errMsg"></div>
-        <div id="nameErrorMsg" class="errMsg"></div>
-        <input type="text" name="username" id="usernameRegister" placeholder="Username">
-        <div id="PassErrorMsg" class="errMsg"></div>
-        <input type="password" name="password" id="passwordRegister" placeholder="Password">
+        <h3 id="successMsg" class="hidden">Thank you fo your registration</h3>
+        <div id="nameAndPassErrorMsg" class="errMsg hidden">Write your password and your name</div>
+        <div id="alreadyRegisteredErrorMsg" class="errMsg hidden">You have already registered</div>
+        <div id="nameErrorMsg" class="errMsg hidden">Write Your Name</div>
+       <div><input type="text" name="username" id="usernameRegister" placeholder="Username"></div>
+        <div id="passErrorMsg" class="errMsg hidden">Write Your Password</div>
+        <div><input type="password" name="password" id="passwordRegister" placeholder="Password"></div>
 
-        <input type="submit" value="Register">
+        <div><input type="submit" value="Register"></div>
       </form>
     </div>
   </template>
 
-  <template id="registerSuccessTemplate">
-    <h3 id="successrMsg">Thank you fo your registration</h3>
-  </template>
+
 
   <template id="createEntryFormTemplate">
     <div id="showEntriesForm" class="hidden">
