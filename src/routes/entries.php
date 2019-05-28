@@ -100,5 +100,10 @@ return function ($app) {
     return $response->withJson($entries-> getAllUsersEntriesAndUsername());
   })->add($auth);
 
+  $app->get('/api/entries/{num}', function($request, $response, $args){
+    $page = $args['num'];
+    $entry = new Entry($this->db);
 
+    return $response->withJson($entry->show20entries($page));
+  });
 };
