@@ -20,8 +20,9 @@ main {
 }
 
 h1 {
+  font-size: 4em;
   text-align: center;
-  color: #e74c3c;
+  color: #c916e0;
   margin-top: 20px;
   margin-bottom: 20px;
 }
