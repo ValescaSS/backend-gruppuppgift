@@ -106,4 +106,14 @@ class Entry extends Mapper
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function show20Entries($numpage) {
+        $rows = 20;
+        $offset = $numpage * 20;
+        $orderby = 'DESC';
+
+        $statement = $this->db->prepare("SELECT * FROM entries ORDER BY createdAt {$orderby} LIMIT {$rows} OFFSET {$offset}");
+        $statement->execute();
+        return $statement->fetchall(PDO::FETCH_ASSOC);
+    }
 }
