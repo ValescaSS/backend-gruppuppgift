@@ -1,5 +1,5 @@
 const views = {
-  login: ["#loginFormTemplate", "#registerFormTemplate", "#searchFormTemplate"],
+  login: ["#loginFormTemplate", "#registerFormTemplate"],
   loginFail: [
     "#loginFailTemplate",
     "#loginFormTemplate",
@@ -10,6 +10,7 @@ const views = {
     "#loginFormTemplate",
     "#registerFormTemplate"
   ],
+  serch:["#searchFormTemplate"],
   loggedIn: ["#createEntryFormTemplate"],
   entrySuccess: ["#createEntrySuccessTemplate", "#createEntryFormTemplate"],
   entryFail: ["#createEntryFailTemplate", "#createEntryFormTemplate"],
@@ -27,8 +28,6 @@ const views = {
 function renderView(view) {
   const target = document.querySelector("main");
 
-  // Rensa innehållet eftersom innehållet bara växer om vi kör flera renderView()
-  // target.innerHTML = '';
 
   view.forEach(template => {
     const templateMarkup = document.querySelector(template).innerHTML;
@@ -44,8 +43,6 @@ function renderView(view) {
 function lastTwentyEntryrenderView(view) {
   const target = document.querySelector("aside");
 
-  // Rensa innehållet eftersom innehållet bara växer om vi kör flera renderView()
-  // target.innerHTML = '';
 
   view.forEach(template => {
     const templateMarkup = document.querySelector(template).innerHTML;
@@ -71,12 +68,26 @@ function showAllUsers(view) {
     target.append(div);
   });
 }
+
+function searchView(view) {
+  const target = document.querySelector("header");
+
+  view.forEach(template => {
+    const templateMarkup = document.querySelector(template).innerHTML;
+
+    const div = document.createElement("div");
+
+    div.innerHTML = templateMarkup;
+
+    target.append(div);
+  });
+}
+searchView(views.serch);
 renderView(views.login);
 renderView(views.loggedIn);
 lastTwentyEntryrenderView(views.entry);
 renderView(views.completeEntry);
 showAllUsers(views.allUsers);
-// renderView(views.entrySuccess);
 
 const bindEvents = () => {
   const loginForm = document.querySelector("#loginForm");
@@ -84,15 +95,10 @@ const bindEvents = () => {
   const hideRegister = document.querySelector("#hideRegisterForm");
   const showEntriesForm = document.querySelector("#showEntriesForm");
   const logoutBtn = document.querySelector("#logout");
-  // const entrySuccess = document.querySelector("#createEntrySuccessTemplate")
-  const createEntryFormTemplate = document.getElementById(
-    "createEntryFormTemplate"
-  );
   const registerForm = document.querySelector("#registerForm");
   const entriesForm = document.querySelector("#entriesForm");
   const senasteEntries = document.querySelector("#senasteEntries");
   const completeEntry = document.querySelector("#completeEntry");
-  // const entryComments = document.querySelector("#entryComments");
   const showAllEntriesBtn = document.querySelector("#showAllEntriesBtn");
   const hideSearchForm = document.querySelector("#hideSearchForm");
   const showAllUsersBtn = document.querySelector("#showAllUsersBtn");
@@ -205,8 +211,6 @@ const bindEvents = () => {
             }
           })
           .then(data => {
-            console.log(data[0].title);
-            console.log(data[0].content);
             document.getElementById("edit-title").value = data[0].title;
             document.getElementById("edit-content").value = data[0].content;
             editEntry(entryID);
@@ -233,7 +237,6 @@ const bindEvents = () => {
             : response.json();
         })
         .then(data => {
-          //console.log(data);
           showAllUsersEntries(data);
         })
         .catch(error => console.error(error));
@@ -424,7 +427,6 @@ const bindEvents = () => {
       .then(data => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
-        // console.log(data);
       })
 
       .catch(error => {
@@ -442,7 +444,6 @@ const bindEvents = () => {
       if (!response.ok) {
         return Error(response.statusText);
       } else {
-        console.log('logout');
         hideLogin.classList.remove('hidden');
         hideRegister.classList.remove('hidden');
         showEntriesForm.classList.add('hidden');
@@ -488,16 +489,13 @@ const bindEvents = () => {
           let div = document.createElement("div");
           div.innerHTML = data;
           nameAndPassErrorMsg.append(div);
-          console.log(div);
         } else if (data === "Write your name") {
           let div = document.createElement("div");
           div.innerHTML = data;
           nameErrorMsg.append(div);
-          console.log(div);
         } else if (data === "Write your password") {
           let div = document.createElement("div");
           div.innerHTML = data;
-          console.log(data);
           nameErrorMsg.append(div);
         } else if (data === "User registred") {
           hideLogin.classList.add("hidden");
@@ -541,7 +539,6 @@ const bindEvents = () => {
           showEntry(data);
           document.getElementById('title').value = '';
           document.getElementById('content').value = '';
-          // console.log(data);
         })
   
         .catch(error => {
@@ -718,6 +715,7 @@ const bindEvents = () => {
     target.append(entryTable);
 
     // show comment form
+    let hideBtn = document.querySelector('#hideBtn');
     const moreBtnArray = document.querySelectorAll(".more");
     for (let i = 0; i < moreBtnArray.length; i++) {
       moreBtnArray[i].addEventListener("click", event => {
@@ -726,6 +724,7 @@ const bindEvents = () => {
         console.log(entryID);
         showEntriesForm.classList.add("hidden");
         entryTable.classList.add("hidden");
+        hideBtn.classList.add('hidden');
         renderView(views.entryComment);
         commentMore(entryID); // Visa komment
         commentForm(entryID); // Visa komment form
@@ -794,11 +793,8 @@ const bindEvents = () => {
           event.preventDefault();
           
           let commentID = deleteCommentBtnArray[i].getAttribute('data-value');
-          // console.log(commentID); // Hämta commentID
           deleteComment(commentID); // SKicka den specifika commentID till deleteComment funktion
           commentMore(entryID);
-          console.log(commentID);
-          console.log(entryID);
         })
       }
       const editCommentBtnArray = document.querySelectorAll('.editCommentBtn');
@@ -809,12 +805,8 @@ const bindEvents = () => {
           hideCommentForm.classList.add('hidden');
           renderView(views.editEntryComment); // Visa edit comment form
           let commentID = editCommentBtnArray[i].getAttribute('data-value');
-          console.log(commentID); // Hämta commentID
           // Först hämta den specifika komment för att kunna visa på textarea 
           // Och sedan skicka Edit comment
-
-          // let commentForm = document.querySelector('commentForm');
-          // commentForm.classList.remove('hidden');
 
           fetch('/api/comment/' + commentID, {
             method: 'GET'
@@ -865,7 +857,7 @@ const bindEvents = () => {
 
   window.commentMore = commentMore;
 
-  // Visa komment form
+  // Visa komment form och skriva kommentera
   function commentForm(entryID) {
     const commentForm = document.querySelector("#commentForm");
     commentForm.addEventListener("submit", event => {
@@ -879,16 +871,12 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          /* console.log('skrivit!'); */
           return response.json();
         }
-      }).then(data => {
-        console.log(data);
-      })
-        .catch(error => {
-          console.error(error);
-        });
-
+      }).catch(error => {
+        console.error(error);
+      });
+      document.getElementById('content').value='';
       commentMore(entryID);
     });
   }
