@@ -337,7 +337,7 @@ const bindEvents = () => {
       showAllEntriesBtn.classList.remove("hidden");
       hideSearchForm.classList.remove("hidden");
       allUserList.classList.add('hidden');
-      showAllUsersBtn.classList.add('hidden');
+      showAllUsersBtn.classList.add('hidden')
 
       const api3 = {
         ping3() {
@@ -405,6 +405,7 @@ const bindEvents = () => {
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
           hideSearchForm.classList.remove("hidden");
+          showAllUsersBtn.classList.add('hidden')
           return fetch("/api/entries", {
             method: "GET"
           });
