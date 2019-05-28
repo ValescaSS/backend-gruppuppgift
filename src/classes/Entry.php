@@ -30,7 +30,7 @@ class Entry extends Mapper
 
     public function getEntriesUserId($userID)
     {
-        $statement = $this->db->prepare("SELECT * FROM entries WHERE createdBy = {$userID}");
+        $statement = $this->db->prepare("SELECT * FROM entries WHERE createdBy = {$userID} ORDER BY createdAt DESC");
         $statement->execute();
         return $statement->fetchall(PDO::FETCH_ASSOC);
     }
@@ -51,17 +51,6 @@ class Entry extends Mapper
         return $statement->fetchall(PDO::FETCH_ASSOC);
     }
 
-    // public function postNewEntryUserId($userID, $title, $content){
-    //     $statement = $this->db->prepare("INSERT INTO entries (title, content, createdAt, createdBy) VALUES (:title, :content, :createdAt, :createdBy)");
-    //     date_default_timezone_set("Europe/Stockholm");
-    //     $statement->execute([
-    //       ":title" => $title,
-    //       ":content" => $content,
-    //       ":createdAt" => date('Y-m-d H:i:s'),
-    //       ":createdBy" => $userID
-    //       ]);
-    //     return "Post send";
-    // }
     public function postNewEntryUserId($userID, $title, $content)
     {
         $statement = $this->db->prepare("INSERT INTO entries (title, content, createdBy, createdAt) VALUES (:title, :content , :createdBy , :createdAt )");

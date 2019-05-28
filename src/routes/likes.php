@@ -7,7 +7,6 @@ return function ($app) {
 
 
   $app->get('/api/like', function($request, $response ,$args) {
-    // $entryID =  $args['id'];
     $likes = new Likes($this->db);
 
     return $response->withJson($likes->getAllLikesoneEntry());
