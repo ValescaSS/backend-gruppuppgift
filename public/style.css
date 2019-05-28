@@ -50,7 +50,7 @@ textarea {
   border-bottom: 0.5px solid black;
 }
 
-.pagination a {
+/* .pagination a {
   color: black;
   float: left;
   padding: 8px 16px;
@@ -58,15 +58,35 @@ textarea {
   transition: background-color .3s;
 }
 
-/* .pagination a.active {
+.pagination a.active {
   background-color: dodgerblue;
   color: white;
-} */
+}
 
 .pagination a:hover:not(.active) {
   background-color: #ddd;
+} */
+
+.pagesList {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
 }
 
+.pagesList li {
+  border: 1px solid rgb(187, 181, 181);
+  text-decoration: none;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 2px;
+}
+
+.pagesList li a {
+  color: rgb(141, 134, 134);
+}
 #hideSearchForm form{
   text-align: end;
 }
@@ -75,4 +95,11 @@ textarea {
    width: 400px;
    border: none;
    border-bottom: 1px solid black;
+}
+.likeBtn{
+  cursor: pointer;
+}
+
+.likeBtn:hover {
+  background-color: rgba(17, 17, 235, 0.164);
 }
