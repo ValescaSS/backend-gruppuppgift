@@ -28,7 +28,7 @@ h1 {
   display: none;
 }
 
-#logout{
+#logout {
   border: 1px solid black;
 }
 
@@ -36,18 +36,35 @@ table {
   border: 1px solid black;
 }
 
-.errMsg{
+.errMsg {
   color: red;
 }
 
-#successMsg{
+#successMsg {
   color: green;
 }
 
-textarea{
+textarea {
   width: 100%;
 }
 
 .borderbottom{
   border-bottom: 0.5px solid black;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+/* .pagination a.active {
+  background-color: dodgerblue;
+  color: white;
+} */
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
 }

@@ -19,6 +19,12 @@ return function ($app) {
 
     return $response->withJson($entries->getLastXEntries($num));
   });
+  // GET route som hämtar de senaste inläggen
+  $app->get('/entries/last', function($request, $response, $args){
+    $entries = new Entry($this->db);
+
+    return $response->withJson($entries->getLastEntries());
+  });
 
   // 5get Skapa en GET route som hämtar de X första inläggen
   $app->get('/entries/first/{num}', function($request, $response, $args){
