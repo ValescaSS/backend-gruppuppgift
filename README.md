@@ -16,8 +16,11 @@ https://github.com/mmdarrah
 
 # Krav
 Den första vyn ska visa en sammanfattning av de senaste 20 inläggen.
+
 Det ska vara möjligt att klicka på en sammanfattning för att läsa hela inlägget.
+
 När man läser hela inlägget ska man också få en lista på alla kommentarer till inlägget.
+
 Det ska vara möjligt att registera en ny användare.
 Det ska vara vara möjligt att logga in.
 En inloggad användare ska kunna se en lista på alla sina inlägg.
