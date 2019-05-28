@@ -508,31 +508,43 @@ const bindEvents = () => {
   });
   /*---------------end of register --------------------*/
 
-  /* ------------------- Posta Entries form ------------------*/
-  entriesForm.addEventListener("submit", event => {
-    event.preventDefault();
-    console.log("clicked");
-
-    const formData = new FormData(entriesForm);
-    fetch("/api/entry", {
-      method: "POST",
-      body: formData
-    })
-      .then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          return response.json();
-        }
+    /* ------------------- Posta Entries form ------------------*/
+    entriesForm.addEventListener("submit", event => {
+      event.preventDefault();
+  
+      const formData = new FormData(entriesForm);
+      fetch("/api/entry", {
+        method: "POST",
+        body: formData
       })
-      .then(data => {
-        console.log(data); //Skrivit inlägg!
-        showEntry(data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  });
+        .then(response => {
+          if (!response.ok) {
+            return Error(response.statusText);
+          } else {
+            return fetch("/api/entries", {
+              method: "GET"
+            });
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            return Error(response.statusText);
+          } else {
+            return response.json();
+          }
+        })
+        .then(data => {
+          // Skicka alla inlägg innehåll till showEntry funktion
+          showEntry(data);
+          document.getElementById('title').value = '';
+          document.getElementById('content').value = '';
+          // console.log(data);
+        })
+  
+        .catch(error => {
+          console.error(error);
+        });
+    });
 
   /* -------------------end of Entries form ------------------*/
 
@@ -751,7 +763,6 @@ const bindEvents = () => {
       target.innerHTML = '';
       entryMoreComment.innerHTML = '';
       data.forEach(comment => {
-        // entryMoreComment.innerHTML += '<div class="container"><div class="row"><div class="col-6"><p>' + ' ' + comment.content + ''+ comment.username+'' + comment.createdAt+ '</p></div>' + `<div class="col-6"><div class="row justify-content-end"><button data-value=${comment.commentID} class ="deleteCommentBtn btn btn-danger mx-5">Delete</button>` + `<button data-value=${comment.commentID} class ="editCommentBtn btn btn-info">Edit</button></div></div></div>`;
         entryMoreComment.innerHTML += `
              <div class="container">
                 <div class = "row">
