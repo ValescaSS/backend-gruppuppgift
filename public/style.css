@@ -48,6 +48,10 @@ textarea {
   width: 100%;
 }
 
+.borderbottom{
+  border-bottom: 0.5px solid black;
+}
+
 .pagination a {
   color: black;
   float: left;

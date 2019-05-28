@@ -1,5 +1,5 @@
 const views = {
-  login: ["#loginFormTemplate", "#registerFormTemplate"],
+  login: ["#loginFormTemplate", "#registerFormTemplate", "#searchFormTemplate"],
   loginFail: [
     "#loginFailTemplate",
     "#loginFormTemplate",
@@ -16,6 +16,7 @@ const views = {
   entryEdit: ["#editEntry"],
   entry: ["#lastTwentyEntriesTemplate"],
   completeEntry: ["#showCompleteEntryTemplate"],
+  individualComment: ['#showIndividualCommentAndEntry'],
   comment: ["#entryCommentsTemplates"],
   entryComment: ['#moreentryCommentsTemplates', '#createCommentFormTemplate'],
   editEntryComment: ['#editCommentTemplate'],
@@ -77,9 +78,8 @@ const bindEvents = () => {
   const completeEntry = document.querySelector("#completeEntry");
   // const entryComments = document.querySelector("#entryComments");
   const showAllEntriesBtn = document.querySelector('#showAllEntriesBtn');
-  const journalLinkBtn = document.querySelector('#journalLinkBtn');
-
-  console.log(journalLinkBtn);
+  const hideSearchForm = document.querySelector('#hideSearchForm');
+  const showIndividualCommentAndEntry = document.querySelector('#showIndividualCommentAndEntry');
 
   console.log(showAllEntriesBtn);
 
@@ -105,14 +105,14 @@ const bindEvents = () => {
       <p>${element.content}</p>
       <div class="row justify-content-end">
         <div class="mx-5"><a href="" data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="deleteBtn" type="submit"><i class="far fa-trash-alt"></i></a></div>
         <div><button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="editBtn">Edit<i class="far fa-edit"></i></button></div>
       </div>
         <div><button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="showCommentsBtn">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
@@ -128,7 +128,11 @@ const bindEvents = () => {
       showCommentsBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
         let entryID = showCommentsBtnArray[i].getAttribute('data-value');
+        showEntriesForm.classList.add("hidden");
+        entryTable.classList.add('hidden');
+        showAllEntriesBtn.classList.add("hidden");
         showUserComment(entryID);
+        renderView(views.individualComment);
       })
     }
 
@@ -152,6 +156,7 @@ const bindEvents = () => {
         renderView(views.entryEdit);
         showEntriesForm.classList.add("hidden");
         entryTable.classList.add('hidden');
+        showAllEntriesBtn.classList.add('hidden');
         fetch("/api/entry/" + entryID, {
             method: "GET"
           })
@@ -189,7 +194,7 @@ const bindEvents = () => {
             response.json();
         })
         .then(data => {
-          console.log(data);
+          //console.log(data);
           showAllUsersEntries(data);
         })
         .catch(error => console.error(error));
@@ -293,6 +298,7 @@ const bindEvents = () => {
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
       showAllEntriesBtn.classList.remove("hidden");
+      hideSearchForm.classList.remove('hidden');
 
       const api3 = {
         ping3() {
@@ -348,6 +354,7 @@ const bindEvents = () => {
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
+          hideSearchForm.classList.remove('hidden');
           return fetch("/api/entries", {
             method: 'GET'
           });
@@ -532,37 +539,78 @@ const bindEvents = () => {
   }
 
   /* ------------------- Show user comment & Entry ----------------------- */
+
   function showUserComment(entryID) {
-
+    console.log(entryID);
     fetch('/api/entry/' + entryID, {
-      method: 'GET'
-    }).then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        return response.json();
-      }
-    }).then(data => {
-
-    })
-
+        method: "GET"
+      })
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return response.json();
+        }
+      })
+      .then(data => {
+        let target = document.querySelector('#individualComment');
+        let entry = document.createElement('div');
+        entry.innerHTML = '';
+        entry.innerHTML += `
+        <div class="my-5 text-center">
+        <h3>${data[0].title}</h3>
+        </div>
+        <div class="my-5"><p>${data[0].content}</p></div>
+        `;
+        target.append(entry);
+        return fetch('/api/comment/user/' + entryID, {
+          method: 'GET'
+        })
+      }).then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          return response.json();
+        }
+      }).then(data => {
+        let target = document.querySelector('#individualComment');
+        let entry = document.createElement('div');
+        if (data.length == 0) {
+          entry.innerHTML += '<h4>No comment</h4>';
+          target.append(entry);
+        } else {
+          entry.innerHTML = '<h3>Comment</h3>'
+          data.forEach(comment => {
+            entry.innerHTML += `
+             <div class="container">
+             <div class="row justify-content-between my-4 borderbottom">
+             <div>${comment.content}</div>
+             <div><span class="mx-4">By</span>${comment.username}</div>
+             </div>
+             </div>
+             `;
+            target.append(entry);
+          })
+        }
+      }).catch(error => {
+        console.error(error);
+      });
 
 
   }
-
-
 
   /* ------------------- End of show user comment & Entry ----------------------- */
 
 
   /*---------------------- Show all users entries ------------------*/
 
-
+  // OBS!!! In this function we get all the entries and the number of likes for evry entry
+  // Line nummber 179
   function showAllUsersEntries(entries) {
     let target = document.querySelector('#showAllUsersEntries');
     let entryTable = document.createElement('div');
     entryTable.innerHTML = '';
-    /* console.log(entries); */
+    // console.log(entries);
     entries.forEach(element => {
       entryTable.innerHTML += `
       <div class="container mt-5" id='userEntries'>
@@ -575,11 +623,11 @@ const bindEvents = () => {
       <div class="row justify-content-end">
        
         <button data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="more btn btn-outline-secondary">Comment<i class="far fa-comments"></i></button></div>
       
         <div><a data-value=${
-          element.entryID
+        element.entryID
         } role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${element.likes}</div>
       </div>
       </div>
@@ -612,7 +660,7 @@ const bindEvents = () => {
       likeBtnArray[i].addEventListener('click', event => {
         event.preventDefault();
         let entryID = likeBtnArray[i].getAttribute('data-value');
-        console.log(entryID);
+        // console.log(entryID);
         addLike(entryID);
       })
     }
@@ -782,9 +830,6 @@ const bindEvents = () => {
       })
   }
 
-
-
-
   // Add like to an entry
 
   function addLike(entryID) {
@@ -795,7 +840,7 @@ const bindEvents = () => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
-          console.log('I like you!');
+          // console.log('I like you!');
           return response.json();
         }
       }).then(data => {
@@ -807,39 +852,53 @@ const bindEvents = () => {
 
   }
 
-  function getLike(entryID) {
+  /* -------------Search-------------- */
 
-    fetch('/api/like/' + entryID, {
-        method: "GET"
-      })
-      .then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          console.log("Likes are here :)");
-          return response.json();
-        }
+  document.querySelector('.searchBtn').addEventListener('click', event => {
 
-      }).then(data => {
-        console.log(data);
-        let output = data.map(a => a.likes);
-        let likes = output[0]
-        console.log(likes);
-        showAllEntries(data) // OBS!!!! infinite loop
-        // data.forEach(element => {
+    event.preventDefault()
+    let searchWord = document.getElementById('search').value;
+    /* console.log(searchWord); */
 
-        //   console.log(element);
-        // });
+    search(searchWord);
 
-      })
-      .catch(error => {
-        console.error(error);
-      })
+  });
 
+
+  function search(searchWord) {
+    fetch('/api/search/' + searchWord, {
+      method: 'GET'
+    }).then(response => {
+      if (!response.ok) {
+        // return Error(response.statusText);
+        let target = document.getElementById("searchFormDiv");
+        let searchEntry = document.createElement('div');
+        target.append(searchEntry);
+        return searchEntry.innerHTML = 'Type something in the search bar!!!';
+
+      } else {
+        return response.json();
+      }
+    }).then(data => {
+      console.log(data) // skriver ut objekt som innehåller searches
+      if (data.length == 0) {
+        let target = document.getElementById("searchFormDiv");
+        let searchEntry = document.createElement('div');
+        target.append(searchEntry);
+        return searchEntry.innerHTML = 'Sorry, no results found for ' + searchWord + ".";
+      } else {
+
+
+        let target = document.getElementById("searchFormDiv");
+        let searchEntry = document.createElement('div');
+        searchEntry.innerHTML = '';
+        data.forEach(element => {
+          /* console.log(element); */
+          searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>';
+        })
+        target.append(searchEntry); //Visa kommenterar på skärmen
+      }
+    })
   }
-
-
-
-
 }
 bindEvents();

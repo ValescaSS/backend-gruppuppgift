@@ -36,6 +36,9 @@
 
   $comments = require __DIR__ . '/../src/routes/comments.php';
   $comments($app);
+  
+  $comments = require __DIR__ . '/../src/routes/search.php';
+  $comments($app);
 
   $likes = require __DIR__ . '/../src/routes/likes.php';
   $likes($app);
