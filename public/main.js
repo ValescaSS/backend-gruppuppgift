@@ -293,16 +293,21 @@ const bindEvents = () => {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
+        
+        showAllEntriesBtn.classList.add("hidden");
+        allUserList.classList.add("hidden");
+        showAllEntriesBtn.classList.add("hidden");
         completeEntry.innerHTML =
-          "<h2>" +
-          v[i]["title"] +
-          "</h2><p>" +
-          v[i]["entryID"] +
-          " " +
-          v[i]["content"] +
-          "</p>";
-
+        "<h2>" +
+        v[i]["title"] +
+        "</h2><p>" +
+        v[i]["entryID"] +
+        " " +
+        v[i]["content"] +
+        "</p>";
+        
         api2.ping2(v[i]["entryID"]);
+        
       });
     }
   }
@@ -329,8 +334,9 @@ const bindEvents = () => {
       logoutBtn.classList.remove("hidden");
       showAllEntriesBtn.classList.remove("hidden");
       hideSearchForm.classList.remove("hidden");
+      showAllUsersBtn.classList.add('hidden');
       allUserList.classList.add('hidden');
-      showAllUsersBtn.classList.add('hidden')
+      
 
       const api3 = {
         ping3() {
@@ -398,7 +404,9 @@ const bindEvents = () => {
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
           hideSearchForm.classList.remove("hidden");
-          showAllUsersBtn.classList.add('hidden')
+          showAllUsersBtn.classList.add('hidden');
+          showAllUsersBtn.classList.add('hidden');
+          allUserList.classList.add('hidden');
           return fetch("/api/entries", {
             method: "GET"
           });
