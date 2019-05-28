@@ -144,14 +144,14 @@ const bindEvents = () => {
       <div class="row justify-content-end">
         <div class="mx-5"><a data-value=${
         element.entryID
-        } role="button" class ="deleteBtn" type="submit"><i class="far fa-trash-alt"></i></a></div>
+        } role="button" class ="deleteBtn btn btn-danger" type="submit"><i class="far fa-trash-alt"></i></a></div>
         <div><button data-value=${
           element.entryID
-        } role="button" class ="editBtn">Edit<i class="far fa-edit"></i></button></div>
+        } role="button" class ="editBtn btn btn-info">Edit<i class="far fa-edit"></i></button></div>
       </div>
         <div><button data-value=${
           element.entryID
-        } role="button" class ="showCommentsBtn">Comment<i class="far fa-comments"></i></button></div>
+        } role="button" class ="showCommentsBtn btn btn-info">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
     </div>
@@ -421,7 +421,7 @@ const bindEvents = () => {
       .then(data => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
-        console.log(data);
+        // console.log(data);
       })
 
       .catch(error => {
@@ -947,6 +947,7 @@ const bindEvents = () => {
         // return Error(response.statusText);
         let target = document.getElementById("searchFormDiv");
         let searchEntry = document.createElement('div');
+        target.innerHTML = '';
         target.append(searchEntry);
         return searchEntry.innerHTML = 'Type something in the search bar!!!';
 
@@ -954,10 +955,11 @@ const bindEvents = () => {
         return response.json();
       }
     }).then(data => {
-      console.log(data) // skriver ut objekt som innehåller searches
+      // console.log(data) // skriver ut objekt som innehåller searches
       if (data.length == 0) {
         let target = document.getElementById("searchFormDiv");
         let searchEntry = document.createElement('div');
+        target.innerHTML = '';
         target.append(searchEntry);
         return searchEntry.innerHTML = 'Sorry, no results found for ' + searchWord + ".";
       } else {
@@ -966,6 +968,7 @@ const bindEvents = () => {
         let target = document.getElementById("searchFormDiv");
         let searchEntry = document.createElement('div');
         searchEntry.innerHTML = '';
+        target.innerHTML = '';
         data.forEach(element => {
           /* console.log(element); */
           searchEntry.innerHTML += '<p>' + ' ' + element.title + '</p>' + '<p>' + ' ' + element.title + '</p>';

@@ -1,6 +1,6 @@
 body {
   background: #ecf0f1;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Philosopher', sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -16,12 +16,14 @@ header {
 }
 
 main {
-  max-width: 40em;
+  max-width: 50em;
 }
 
 h1 {
   text-align: center;
   color: #e74c3c;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .hidden {
@@ -29,7 +31,9 @@ h1 {
 }
 
 #logout {
-  border: 1px solid black;
+  position: fixed;
+  top: 30px;
+  left: 92%;
 }
 
 table {
@@ -67,4 +71,11 @@ textarea {
 
 .pagination a:hover:not(.active) {
   background-color: #ddd;
+}
+
+
+#showAllEntriesBtn{
+  position: fixed;
+  top: 80px;
+  left: 92%;
 }
