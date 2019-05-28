@@ -23,10 +23,10 @@
       <form id="loginForm">
         <div id="wrongPassAndUserErrorMsg" class="errMsg"></div>
         <div id="noRegisteredNameErrorMsg" class="errMsg"></div>
-        <input type="text" name="username" id="usernameLogin" placeholder="Username">
+        <div><input type="text" name="username" id="usernameLogin" placeholder="Username"></div>
         <div id="wrongPassErrorMsg" class="errMsg"></div>
-        <input type="password" name="password" id="passwordLogin" placeholder="Password">
-        <input type="submit" value="Logga in">
+        <div><input type="password" name="password" id="passwordLogin" placeholder="Password"></div>
+        <div><input type="submit" value="Logga in"></div>
       </form>
     </div>
   </template>
@@ -34,6 +34,7 @@
   <template id="registerFormTemplate">
     <div id="hideRegisterForm">
       <h2>Registrera användare</h2>
+      
       <form id="registerForm">
         <h3 id="successMsg" class="hidden">Thank you fo your registration</h3>
         <div id="nameAndPassErrorMsg" class="errMsg hidden">Write your password and your name</div>
