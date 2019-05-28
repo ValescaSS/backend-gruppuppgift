@@ -16,11 +16,12 @@ const views = {
   entryEdit: ["#editEntry"],
   entry: ["#lastTwentyEntriesTemplate"],
   completeEntry: ["#showCompleteEntryTemplate"],
-  individualComment: ['#showIndividualCommentAndEntry'],
+  individualComment: ["#showIndividualCommentAndEntry"],
   comment: ["#entryCommentsTemplates"],
-  entryComment: ['#moreentryCommentsTemplates', '#createCommentFormTemplate'],
-  editEntryComment: ['#editCommentTemplate'],
-  allEntries: ['#createAllEntryTemplate']
+  entryComment: ["#moreentryCommentsTemplates", "#createCommentFormTemplate"],
+  editEntryComment: ["#editCommentTemplate"],
+  allEntries: ["#createAllEntryTemplate"],
+  allUsers: ["#showAllUsersTemplate"]
 };
 
 function renderView(view) {
@@ -56,10 +57,25 @@ function lastTwentyEntryrenderView(view) {
     target.append(div);
   });
 }
+
+function showAllUsers(view) {
+  const target = document.querySelector("section");
+
+  view.forEach(template => {
+    const templateMarkup = document.querySelector(template).innerHTML;
+
+    const div = document.createElement("div");
+
+    div.innerHTML = templateMarkup;
+
+    target.append(div);
+  });
+}
 renderView(views.login);
 renderView(views.loggedIn);
 lastTwentyEntryrenderView(views.entry);
 renderView(views.completeEntry);
+showAllUsers(views.allUsers);
 // renderView(views.entrySuccess);
 
 const bindEvents = () => {
@@ -77,15 +93,37 @@ const bindEvents = () => {
   const senasteEntries = document.querySelector("#senasteEntries");
   const completeEntry = document.querySelector("#completeEntry");
   // const entryComments = document.querySelector("#entryComments");
-  const showAllEntriesBtn = document.querySelector('#showAllEntriesBtn');
-  const hideSearchForm = document.querySelector('#hideSearchForm');
+  const showAllEntriesBtn = document.querySelector("#showAllEntriesBtn");
+  const hideSearchForm = document.querySelector("#hideSearchForm");
+  const showAllUsersBtn = document.querySelector("#showAllUsersBtn");
+  const allUserList = document.querySelector("#allUserList");
 
+  /*-----------------Show all users-------------------*/
+  
+  showAllUsersBtn.addEventListener("click", function(e) {
+    e.preventDefault();
 
+    const api = {
+      ping() {
+        return fetch("/users")
+          .then(respons => {
+            return !respons.ok ? new Error(respons.statusText) : respons.json();
+          })
+          .then(data => {
+            registeredUser(data);
+          })
+          .catch(error => console.error(error));
+      }
+    };
+    api.ping();
 
-
-  // journalLinkBtn.classList.add('hidden');
-
-
+    function registeredUser(users) {
+      let allUsers = document.getElementById("allUsers");
+      users.forEach(element => {
+        allUsers.innerHTML += "<p>" + element["username"] + "</p>";
+      });
+    }
+  });
 
   /*----------- Show journal---------------*/
   function showEntry(entries) {
@@ -108,32 +146,31 @@ const bindEvents = () => {
         element.entryID
         } role="button" class ="deleteBtn" type="submit"><i class="far fa-trash-alt"></i></a></div>
         <div><button data-value=${
-        element.entryID
+          element.entryID
         } role="button" class ="editBtn">Edit<i class="far fa-edit"></i></button></div>
       </div>
         <div><button data-value=${
-        element.entryID
+          element.entryID
         } role="button" class ="showCommentsBtn">Comment<i class="far fa-comments"></i></button></div>
       </div>
       </div>
     </div>
      `;
-
     });
     target1.append(entryTable);
 
     //Show comment knappen
-    const showCommentsBtnArray = document.querySelectorAll('.showCommentsBtn');
+    const showCommentsBtnArray = document.querySelectorAll(".showCommentsBtn");
     for (let i = 0; i < showCommentsBtnArray.length; i++) {
-      showCommentsBtnArray[i].addEventListener('click', event => {
+      showCommentsBtnArray[i].addEventListener("click", event => {
         event.preventDefault();
-        let entryID = showCommentsBtnArray[i].getAttribute('data-value');
+        let entryID = showCommentsBtnArray[i].getAttribute("data-value");
         showEntriesForm.classList.add("hidden");
-        entryTable.classList.add('hidden');
+        entryTable.classList.add("hidden");
         showAllEntriesBtn.classList.add("hidden");
         showUserComment(entryID);
         renderView(views.individualComment);
-      })
+      });
     }
 
     // Delete knappen
@@ -155,8 +192,8 @@ const bindEvents = () => {
         let entryID = editBtnArray[i].getAttribute("data-value");
         renderView(views.entryEdit);
         showEntriesForm.classList.add("hidden");
-        entryTable.classList.add('hidden');
-        showAllEntriesBtn.classList.add('hidden');
+        entryTable.classList.add("hidden");
+        showAllEntriesBtn.classList.add("hidden");
         fetch("/api/entry/" + entryID, {
           method: "GET"
         })
@@ -185,25 +222,24 @@ const bindEvents = () => {
 
     showAllEntriesBtn.addEventListener('click', event => {
       event.preventDefault();
-      showEntriesForm.classList.add('hidden');
-      entryTable.classList.add('hidden');
-      showAllEntriesBtn.classList.add('hidden');
+      showEntriesForm.classList.add("hidden");
+      entryTable.classList.add("hidden");
+      showAllEntriesBtn.classList.add("hidden");
       renderView(views.allEntries);
-      fetch('/api/like') // Hämta all users inlägg, username och likes
+      fetch("/api/like") // Hämta all users inlägg, username och likes
         .then(response => {
-          return !response.ok ?
-            new Error(response.statusText) :
-            response.json();
+          return !response.ok
+            ? new Error(response.statusText)
+            : response.json();
         })
         .then(data => {
           //console.log(data);
           showAllUsersEntries(data);
         })
         .catch(error => console.error(error));
-    })
+    });
   }
   /*------------------end of show journal -----------------*/
-
 
   /*--------------------Twenty entries---------------------*/
 
@@ -211,9 +247,9 @@ const bindEvents = () => {
     ping() {
       return fetch("/entries/last/20")
         .then(response => {
-          return !response.ok ?
-            new Error(response.statusText) :
-            response.json();
+          return !response.ok
+            ? new Error(response.statusText)
+            : response.json();
         })
         .then(data => {
           twentyEntries(data);
@@ -228,9 +264,9 @@ const bindEvents = () => {
     ping2(x) {
       return fetch("/api/comments/entry/" + x)
         .then(response => {
-          return !response.ok ?
-            new Error(response.statusText) :
-            response.json();
+          return !response.ok
+            ? new Error(response.statusText)
+            : response.json();
         })
         .then(data => {
           commentsToSelectedEntry(data);
@@ -260,7 +296,7 @@ const bindEvents = () => {
     let showalltxt = document.querySelectorAll(".showalltxt-btn");
 
     for (let i = 0; i < v.length; i++) {
-      showalltxt[i].addEventListener("click", function () {
+      showalltxt[i].addEventListener("click", function() {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
@@ -290,7 +326,6 @@ const bindEvents = () => {
 
   /*-------------------End twenty entries------------------*/
 
-
   /* --------------- Om användare har loggat in? ----------*/
   fetch("/api/ping").then(response => {
     if (response.ok) {
@@ -300,15 +335,17 @@ const bindEvents = () => {
       showEntriesForm.classList.remove("hidden");
       logoutBtn.classList.remove("hidden");
       showAllEntriesBtn.classList.remove("hidden");
-      hideSearchForm.classList.remove('hidden');
+      hideSearchForm.classList.remove("hidden");
+      allUserList.classList.add('hidden');
+      showAllUsersBtn.classList.add('hidden');
 
       const api3 = {
         ping3() {
           return fetch("/api/entries")
             .then(response => {
-              return !response.ok ?
-                new Error(response.statusText) :
-                response.json();
+              return !response.ok
+                ? new Error(response.statusText)
+                : response.json();
             })
             .then(data => {
               showEntry(data);
@@ -335,19 +372,30 @@ const bindEvents = () => {
         } else {
           return response.json();
         }
-      }).then(data => {
-        let wrongPassAndUserErrorMsg = document.getElementById('wrongPassAndUserErrorMsg');
-        let noRegisteredNameErrorMsg = document.getElementById('noRegisteredNameErrorMsg');
-        let wrongPassErrorMsg = document.getElementById('wrongPassErrorMsg');
-        wrongPassAndUserErrorMsg.innerHTML = '';
-        noRegisteredNameErrorMsg.innerHTML = '';
-        wrongPassErrorMsg.innerHTML = '';
+      })
+      .then(data => {
+        let wrongPassAndUserErrorMsg = document.getElementById(
+          "wrongPassAndUserErrorMsg"
+        );
+        let noRegisteredNameErrorMsg = document.getElementById(
+          "noRegisteredNameErrorMsg"
+        );
+        let wrongPassErrorMsg = document.getElementById("wrongPassErrorMsg");
+        wrongPassAndUserErrorMsg.innerHTML = "";
+        noRegisteredNameErrorMsg.innerHTML = "";
+        wrongPassErrorMsg.innerHTML = "";
 
-        if (data === 'Write your password and your name') {
+        if (data === "Write your password and your name") {
           wrongPassAndUserErrorMsg.innerHTML = data;
-        } else if (data === 'We can not find your name' || data === 'Write your name') {
+        } else if (
+          data === "We can not find your name" ||
+          data === "Write your name"
+        ) {
           noRegisteredNameErrorMsg.innerHTML = data;
-        } else if (data === 'Wrong password' || data === 'Write your password') {
+        } else if (
+          data === "Wrong password" ||
+          data === "Write your password"
+        ) {
           wrongPassErrorMsg.innerHTML = data;
         } else {
           hideLogin.classList.add("hidden");
@@ -356,9 +404,9 @@ const bindEvents = () => {
           showEntriesForm.classList.remove("hidden");
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
-          hideSearchForm.classList.remove('hidden');
+          hideSearchForm.classList.remove("hidden");
           return fetch("/api/entries", {
-            method: 'GET'
+            method: "GET"
           });
         }
       })
@@ -377,9 +425,8 @@ const bindEvents = () => {
 
       .catch(error => {
         console.error(error);
-      })
-  })
-
+      });
+  });
 
   /*----------------  end of log in ------------*/
 
@@ -413,7 +460,6 @@ const bindEvents = () => {
 
     const formData = new FormData(registerForm);
 
-
     fetch("/api/register", {
       method: "POST",
       body: formData
@@ -424,28 +470,32 @@ const bindEvents = () => {
         } else {
           return response.json();
         }
-      }).then(data => {
+      })
+      .then(data => {
+        let nameAndPassErrorMsg = document.getElementById(
+          "nameAndPassErrorMsg"
+        );
+        let nameErrorMsg = document.getElementById("nameErrorMsg");
 
-        let nameAndPassErrorMsg = document.getElementById('nameAndPassErrorMsg');
-        let nameErrorMsg = document.getElementById('nameErrorMsg');
-
-
-        if (data === 'Write your password and your name' || data === 'You have already registered') {
-          let div = document.createElement('div');
+        if (
+          data === "Write your password and your name" ||
+          data === "You have already registered"
+        ) {
+          let div = document.createElement("div");
           div.innerHTML = data;
           nameAndPassErrorMsg.append(div);
           console.log(div);
-        } else if (data === 'Write your name') {
-          let div = document.createElement('div');
+        } else if (data === "Write your name") {
+          let div = document.createElement("div");
           div.innerHTML = data;
           nameErrorMsg.append(div);
           console.log(div);
-        } else if (data === 'Write your password') {
-          let div = document.createElement('div');
+        } else if (data === "Write your password") {
+          let div = document.createElement("div");
           div.innerHTML = data;
           console.log(data);
           nameErrorMsg.append(div);
-        } else if (data === 'User registred') {
+        } else if (data === "User registred") {
           hideLogin.classList.add("hidden");
           hideRegister.classList.add("hidden");
           renderView(views.registerSuccess);
@@ -564,9 +614,9 @@ const bindEvents = () => {
         }
       })
       .then(data => {
-        let target = document.querySelector('#individualComment');
-        let entry = document.createElement('div');
-        entry.innerHTML = '';
+        let target = document.querySelector("#individualComment");
+        let entry = document.createElement("div");
+        entry.innerHTML = "";
         entry.innerHTML += `
         <div class="my-5 text-center">
         <h3>${data[0].title}</h3>
@@ -574,23 +624,25 @@ const bindEvents = () => {
         <div class="my-5"><p>${data[0].content}</p></div>
         `;
         target.append(entry);
-        return fetch('/api/comment/user/' + entryID, {
-          method: 'GET'
-        })
-      }).then(response => {
+        return fetch("/api/comment/user/" + entryID, {
+          method: "GET"
+        });
+      })
+      .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
         } else {
           return response.json();
         }
-      }).then(data => {
-        let target = document.querySelector('#individualComment');
-        let entry = document.createElement('div');
+      })
+      .then(data => {
+        let target = document.querySelector("#individualComment");
+        let entry = document.createElement("div");
         if (data.length == 0) {
-          entry.innerHTML += '<h4>No comment</h4>';
+          entry.innerHTML += "<h4>No comment</h4>";
           target.append(entry);
         } else {
-          entry.innerHTML = '<h3>Comment</h3>'
+          entry.innerHTML = "<h3>Comment</h3>";
           data.forEach(comment => {
             entry.innerHTML += `
              <div class="container">
@@ -601,17 +653,15 @@ const bindEvents = () => {
              </div>
              `;
             target.append(entry);
-          })
+          });
         }
-      }).catch(error => {
+      })
+      .catch(error => {
         console.error(error);
       });
-
-
   }
 
   /* ------------------- End of show user comment & Entry ----------------------- */
-
 
   /*---------------------- Show all users entries ------------------*/
 
@@ -635,12 +685,14 @@ const bindEvents = () => {
       <div class="row justify-content-end">
        
         <button data-value=${
-        element.entryID
+          element.entryID
         } role="button" class ="more btn btn-outline-secondary">Comment<i class="far fa-comments"></i></button></div>
       
         <div><a data-value=${
-        element.entryID
-        } role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${element.likes}</div>
+          element.entryID
+        } role="button" class ="likeBtn"><i class="far fa-thumbs-up"></i></a>${
+        element.likes
+      }</div>
       </div>
       </div>
     </div>
@@ -649,32 +701,29 @@ const bindEvents = () => {
     });
     target.append(entryTable);
 
-
     // show comment form
-    const moreBtnArray = document.querySelectorAll('.more');
+    const moreBtnArray = document.querySelectorAll(".more");
     for (let i = 0; i < moreBtnArray.length; i++) {
-
-      moreBtnArray[i].addEventListener('click', event => {
+      moreBtnArray[i].addEventListener("click", event => {
         event.preventDefault();
-        let entryID = moreBtnArray[i].getAttribute('data-value');
+        let entryID = moreBtnArray[i].getAttribute("data-value");
         console.log(entryID);
-        showEntriesForm.classList.add('hidden');
-        entryTable.classList.add('hidden');
+        showEntriesForm.classList.add("hidden");
+        entryTable.classList.add("hidden");
         renderView(views.entryComment);
         commentMore(entryID); // Visa komment
         commentForm(entryID); // Visa komment form
-      })
+      });
     }
 
-    const likeBtnArray = document.querySelectorAll('.likeBtn');
+    const likeBtnArray = document.querySelectorAll(".likeBtn");
     for (let i = 0; i < likeBtnArray.length; i++) {
-
-      likeBtnArray[i].addEventListener('click', event => {
+      likeBtnArray[i].addEventListener("click", event => {
         event.preventDefault();
-        let entryID = likeBtnArray[i].getAttribute('data-value');
+        let entryID = likeBtnArray[i].getAttribute("data-value");
         // console.log(entryID);
         addLike(entryID);
-      })
+      });
     }
 
 
@@ -684,9 +733,7 @@ const bindEvents = () => {
 
   /* ------------------- Comments ----------------------- */
 
-
-
-  //Hämta komment 
+  //Hämta komment
   function commentMore(entryID) {
     fetch('/api/comments/users/' + entryID, {
       method: 'GET'
@@ -798,15 +845,15 @@ const bindEvents = () => {
     })
       .catch(error => {
         console.error(error);
-      })
+      });
   }
 
   window.commentMore = commentMore;
 
   // Visa komment form
   function commentForm(entryID) {
-    const commentForm = document.querySelector('#commentForm');
-    commentForm.addEventListener('submit', event => {
+    const commentForm = document.querySelector("#commentForm");
+    commentForm.addEventListener("submit", event => {
       event.preventDefault();
       /* alert('Hej'); */
       const formData = new FormData(commentForm);
@@ -825,32 +872,32 @@ const bindEvents = () => {
       })
         .catch(error => {
           console.error(error);
-        })
+        });
 
       commentMore(entryID);
-    })
-
+    });
   }
 
   // Ta bort sina kommentarer
   function deleteComment(commentID) {
     console.log(commentID);
-    fetch('/api/comment/' + commentID, {
-      method: 'DELETE'
-    }).then(response => {
-      if (!response.ok) {
-        return Error(response.statusText);
-      } else {
-        /* console.log('GET'); */
-        return response.json();
-
-      }
-    }).then(data => {
-      console.log(data);
+    fetch("/api/comment/" + commentID, {
+      method: "DELETE"
     })
+      .then(response => {
+        if (!response.ok) {
+          return Error(response.statusText);
+        } else {
+          /* console.log('GET'); */
+          return response.json();
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
       .catch(error => {
         console.error(error);
-      })
+      });
   }
 
   // Add like to an entry
@@ -878,24 +925,18 @@ const bindEvents = () => {
       })
       .catch(error => {
         console.error(error);
-      })
-
+      });
   }
 
   /* -------------Search-------------- */
 
-  /* -------------Search-------------- */
-
-  document.querySelector('.searchBtn').addEventListener('click', event => {
-
-    event.preventDefault()
-    let searchWord = document.getElementById('search').value;
+  document.querySelector(".searchBtn").addEventListener("click", event => {
+    event.preventDefault();
+    let searchWord = document.getElementById("search").value;
     /* console.log(searchWord); */
 
     search(searchWord);
-
   });
-
 
   function search(searchWord) {
     fetch('/api/search/' + searchWord, {
@@ -934,5 +975,5 @@ const bindEvents = () => {
     })
 
   }
-}
+};
 bindEvents();
