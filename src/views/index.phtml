@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Philosopher|Ranga&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -142,7 +143,7 @@
     <form id="commentForm">
       <br>
       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
-      <input type="submit" value="Add comment">
+      <button class="btn btn-success"><input type="submit" value="Add comment"></button>
 
     </form>
 
@@ -151,16 +152,15 @@
   <template id="moreentryCommentsTemplates">
     <h2>Comments</h2>
     <div id="moreentryComments">
-      <!-- innehåll -->
     </div>
 
   </template>
 
- <template id="editCommentTemplate">
- <form id="editCommentForm">
-       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
-       <input type="submit" value="Edit comment">
-     </form>
+  <template id="editCommentTemplate">
+    <form id="editCommentForm">
+      <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
+      <button class="btn btn-primary"><input type="submit" value="Edit comment"></button>
+    </form>
 
   </template>
 
@@ -169,6 +169,15 @@
 
     </div>
     <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+  </template>
+
+  <template id="showAllUsersTemplate">
+    <div id="allUserList">
+      <h2 class="hidden">All Users</h2>
+      <div id="allUsers">
+        <button id="showAllUsersBtn">Show All Users</button>
+      </div>
+    </div>
   </template>
 
 
@@ -182,6 +191,10 @@
     <main>
       <!-- innehåll -->
     </main>
+    
+    <article>
+        <!-- innehåll -->
+    </article>
 
     <aside>
       <!-- innehåll -->
@@ -195,17 +208,17 @@
 
   <button><a href="" id="showAllEntriesBtn" class="hidden">Show all entries</a></button>
 
-  <div class="pagination">
+  <!-- <div class="pagination">
     <a href="#">1</a>
     <a href="#">2</a>
     <a href="#">3</a>
     <a href="#">4</a>
     <a href="#">5</a>
     <a href="#">6</a>
-  </div>
+  </div> -->
 
   <script type="text/javascript" src="main.js"></script>
 
 </body>
 
-</htmlte>
+</template>
