@@ -81,8 +81,8 @@ const bindEvents = () => {
   const hideSearchForm = document.querySelector('#hideSearchForm');
   const showIndividualCommentAndEntry = document.querySelector('#showIndividualCommentAndEntry');
 
-  console.log(showAllEntriesBtn);
 
+  
 
   // journalLinkBtn.classList.add('hidden');
 
@@ -181,24 +181,26 @@ const bindEvents = () => {
     }
 
     //Show all users entries
-    showAllEntriesBtn.addEventListener('click', event => {
-      event.preventDefault();
-      showEntriesForm.classList.add('hidden');
-      entryTable.classList.add('hidden');
-      showAllEntriesBtn.classList.add('hidden');
-      renderView(views.allEntries);
-      fetch('/api/like') // Hämta all users inlägg, username och likes
+ 
+
+      showAllEntriesBtn.addEventListener('click', event => {
+        event.preventDefault();
+        showEntriesForm.classList.add('hidden');
+        entryTable.classList.add('hidden');
+        showAllEntriesBtn.classList.add('hidden');
+        renderView(views.allEntries);
+        fetch('/api/like') // Hämta all users inlägg, username och likes
         .then(response => {
           return !response.ok ?
-            new Error(response.statusText) :
-            response.json();
+          new Error(response.statusText) :
+          response.json();
         })
         .then(data => {
           //console.log(data);
           showAllUsersEntries(data);
         })
         .catch(error => console.error(error));
-    })
+      })
   }
   /*------------------end of show journal -----------------*/
 
@@ -324,9 +326,9 @@ const bindEvents = () => {
 
     const formData = new FormData(loginForm);
     fetch("/api/login", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -370,7 +372,6 @@ const bindEvents = () => {
       .then(data => {
         // Skicka alla inlägg innehåll till showEntry funktion
         showEntry(data);
-        getLike(data);
         console.log(data);
       })
 
@@ -387,17 +388,17 @@ const bindEvents = () => {
     // event.preventDefault();
 
     fetch('/api/logout').then(response => {
-        if (!response.ok) {
-          return Error(response.statusText);
-        } else {
-          console.log('logout');
-          hideLogin.classList.remove('hidden');
-          hideRegister.classList.remove('hidden');
-          showEntriesForm.classList.add('hidden');
-          target.classList.add('hidden');
-          return response.json();
-        }
-      })
+      if (!response.ok) {
+        return Error(response.statusText);
+      } else {
+        console.log('logout');
+        hideLogin.classList.remove('hidden');
+        hideRegister.classList.remove('hidden');
+        showEntriesForm.classList.add('hidden');
+        target.classList.add('hidden');
+        return response.json();
+      }
+    })
       .catch(error => {
         console.error(error);
       });
@@ -414,9 +415,9 @@ const bindEvents = () => {
 
 
     fetch("/api/register", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -463,9 +464,9 @@ const bindEvents = () => {
 
     const formData = new FormData(entriesForm);
     fetch("/api/entry", {
-        method: "POST",
-        body: formData
-      })
+      method: "POST",
+      body: formData
+    })
       .then(response => {
         if (!response.ok) {
           return Error(response.statusText);
@@ -516,12 +517,12 @@ const bindEvents = () => {
         formJson[key] = value;
       });
       fetch("/api/entry/" + entryID, {
-          method: "PUT",
-          body: JSON.stringify(formJson),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        method: "PUT",
+        body: JSON.stringify(formJson),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
         .then(response => {
           if (!response.ok) {
             return Error(response.statusText);
@@ -610,6 +611,7 @@ const bindEvents = () => {
     let target = document.querySelector('#showAllUsersEntries');
     let entryTable = document.createElement('div');
     entryTable.innerHTML = '';
+    target.innerHTML = '';
     // console.log(entries);
     entries.forEach(element => {
       entryTable.innerHTML += `
@@ -665,15 +667,6 @@ const bindEvents = () => {
       })
     }
 
-
-    // const likegeter = document.querySelectorAll('.likeBtn');
-    // for (let i = 0; i < likegeter.length; i++) {
-
-    //     let entryID = likegeter[i].getAttribute('data-value');
-    //     // console.log(entryID);
-
-    //     /* getLike(entryID); */
-    //   }
 
 
   }
@@ -844,13 +837,26 @@ const bindEvents = () => {
           return response.json();
         }
       }).then(data => {
+        // console.log(data);
+        return fetch('/api/like',{
+          method: 'GET'
+        })
+      }).then(response => {
+        return !response.ok ?
+        new Error(response.statusText) :
+        response.json();
+      })
+      .then(data => {
         console.log(data);
+        showAllUsersEntries(data);
       })
       .catch(error => {
         console.error(error);
       })
 
   }
+
+  /* -------------Search-------------- */
 
   /* -------------Search-------------- */
 
@@ -898,7 +904,9 @@ const bindEvents = () => {
         })
         target.append(searchEntry); //Visa kommenterar på skärmen
       }
+
     })
+
   }
 }
 bindEvents();
