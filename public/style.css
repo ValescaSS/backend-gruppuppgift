@@ -73,3 +73,14 @@ textarea {
 #hideSearchForm form{
   text-align: end;
 }
+
+.likeBtn{
+  cursor: pointer;
+  
+  
+  
+}
+
+.likeBtn:hover {
+  background-color: rgba(17, 17, 235, 0.164);
+}
