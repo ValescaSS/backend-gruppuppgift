@@ -1,40 +1,41 @@
 body {
-  background: #ecf0f1;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: white;
+  font-family: 'Philosopher', sans-serif;
+
   padding: 0;
   margin: 0;
 }
 
-/* .container {
-  border: 2px solid black;
-  max-width: 1000px;
-  margin: 100px auto 0 auto; 
-} */
-
 header {
-  border-bottom: 1px solid black;
+  background-color: rgba(226, 202, 171, 0.993);
+}
+
+input[id=title], textarea {
+  border: none;
+  border-bottom: 1px solid rgba(59, 59, 59, 0.87);
+  font-size: 1em;
+  color: rgba(0, 0, 0, .5);
+  margin-bottom: 20px;
+  border-radius: 0;
 }
 
 main {
-  max-width: 40em;
+  max-width: 50em;
 }
 
 h1 {
+  font-size: 4em;
   text-align: center;
-  color: #e74c3c;
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
+
 
 .hidden {
   display: none;
 }
 
-#logout {
-  border: 1px solid black;
-}
-
-table {
-  border: 1px solid black;
-}
 
 .errMsg {
   color: red;
@@ -88,4 +89,7 @@ textarea {
 
 .pagesList li a {
   color: rgb(141, 134, 134);
+}
+#hideSearchForm form{
+  text-align: end;
 }

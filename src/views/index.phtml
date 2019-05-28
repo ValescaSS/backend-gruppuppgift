@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Philosopher|Ranga&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -19,7 +20,7 @@
       <form id="searchForm">
         <div id="No result" class="errMsg"></div>
         <input type="text" name="search" id="search" placeholder="Search...">
-        <input type="submit" class="searchBtn" name="submit-search" value="Search">
+        <input type="submit" class="searchBtn btn btn-outline-success btn-sm" name="submit-search" value="Search">
         <div id="searchFormDiv">
           <h2>Search Results</h2>
           <!-- innehåll -->
@@ -34,10 +35,10 @@
       <form id="loginForm">
         <div id="wrongPassAndUserErrorMsg" class="errMsg"></div>
         <div id="noRegisteredNameErrorMsg" class="errMsg"></div>
-        <input type="text" name="username" id="usernameLogin" placeholder="Username">
+        <div><input type="text" name="username" id="usernameLogin" placeholder="Username"></div>
         <div id="wrongPassErrorMsg" class="errMsg"></div>
-        <input type="password" name="password" id="passwordLogin" placeholder="Password">
-        <input type="submit" value="Logga in">
+        <div><input type="password" name="password" id="passwordLogin" placeholder="Password"></div>
+        <div><input type="submit" value="Logga in"></div>
       </form>
     </div>
   </template>
@@ -45,26 +46,28 @@
   <template id="registerFormTemplate">
     <div id="hideRegisterForm">
       <h2>Registrera användare</h2>
+      
       <form id="registerForm">
-        <div id="nameAndPassErrorMsg" class="errMsg"></div>
-        <div id="nameErrorMsg" class="errMsg"></div>
-        <input type="text" name="username" id="usernameRegister" placeholder="Username">
-        <div id="PassErrorMsg" class="errMsg"></div>
-        <input type="password" name="password" id="passwordRegister" placeholder="Password">
+        <h3 id="successMsg" class="hidden">Thank you fo your registration</h3>
+        <div id="nameAndPassErrorMsg" class="errMsg hidden">Write your password and your name</div>
+        <div id="alreadyRegisteredErrorMsg" class="errMsg hidden">You have already registered</div>
+        <div id="nameErrorMsg" class="errMsg hidden">Write Your Name</div>
+       <div><input type="text" name="username" id="usernameRegister" placeholder="Username"></div>
+        <div id="passErrorMsg" class="errMsg hidden">Write Your Password</div>
+        <div><input type="password" name="password" id="passwordRegister" placeholder="Password"></div>
 
-        <input type="submit" value="Register">
+        <div><input type="submit" value="Register"></div>
       </form>
     </div>
   </template>
 
-  <template id="registerSuccessTemplate">
-    <h3 id="successrMsg">Thank you fo your registration</h3>
-  </template>
+
 
   <template id="createEntryFormTemplate">
     <div id="showEntriesForm" class="hidden">
       <div class="container">
         <form id="entriesForm">
+          <h2 class="text-center">Write your Journal</h2>
           <div class="form-group row">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" class="form-control" value="">
@@ -142,38 +145,38 @@
     <form id="commentForm">
       <br>
       <textarea name="content" id="content" cols="30" rows="10" placeholder="Comment...."></textarea>
-      <input type="submit" value="Add comment">
-
+      <button class="btn btn-success"><input type="submit" value="Add comment"></button>
+     
     </form>
-
+    <button class="btn btn-outline-secondary mt-5" ><a href="">Back</a></button>     
   </template>
 
   <template id="moreentryCommentsTemplates">
     <h2>Comments</h2>
     <div id="moreentryComments">
     </div>
-
   </template>
 
- <template id="editCommentTemplate">
+  <template id="editCommentTemplate">
     <form id="editCommentForm">
-       <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
-       <input type="submit" value="Edit comment">
-     </form>
+      <textarea name="content" id="editCommentContent" cols="30" rows="10" value="" placeholder="Edit...."></textarea>
+      <button class="btn btn-primary"><input type="submit" value="Edit comment"></button>
+    </form>
 
   </template>
 
   <template id="createAllEntryTemplate">
     <div id="showAllUsersEntries">
-
-    </div>
-    <button class="btn btn-outline-secondary"><a href="">Back</a></button>
+      </div>
+      <button class="btn btn-outline-secondary mt-5" id="hideBtn" ><a href="">Back</a></button>   
   </template>
 
   <template id="showAllUsersTemplate">
-    <h2 class="hidden">All Users</h2>
-    <div id="allUsers">
-      <button id="showAllUsersBtn">Show All Users</button>
+    <div id="allUserList">
+      <h2 class="hidden">All Users</h2>
+      <div id="allUsers">
+        <button id="showAllUsersBtn" >Show All Users</button>
+      </div>
     </div>
   </template>
 
@@ -184,15 +187,48 @@
   </template>
 
   <div class="container">
-    <a href="" id="logout" class="hidden"><i class="fas fa-sign-out-alt">Sign out</i></a>
     <!-- <button id="logout" class="hidden">Logga ut</button> -->
-    <header>
-      <h1><?= $title ?></h1>
+  <header class="sticky-top">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col">
+          <div ><a href="" id="logout" class="hidden btn btn-warning hidden text-white"><i class="fas fa-sign-out-alt">Sign out</i></a></div>
+        </div>
+        <div class="col">
+          <h1><?= $title ?></h1>
+        </div>
+        <div class="col">
+          <div><button class="btn btn-warning hidden ml-5 align-self-end" id="showAllEntriesBtn">Show all entries</button></div>
+        </div>
+
+        
+        <template id="searchFormTemplate">
+          <div class="col">
+            <div id="hideSearchForm" class="hidden justify-content-end">
+              <form id="searchForm">
+                <div id="No result" class="errMsg"></div>
+                <input type="text" name="search" id="search" placeholder="Search...">
+                <input type="submit" class="searchBtn" name="submit-search" value="Search">
+                <div id="searchFormDiv">
+                  <h2>Search Results</h2>
+                  <!-- innehåll -->
+                </div>
+              </form>
+            </div>
+          </div>
+          </template>
+      </div>
+    </div>
     </header>
 
     <main>
       <!-- innehåll -->
     </main>
+    
+    <article>
+        <!-- innehåll -->
+    </article>
 
     <aside>
       <!-- innehåll -->
@@ -208,7 +244,6 @@
 
   </div>
 
-  <button><a href="" id="showAllEntriesBtn" class="hidden">Show all entries</a></button>
 
   <script type="text/javascript" src="main.js"></script>
 

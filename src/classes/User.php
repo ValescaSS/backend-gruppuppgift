@@ -40,7 +40,7 @@ class User extends Mapper {
       ":username" => $username, 
       ":password" => password_hash($password, PASSWORD_BCRYPT)
       ]);
-    return "User registred";
+    return "Thank you for your registration";
   }
   
   public function changeUsername($userID, $new_username){

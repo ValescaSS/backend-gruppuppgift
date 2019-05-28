@@ -71,4 +71,31 @@ return function ($app) {
 
     return $response->withJson($comment->getUserCommentAndUsername($entryID));
   })->add($auth);
+
+
+    $auth = require __DIR__ . '/../middlewares/auth.php';
+
+    // Post route som lägger till kommentarer i databasen 
+    $app->post('/api/comments', function($request, $response){
+        $data = $request->getParsedBody();
+        $newComment = new Kommentar($this->db);
+
+        return $response->withJson($newComment-> postNewComment($data['createdBy'], $data['entryID'], $data['content']));     
+    });
+
+    // Get rout som hämtar alla kommentarer till ett inlägg
+    $app->get('/api/comments/entry/{id}', function($request, $response, $args){
+        $entryID = $args['id'];
+        $comments = new Kommentar($this->db);
+
+        return $response->withJson($comments-> showCommentsEntryID($entryID));
+    });
+  // Get ett inlägg och all kommenterar
+  $app->get('/api/comments/users/{id}', function ($request, $response, $args) {
+    $entryID = (int)$args['id'];
+    $comment = new Kommentar($this->db);
+
+    return $response->withJson($comment->getUserCommentsAndUsernames($entryID));
+  })->add($auth);
 };
+

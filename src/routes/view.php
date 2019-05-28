@@ -5,18 +5,7 @@ return function ($app) {
   $app->get('/', function ($request, $response, $args) {
     // Render index view
     return $this->renderer->render($response, 'index.phtml', [
-      'title' => 'Journal'
-    ]);
-  });
-
-  $app->get('/name', function ($request, $response, $args) {
-    // Render index view
-    $userID = $_SESSION['userID'];
-    $userObj = new User($this->db);
-    $user = $userObj->getUserByID($userID);
-    var_dump($user['username']);
-    return $this->renderer->render($response, 'index.phtml', [
-      'welcome' => $user['username']
+      'title' => 'TMVT Journal'
     ]);
   });
 };
