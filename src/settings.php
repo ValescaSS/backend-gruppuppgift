@@ -12,7 +12,7 @@ return [
 
     // Database settings
     'db' => [
-      'host' => 'localhost:8889',
+      'host' => 'localhost:3306',
       'user' => 'root',
       'pass' => 'root',
       'dbname' => 'grupp-journal'

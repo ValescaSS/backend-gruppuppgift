@@ -110,6 +110,7 @@ const bindEvents = () => {
   const showAllUsersBtn = document.querySelector("#showAllUsersBtn");
   const pagesList = document.getElementById('pagesList');
   const allUserList = document.querySelector("#allUserList");
+  const HidePagination = document.querySelector("#pagination");
 
   /*-----------------Show all users-------------------*/
 
@@ -406,7 +407,8 @@ const bindEvents = () => {
       hideSearchForm.classList.remove("hidden");
       showAllUsersBtn.classList.add('hidden');
       allUserList.classList.add('hidden');
-      
+      HidePagination.classList.add('hidden');
+      // pagesList.classList.add('hidden');
 
       const api3 = {
         ping3() {
@@ -477,6 +479,7 @@ const bindEvents = () => {
           showAllUsersBtn.classList.add('hidden');
           showAllUsersBtn.classList.add('hidden');
           allUserList.classList.add('hidden');
+          HidePagination.classList.add('hidden');
           return fetch("/api/entries", {
             method: "GET"
           });
