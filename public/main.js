@@ -111,6 +111,7 @@ const bindEvents = () => {
   const pagesList = document.getElementById('pagesList');
   const allUserList = document.querySelector("#allUserList");
   const HidePagination = document.querySelector("#pagination");
+  
 
   /*-----------------Show all users-------------------*/
 
@@ -408,7 +409,6 @@ const bindEvents = () => {
       showAllUsersBtn.classList.add('hidden');
       allUserList.classList.add('hidden');
       HidePagination.classList.add('hidden');
-      // pagesList.classList.add('hidden');
 
       const api3 = {
         ping3() {
@@ -767,7 +767,6 @@ const bindEvents = () => {
     let entryTable = document.createElement('div');
     entryTable.innerHTML = '';
     target.innerHTML = '';
-    // console.log(entries);
     entries.forEach(element => {
       entryTable.innerHTML += `
       <div class="container mt-5" id='userEntries'>
@@ -818,7 +817,6 @@ const bindEvents = () => {
       likeBtnArray[i].addEventListener("click", event => {
         event.preventDefault();
         let entryID = likeBtnArray[i].getAttribute("data-value");
-        // console.log(entryID);
         addLike(entryID);
       });
     }
@@ -883,9 +881,14 @@ const bindEvents = () => {
       for (let i = 0; i < editCommentBtnArray.length; i++) {
         editCommentBtnArray[i].addEventListener('click', event => {
           event.preventDefault();
+          renderView(views.editEntryComment); // Visa edit comment form
           let hideCommentForm = document.getElementById('commentForm'); //Dölja comment form
           hideCommentForm.classList.add('hidden');
-          renderView(views.editEntryComment); // Visa edit comment form
+          const commentBackBtn = document.querySelector('#commentBackBtn');
+          commentBackBtn.classList.add('hidden');
+          const editCommentBackBtn = document.querySelector('#editCommentBackBtn');
+          editCommentBackBtn.classList.remove('hidden');
+          
           let commentID = editCommentBtnArray[i].getAttribute('data-value');
           // Först hämta den specifika komment för att kunna visa på textarea 
           // Och sedan skicka Edit comment
