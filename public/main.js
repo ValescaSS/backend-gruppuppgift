@@ -287,11 +287,16 @@ const bindEvents = () => {
 
   // Visar en sammanfattning av 20 senaste inlägg i varje sida (paginering)
   function twentyEntries(v) {
+    console.log(v);
     senasteEntries.innerHTML = "";
-    for (let i = 1; i <= v.length; i++) {
+    for (let i = 0; i < v.length; i++) {
+
       let title = v[i]["title"];
       let str = v[i]["content"];
       let createdAt = v[i]["createdAt"]
+      console.log(title);
+      console.log(str);
+      console.log(createdAt);
       senasteEntries.innerHTML +=
         "<p><h4>" +
         title +
@@ -362,7 +367,6 @@ const bindEvents = () => {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
-        
         showAllEntriesBtn.classList.add("hidden");
         allUserList.classList.add("hidden");
         showAllEntriesBtn.classList.add("hidden");
