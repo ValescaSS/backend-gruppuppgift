@@ -110,9 +110,12 @@ const bindEvents = () => {
   const pagesList = document.getElementById('pagesList');
   const allUserList = document.querySelector("#allUserList");
   const HidePagination = document.querySelector("#pagination");
+  const hideAllUsers = document.querySelector('#allUsers');
   
 
   /*-----------------Show all users-------------------*/
+
+
 
     const api5 = {
       ping() {
@@ -130,6 +133,7 @@ const bindEvents = () => {
 
     function registeredUser(users) {
       let allUsers = document.getElementById("allUsers");
+      allUserList.innerHTML = '<h3>All Users</h3>'
       users.forEach(element => {
         allUsers.innerHTML += "<p>" + element["username"] + "</p>";
       });
@@ -290,7 +294,6 @@ const bindEvents = () => {
     console.log(v);
     senasteEntries.innerHTML = "";
     for (let i = 0; i < v.length; i++) {
-
       let title = v[i]["title"];
       let str = v[i]["content"];
       let createdAt = v[i]["createdAt"]
@@ -367,6 +370,7 @@ const bindEvents = () => {
         senasteEntries.classList.add("hidden");
         hideLogin.classList.add("hidden");
         hideRegister.classList.add("hidden");
+        HidePagination.classList.add('hidden');
         showAllEntriesBtn.classList.add("hidden");
         allUserList.classList.add("hidden");
         showAllEntriesBtn.classList.add("hidden");
@@ -408,6 +412,9 @@ const bindEvents = () => {
       hideSearchForm.classList.remove("hidden");
       allUserList.classList.add('hidden');
       HidePagination.classList.add('hidden');
+      allUsers.classList.add('hidden');
+      hideAllUsers.classList.add('hidden');
+      
 
       const api3 = {
         ping3() {
@@ -477,6 +484,7 @@ const bindEvents = () => {
           hideSearchForm.classList.remove("hidden");
           allUserList.classList.add('hidden');
           HidePagination.classList.add('hidden');
+          hideAllUsers.classList.add('hidden');
           return fetch("/api/entries", {
             method: "GET"
           });

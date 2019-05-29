@@ -50,23 +50,6 @@ textarea {
   border-bottom: 0.5px solid black;
 }
 
-/* .pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-  transition: background-color .3s;
-}
-
-.pagination a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-.pagination a:hover:not(.active) {
-  background-color: #ddd;
-} */
-
 .pagesList {
   display: flex;
   justify-content: center;
@@ -104,3 +87,8 @@ textarea {
   background-color: rgba(17, 17, 235, 0.164);
 }
 
+#allUsers{
+  border: 1px solid black;
+  margin: 40%;
+  padding: 2%;
+}
