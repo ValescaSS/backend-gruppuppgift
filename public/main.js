@@ -138,7 +138,6 @@ const bindEvents = () => {
         allUsers.innerHTML += "<p>" + element["username"] + "</p>";
       });
     }
-  // });
 
   /*----------- Show journal---------------*/
   function showEntry(entries) {
@@ -265,7 +264,7 @@ const bindEvents = () => {
             response.json();
         })
         .then(data => {
-          let numPages = Math.ceil(data.length / 20);
+          let numPages = Math.ceil(data.length / 5);
           pagination(numPages);
         })
         .catch(error => console.error(error));
@@ -293,16 +292,18 @@ const bindEvents = () => {
   // Visar en sammanfattning av 20 senaste inlägg i varje sida (paginering)
   function twentyEntries(v) {
     senasteEntries.innerHTML = "";
-    for (let i = 0; i < v.length; i++) {
-      let entryID = v[i]["entryID"];
+    for (let i = 1; i <= v.length; i++) {
+      let title = v[i]["title"];
       let str = v[i]["content"];
+      let createdAt = v[i]["createdAt"]
       senasteEntries.innerHTML +=
-        "<p>" +
-        entryID +
-        " " +
-        str.substr(0, 200) +
+        "<p><h4>" +
+        title +
+        "</h4> " +
+        "<p>" + createdAt + "</p>" + " " +
+        str.substr(0, 150) +
         "..." +
-        '</p><button class="showalltxt-btn btn btn-outline-success">Visa hela inlägg</button>';
+        '</p><div class="text-right"><button class="showalltxt-btn btn btn-outline-success">Visa hela inlägg</button></div>';
     }
     showCompleteEntry(v);
   }
@@ -341,7 +342,7 @@ const bindEvents = () => {
 
   const api3 = {
     ping3() {
-      return fetch("/entries/last/20")
+      return fetch("/entries/last/5")
         .then(response => {
           return !response.ok ?
             new Error(response.statusText) :
@@ -373,7 +374,6 @@ const bindEvents = () => {
         "<h2>" +
         v[i]["title"] +
         "</h2><p>" +
-        v[i]["entryID"] +
         " " +
         v[i]["content"] +
         "</p>";
