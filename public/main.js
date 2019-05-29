@@ -115,6 +115,11 @@ const bindEvents = () => {
 
   /*-----------------Show all users-------------------*/
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 14a8966a6b00877df437336cd0c2ee4fcc078a6d
     const api5 = {
       ping() {
         return fetch("/users")
