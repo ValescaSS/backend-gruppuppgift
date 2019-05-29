@@ -103,3 +103,9 @@ textarea {
 .likeBtn:hover {
   background-color: rgba(17, 17, 235, 0.164);
 }
+
+#allUsers{
+  border: 1px solid black;
+  margin: 40%;
+  padding: 2%;
+}

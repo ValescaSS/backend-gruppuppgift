@@ -107,18 +107,17 @@ const bindEvents = () => {
   const completeEntry = document.querySelector("#completeEntry");
   const showAllEntriesBtn = document.querySelector("#showAllEntriesBtn");
   const hideSearchForm = document.querySelector("#hideSearchForm");
-  const showAllUsersBtn = document.querySelector("#showAllUsersBtn");
   const pagesList = document.getElementById('pagesList');
   const allUserList = document.querySelector("#allUserList");
   const HidePagination = document.querySelector("#pagination");
+  const hideAllUsers = document.querySelector('#allUsers');
   
 
   /*-----------------Show all users-------------------*/
 
-  showAllUsersBtn.addEventListener("click", function (e) {
-    e.preventDefault();
 
-    const api = {
+
+    const api5 = {
       ping() {
         return fetch("/users")
           .then(respons => {
@@ -130,15 +129,16 @@ const bindEvents = () => {
           .catch(error => console.error(error));
       }
     };
-    api.ping();
+    api5.ping();
 
     function registeredUser(users) {
       let allUsers = document.getElementById("allUsers");
+      allUserList.innerHTML = '<h3>All Users</h3>'
       users.forEach(element => {
         allUsers.innerHTML += "<p>" + element["username"] + "</p>";
       });
     }
-  });
+  // });
 
   /*----------- Show journal---------------*/
   function showEntry(entries) {
@@ -406,9 +406,11 @@ const bindEvents = () => {
       logoutBtn.classList.remove("hidden");
       showAllEntriesBtn.classList.remove("hidden");
       hideSearchForm.classList.remove("hidden");
-      showAllUsersBtn.classList.add('hidden');
       allUserList.classList.add('hidden');
       HidePagination.classList.add('hidden');
+      allUsers.classList.add('hidden');
+      hideAllUsers.classList.add('hidden');
+      
 
       const api3 = {
         ping3() {
@@ -476,10 +478,9 @@ const bindEvents = () => {
           logoutBtn.classList.remove("hidden");
           showAllEntriesBtn.classList.remove("hidden");
           hideSearchForm.classList.remove("hidden");
-          showAllUsersBtn.classList.add('hidden');
-          showAllUsersBtn.classList.add('hidden');
           allUserList.classList.add('hidden');
           HidePagination.classList.add('hidden');
+          hideAllUsers.classList.add('hidden');
           return fetch("/api/entries", {
             method: "GET"
           });
