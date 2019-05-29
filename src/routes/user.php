@@ -11,7 +11,7 @@ return function ($app) {
     return $response->withJson($user->getUserByID($args['id']));
   })->add($auth);
 
-  // En GET route som hämtar alla användare (tänk på att INTE visa password-fältet)
+  // GET route som hämtar alla användare
   $app->get('/users', function ($request, $response) {
     $users = new User($this->db);
     
@@ -19,7 +19,7 @@ return function ($app) {
   });
   
   
-  // En POST route som registrerar en ny användare
+  // POST route som registrerar en ny användare
   $app->post('/api/register', function ($request, $response) {
     $data = $request->getParsedBody();
     //validera om användare har redan registrerat eller inte

@@ -97,8 +97,8 @@ class Entry extends Mapper
     }
 
     public function show20Entries($numpage) {
-        $rows = 20;
-        $offset = $numpage * 20;
+        $rows = 5;
+        $offset = $numpage * 5;
         $orderby = 'DESC';
 
         $statement = $this->db->prepare("SELECT * FROM entries ORDER BY createdAt {$orderby} LIMIT {$rows} OFFSET {$offset}");
